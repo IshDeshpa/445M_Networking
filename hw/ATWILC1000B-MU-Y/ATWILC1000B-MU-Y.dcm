@@ -1,9 +1,0 @@
-EESchema-DOCLIB  Version 2.0
-#
-$CMP ATWILC1000B-MU-Y
-D RF System on a Chip - SoC SmartConnect Chipset WILC1000 - SmartConnect Chipset WINC1000
-K
-F http://ww1.microchip.com/downloads/en/devicedoc/atmel-42491-wilc1000b-mut_datasheet.pdf
-$ENDCMP
-#
-#End Doc Library
