@@ -29,3 +29,12 @@ fp-info-cache
 # Exported BOM files
 *.xml
 *.csv
+
+#file for maanav's lsp 
+.ignore
+
+#cmake build dir
+sw/build
+
+#not sure what this shit is for
+sw/.cache/

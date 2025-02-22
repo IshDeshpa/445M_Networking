@@ -1,0 +1,1653 @@
+
+build/exe.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <g_pfnVectors>:
+   0:	00 01 00 20 6d 02 00 00 d9 02 00 00 e1 02 00 00     ... m...........
+  10:	f9 02 00 00 01 03 00 00 09 03 00 00 00 00 00 00     ................
+	...
+  2c:	11 03 00 00 19 03 00 00 00 00 00 00 21 03 00 00     ............!...
+  3c:	29 03 00 00 39 03 00 00 45 03 00 00 51 03 00 00     )...9...E...Q...
+  4c:	5d 03 00 00 69 03 00 00 75 03 00 00 81 03 00 00     ]...i...u.......
+  5c:	8d 03 00 00 99 03 00 00 a5 03 00 00 b1 03 00 00     ................
+  6c:	bd 03 00 00 c9 03 00 00 d5 03 00 00 e1 03 00 00     ................
+  7c:	ed 03 00 00 f9 03 00 00 05 04 00 00 11 04 00 00     ................
+  8c:	cd 09 00 00 1d 04 00 00 e9 09 00 00 29 04 00 00     ............)...
+  9c:	05 0a 00 00 35 04 00 00 41 04 00 00 4d 04 00 00     ....5...A...M...
+  ac:	59 04 00 00 65 04 00 00 71 04 00 00 7d 04 00 00     Y...e...q...}...
+  bc:	89 04 00 00 95 04 00 00 a1 04 00 00 ad 04 00 00     ................
+  cc:	21 0a 00 00 b9 04 00 00 c5 04 00 00 d1 04 00 00     !...............
+  dc:	dd 04 00 00 e9 04 00 00 f5 04 00 00 01 05 00 00     ................
+  ec:	0d 05 00 00 19 05 00 00 25 05 00 00 31 05 00 00     ........%...1...
+  fc:	3d 05 00 00 49 05 00 00 55 05 00 00 61 05 00 00     =...I...U...a...
+ 10c:	6d 05 00 00 79 05 00 00 85 05 00 00 91 05 00 00     m...y...........
+ 11c:	9d 05 00 00 a9 05 00 00 b5 05 00 00 c1 05 00 00     ................
+ 12c:	cd 05 00 00 d9 05 00 00 e5 05 00 00 f1 05 00 00     ................
+ 13c:	fd 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00     ................
+ 14c:	00 00 00 00 09 06 00 00 15 06 00 00 3d 0a 00 00     ............=...
+ 15c:	21 06 00 00 00 00 00 00 00 00 00 00 00 00 00 00     !...............
+	...
+ 1b0:	59 0a 00 00 2d 06 00 00 39 06 00 00 45 06 00 00     Y...-...9...E...
+ 1c0:	51 06 00 00 5d 06 00 00 69 06 00 00 75 06 00 00     Q...]...i...u...
+ 1d0:	81 06 00 00 8d 06 00 00 99 06 00 00 a5 06 00 00     ................
+ 1e0:	b1 06 00 00 bd 06 00 00 c9 06 00 00 d5 06 00 00     ................
+ 1f0:	e1 06 00 00 ed 06 00 00 f9 06 00 00 05 07 00 00     ................
+ 200:	11 07 00 00 1d 07 00 00 29 07 00 00 00 00 00 00     ........).......
+ 210:	35 07 00 00 41 07 00 00 4d 07 00 00 59 07 00 00     5...A...M...Y...
+ 220:	65 07 00 00 71 07 00 00 7d 07 00 00 89 07 00 00     e...q...}.......
+ 230:	95 07 00 00 a1 07 00 00 ad 07 00 00 b9 07 00 00     ................
+ 240:	c5 07 00 00 d1 07 00 00 dd 07 00 00 e9 07 00 00     ................
+ 250:	f5 07 00 00 01 08 00 00 0d 08 00 00 19 08 00 00     ................
+ 260:	25 08 00 00 31 08 00 00 3d 08 00 00                 %...1...=...
+
+0000026c <ResetISR>:
+ 26c:	b580      	push	{r7, lr}
+ 26e:	b082      	sub	sp, #8
+ 270:	af00      	add	r7, sp, #0
+ 272:	4b13      	ldr	r3, [pc, #76]	@ (2c0 <zero_loop+0x24>)
+ 274:	607b      	str	r3, [r7, #4]
+ 276:	4b13      	ldr	r3, [pc, #76]	@ (2c4 <zero_loop+0x28>)
+ 278:	603b      	str	r3, [r7, #0]
+ 27a:	e007      	b.n	28c <ResetISR+0x20>
+ 27c:	687a      	ldr	r2, [r7, #4]
+ 27e:	1d13      	adds	r3, r2, #4
+ 280:	607b      	str	r3, [r7, #4]
+ 282:	683b      	ldr	r3, [r7, #0]
+ 284:	1d19      	adds	r1, r3, #4
+ 286:	6039      	str	r1, [r7, #0]
+ 288:	6812      	ldr	r2, [r2, #0]
+ 28a:	601a      	str	r2, [r3, #0]
+ 28c:	683b      	ldr	r3, [r7, #0]
+ 28e:	4a0e      	ldr	r2, [pc, #56]	@ (2c8 <zero_loop+0x2c>)
+ 290:	4293      	cmp	r3, r2
+ 292:	d3f3      	bcc.n	27c <ResetISR+0x10>
+ 294:	480e      	ldr	r0, [pc, #56]	@ (2d0 <zero_loop+0x34>)
+ 296:	490f      	ldr	r1, [pc, #60]	@ (2d4 <zero_loop+0x38>)
+ 298:	f04f 0200 	mov.w	r2, #0
+
+0000029c <zero_loop>:
+ 29c:	4288      	cmp	r0, r1
+ 29e:	bfb8      	it	lt
+ 2a0:	f840 2b04 	strlt.w	r2, [r0], #4
+ 2a4:	dbfa      	blt.n	29c <zero_loop>
+ 2a6:	4b09      	ldr	r3, [pc, #36]	@ (2cc <zero_loop+0x30>)
+ 2a8:	681b      	ldr	r3, [r3, #0]
+ 2aa:	4a08      	ldr	r2, [pc, #32]	@ (2cc <zero_loop+0x30>)
+ 2ac:	f443 0370 	orr.w	r3, r3, #15728640	@ 0xf00000
+ 2b0:	6013      	str	r3, [r2, #0]
+ 2b2:	f000 fad9 	bl	868 <main>
+ 2b6:	bf00      	nop
+ 2b8:	3708      	adds	r7, #8
+ 2ba:	46bd      	mov	sp, r7
+ 2bc:	bd80      	pop	{r7, pc}
+ 2be:	bf00      	nop
+ 2c0:	00000ea8 	.word	0x00000ea8
+ 2c4:	20000000 	.word	0x20000000
+ 2c8:	20000000 	.word	0x20000000
+ 2cc:	e000ed88 	.word	0xe000ed88
+ 2d0:	20000000 	.word	0x20000000
+ 2d4:	2000011c 	.word	0x2000011c
+
+000002d8 <NMI_Handler>:
+ 2d8:	b480      	push	{r7}
+ 2da:	af00      	add	r7, sp, #0
+ 2dc:	bf00      	nop
+ 2de:	e7fd      	b.n	2dc <NMI_Handler+0x4>
+
+000002e0 <HardFault_Handler>:
+ 2e0:	b480      	push	{r7}
+ 2e2:	af00      	add	r7, sp, #0
+ 2e4:	4b03      	ldr	r3, [pc, #12]	@ (2f4 <HardFault_Handler+0x14>)
+ 2e6:	681b      	ldr	r3, [r3, #0]
+ 2e8:	4a02      	ldr	r2, [pc, #8]	@ (2f4 <HardFault_Handler+0x14>)
+ 2ea:	f043 0302 	orr.w	r3, r3, #2
+ 2ee:	6013      	str	r3, [r2, #0]
+ 2f0:	bf00      	nop
+ 2f2:	e7fd      	b.n	2f0 <HardFault_Handler+0x10>
+ 2f4:	400243fc 	.word	0x400243fc
+
+000002f8 <MemManage_Handler>:
+ 2f8:	b480      	push	{r7}
+ 2fa:	af00      	add	r7, sp, #0
+ 2fc:	bf00      	nop
+ 2fe:	e7fd      	b.n	2fc <MemManage_Handler+0x4>
+
+00000300 <BusFault_Handler>:
+ 300:	b480      	push	{r7}
+ 302:	af00      	add	r7, sp, #0
+ 304:	bf00      	nop
+ 306:	e7fd      	b.n	304 <BusFault_Handler+0x4>
+
+00000308 <UsageFault_Handler>:
+ 308:	b480      	push	{r7}
+ 30a:	af00      	add	r7, sp, #0
+ 30c:	bf00      	nop
+ 30e:	e7fd      	b.n	30c <UsageFault_Handler+0x4>
+
+00000310 <SVC_Handler>:
+ 310:	b480      	push	{r7}
+ 312:	af00      	add	r7, sp, #0
+ 314:	bf00      	nop
+ 316:	e7fd      	b.n	314 <SVC_Handler+0x4>
+
+00000318 <DebugMon_Handler>:
+ 318:	b480      	push	{r7}
+ 31a:	af00      	add	r7, sp, #0
+ 31c:	bf00      	nop
+ 31e:	e7fd      	b.n	31c <DebugMon_Handler+0x4>
+
+00000320 <PendSV_Handler>:
+ 320:	b480      	push	{r7}
+ 322:	af00      	add	r7, sp, #0
+ 324:	bf00      	nop
+ 326:	e7fd      	b.n	324 <PendSV_Handler+0x4>
+
+00000328 <SysTick_Handler>:
+ 328:	b480      	push	{r7}
+ 32a:	af00      	add	r7, sp, #0
+ 32c:	bf00      	nop
+ 32e:	e7fd      	b.n	32c <SysTick_Handler+0x4>
+
+00000330 <IntDefaultHandler>:
+ 330:	b480      	push	{r7}
+ 332:	af00      	add	r7, sp, #0
+ 334:	bf00      	nop
+ 336:	e7fd      	b.n	334 <IntDefaultHandler+0x4>
+
+00000338 <GPIOPortA_Handler>:
+ 338:	b580      	push	{r7, lr}
+ 33a:	af00      	add	r7, sp, #0
+ 33c:	f7ff fff8 	bl	330 <IntDefaultHandler>
+ 340:	bf00      	nop
+ 342:	bd80      	pop	{r7, pc}
+
+00000344 <GPIOPortB_Handler>:
+ 344:	b580      	push	{r7, lr}
+ 346:	af00      	add	r7, sp, #0
+ 348:	f7ff fff2 	bl	330 <IntDefaultHandler>
+ 34c:	bf00      	nop
+ 34e:	bd80      	pop	{r7, pc}
+
+00000350 <GPIOPortC_Handler>:
+ 350:	b580      	push	{r7, lr}
+ 352:	af00      	add	r7, sp, #0
+ 354:	f7ff ffec 	bl	330 <IntDefaultHandler>
+ 358:	bf00      	nop
+ 35a:	bd80      	pop	{r7, pc}
+
+0000035c <GPIOPortD_Handler>:
+ 35c:	b580      	push	{r7, lr}
+ 35e:	af00      	add	r7, sp, #0
+ 360:	f7ff ffe6 	bl	330 <IntDefaultHandler>
+ 364:	bf00      	nop
+ 366:	bd80      	pop	{r7, pc}
+
+00000368 <GPIOPortE_Handler>:
+ 368:	b580      	push	{r7, lr}
+ 36a:	af00      	add	r7, sp, #0
+ 36c:	f7ff ffe0 	bl	330 <IntDefaultHandler>
+ 370:	bf00      	nop
+ 372:	bd80      	pop	{r7, pc}
+
+00000374 <UART0_Handler>:
+ 374:	b580      	push	{r7, lr}
+ 376:	af00      	add	r7, sp, #0
+ 378:	f7ff ffda 	bl	330 <IntDefaultHandler>
+ 37c:	bf00      	nop
+ 37e:	bd80      	pop	{r7, pc}
+
+00000380 <UART1_Handler>:
+ 380:	b580      	push	{r7, lr}
+ 382:	af00      	add	r7, sp, #0
+ 384:	f7ff ffd4 	bl	330 <IntDefaultHandler>
+ 388:	bf00      	nop
+ 38a:	bd80      	pop	{r7, pc}
+
+0000038c <SSI0_Handler>:
+ 38c:	b580      	push	{r7, lr}
+ 38e:	af00      	add	r7, sp, #0
+ 390:	f7ff ffce 	bl	330 <IntDefaultHandler>
+ 394:	bf00      	nop
+ 396:	bd80      	pop	{r7, pc}
+
+00000398 <I2C0_Handler>:
+ 398:	b580      	push	{r7, lr}
+ 39a:	af00      	add	r7, sp, #0
+ 39c:	f7ff ffc8 	bl	330 <IntDefaultHandler>
+ 3a0:	bf00      	nop
+ 3a2:	bd80      	pop	{r7, pc}
+
+000003a4 <PWM0Fault_Handler>:
+ 3a4:	b580      	push	{r7, lr}
+ 3a6:	af00      	add	r7, sp, #0
+ 3a8:	f7ff ffc2 	bl	330 <IntDefaultHandler>
+ 3ac:	bf00      	nop
+ 3ae:	bd80      	pop	{r7, pc}
+
+000003b0 <PWM0Generator0_Handler>:
+ 3b0:	b580      	push	{r7, lr}
+ 3b2:	af00      	add	r7, sp, #0
+ 3b4:	f7ff ffbc 	bl	330 <IntDefaultHandler>
+ 3b8:	bf00      	nop
+ 3ba:	bd80      	pop	{r7, pc}
+
+000003bc <PWM0Generator1_Handler>:
+ 3bc:	b580      	push	{r7, lr}
+ 3be:	af00      	add	r7, sp, #0
+ 3c0:	f7ff ffb6 	bl	330 <IntDefaultHandler>
+ 3c4:	bf00      	nop
+ 3c6:	bd80      	pop	{r7, pc}
+
+000003c8 <PWM0Generator2_Handler>:
+ 3c8:	b580      	push	{r7, lr}
+ 3ca:	af00      	add	r7, sp, #0
+ 3cc:	f7ff ffb0 	bl	330 <IntDefaultHandler>
+ 3d0:	bf00      	nop
+ 3d2:	bd80      	pop	{r7, pc}
+
+000003d4 <Quadrature0_Handler>:
+ 3d4:	b580      	push	{r7, lr}
+ 3d6:	af00      	add	r7, sp, #0
+ 3d8:	f7ff ffaa 	bl	330 <IntDefaultHandler>
+ 3dc:	bf00      	nop
+ 3de:	bd80      	pop	{r7, pc}
+
+000003e0 <ADC0Seq0_Handler>:
+ 3e0:	b580      	push	{r7, lr}
+ 3e2:	af00      	add	r7, sp, #0
+ 3e4:	f7ff ffa4 	bl	330 <IntDefaultHandler>
+ 3e8:	bf00      	nop
+ 3ea:	bd80      	pop	{r7, pc}
+
+000003ec <ADC0Seq1_Handler>:
+ 3ec:	b580      	push	{r7, lr}
+ 3ee:	af00      	add	r7, sp, #0
+ 3f0:	f7ff ff9e 	bl	330 <IntDefaultHandler>
+ 3f4:	bf00      	nop
+ 3f6:	bd80      	pop	{r7, pc}
+
+000003f8 <ADC0Seq2_Handler>:
+ 3f8:	b580      	push	{r7, lr}
+ 3fa:	af00      	add	r7, sp, #0
+ 3fc:	f7ff ff98 	bl	330 <IntDefaultHandler>
+ 400:	bf00      	nop
+ 402:	bd80      	pop	{r7, pc}
+
+00000404 <ADC0Seq3_Handler>:
+ 404:	b580      	push	{r7, lr}
+ 406:	af00      	add	r7, sp, #0
+ 408:	f7ff ff92 	bl	330 <IntDefaultHandler>
+ 40c:	bf00      	nop
+ 40e:	bd80      	pop	{r7, pc}
+
+00000410 <WDT_Handler>:
+ 410:	b580      	push	{r7, lr}
+ 412:	af00      	add	r7, sp, #0
+ 414:	f7ff ff8c 	bl	330 <IntDefaultHandler>
+ 418:	bf00      	nop
+ 41a:	bd80      	pop	{r7, pc}
+
+0000041c <Timer0B_Handler>:
+ 41c:	b580      	push	{r7, lr}
+ 41e:	af00      	add	r7, sp, #0
+ 420:	f7ff ff86 	bl	330 <IntDefaultHandler>
+ 424:	bf00      	nop
+ 426:	bd80      	pop	{r7, pc}
+
+00000428 <Timer1B_Handler>:
+ 428:	b580      	push	{r7, lr}
+ 42a:	af00      	add	r7, sp, #0
+ 42c:	f7ff ff80 	bl	330 <IntDefaultHandler>
+ 430:	bf00      	nop
+ 432:	bd80      	pop	{r7, pc}
+
+00000434 <Timer2B_Handler>:
+ 434:	b580      	push	{r7, lr}
+ 436:	af00      	add	r7, sp, #0
+ 438:	f7ff ff7a 	bl	330 <IntDefaultHandler>
+ 43c:	bf00      	nop
+ 43e:	bd80      	pop	{r7, pc}
+
+00000440 <Comp0_Handler>:
+ 440:	b580      	push	{r7, lr}
+ 442:	af00      	add	r7, sp, #0
+ 444:	f7ff ff74 	bl	330 <IntDefaultHandler>
+ 448:	bf00      	nop
+ 44a:	bd80      	pop	{r7, pc}
+
+0000044c <Comp1_Handler>:
+ 44c:	b580      	push	{r7, lr}
+ 44e:	af00      	add	r7, sp, #0
+ 450:	f7ff ff6e 	bl	330 <IntDefaultHandler>
+ 454:	bf00      	nop
+ 456:	bd80      	pop	{r7, pc}
+
+00000458 <Comp2_Handler>:
+ 458:	b580      	push	{r7, lr}
+ 45a:	af00      	add	r7, sp, #0
+ 45c:	f7ff ff68 	bl	330 <IntDefaultHandler>
+ 460:	bf00      	nop
+ 462:	bd80      	pop	{r7, pc}
+
+00000464 <SysCtl_Handler>:
+ 464:	b580      	push	{r7, lr}
+ 466:	af00      	add	r7, sp, #0
+ 468:	f7ff ff62 	bl	330 <IntDefaultHandler>
+ 46c:	bf00      	nop
+ 46e:	bd80      	pop	{r7, pc}
+
+00000470 <FlashCtl_Handler>:
+ 470:	b580      	push	{r7, lr}
+ 472:	af00      	add	r7, sp, #0
+ 474:	f7ff ff5c 	bl	330 <IntDefaultHandler>
+ 478:	bf00      	nop
+ 47a:	bd80      	pop	{r7, pc}
+
+0000047c <GPIOPortF_Handler>:
+ 47c:	b580      	push	{r7, lr}
+ 47e:	af00      	add	r7, sp, #0
+ 480:	f7ff ff56 	bl	330 <IntDefaultHandler>
+ 484:	bf00      	nop
+ 486:	bd80      	pop	{r7, pc}
+
+00000488 <GPIOPortG_Handler>:
+ 488:	b580      	push	{r7, lr}
+ 48a:	af00      	add	r7, sp, #0
+ 48c:	f7ff ff50 	bl	330 <IntDefaultHandler>
+ 490:	bf00      	nop
+ 492:	bd80      	pop	{r7, pc}
+
+00000494 <GPIOPortH_Handler>:
+ 494:	b580      	push	{r7, lr}
+ 496:	af00      	add	r7, sp, #0
+ 498:	f7ff ff4a 	bl	330 <IntDefaultHandler>
+ 49c:	bf00      	nop
+ 49e:	bd80      	pop	{r7, pc}
+
+000004a0 <UART2_Handler>:
+ 4a0:	b580      	push	{r7, lr}
+ 4a2:	af00      	add	r7, sp, #0
+ 4a4:	f7ff ff44 	bl	330 <IntDefaultHandler>
+ 4a8:	bf00      	nop
+ 4aa:	bd80      	pop	{r7, pc}
+
+000004ac <SSI1_Handler>:
+ 4ac:	b580      	push	{r7, lr}
+ 4ae:	af00      	add	r7, sp, #0
+ 4b0:	f7ff ff3e 	bl	330 <IntDefaultHandler>
+ 4b4:	bf00      	nop
+ 4b6:	bd80      	pop	{r7, pc}
+
+000004b8 <Timer3B_Handler>:
+ 4b8:	b580      	push	{r7, lr}
+ 4ba:	af00      	add	r7, sp, #0
+ 4bc:	f7ff ff38 	bl	330 <IntDefaultHandler>
+ 4c0:	bf00      	nop
+ 4c2:	bd80      	pop	{r7, pc}
+
+000004c4 <I2C1_Handler>:
+ 4c4:	b580      	push	{r7, lr}
+ 4c6:	af00      	add	r7, sp, #0
+ 4c8:	f7ff ff32 	bl	330 <IntDefaultHandler>
+ 4cc:	bf00      	nop
+ 4ce:	bd80      	pop	{r7, pc}
+
+000004d0 <Quadrature1_Handler>:
+ 4d0:	b580      	push	{r7, lr}
+ 4d2:	af00      	add	r7, sp, #0
+ 4d4:	f7ff ff2c 	bl	330 <IntDefaultHandler>
+ 4d8:	bf00      	nop
+ 4da:	bd80      	pop	{r7, pc}
+
+000004dc <CAN0_Handler>:
+ 4dc:	b580      	push	{r7, lr}
+ 4de:	af00      	add	r7, sp, #0
+ 4e0:	f7ff ff26 	bl	330 <IntDefaultHandler>
+ 4e4:	bf00      	nop
+ 4e6:	bd80      	pop	{r7, pc}
+
+000004e8 <CAN1_Handler>:
+ 4e8:	b580      	push	{r7, lr}
+ 4ea:	af00      	add	r7, sp, #0
+ 4ec:	f7ff ff20 	bl	330 <IntDefaultHandler>
+ 4f0:	bf00      	nop
+ 4f2:	bd80      	pop	{r7, pc}
+
+000004f4 <CAN2_Handler>:
+ 4f4:	b580      	push	{r7, lr}
+ 4f6:	af00      	add	r7, sp, #0
+ 4f8:	f7ff ff1a 	bl	330 <IntDefaultHandler>
+ 4fc:	bf00      	nop
+ 4fe:	bd80      	pop	{r7, pc}
+
+00000500 <Ethernet_Handler>:
+ 500:	b580      	push	{r7, lr}
+ 502:	af00      	add	r7, sp, #0
+ 504:	f7ff ff14 	bl	330 <IntDefaultHandler>
+ 508:	bf00      	nop
+ 50a:	bd80      	pop	{r7, pc}
+
+0000050c <Hibernate_Handler>:
+ 50c:	b580      	push	{r7, lr}
+ 50e:	af00      	add	r7, sp, #0
+ 510:	f7ff ff0e 	bl	330 <IntDefaultHandler>
+ 514:	bf00      	nop
+ 516:	bd80      	pop	{r7, pc}
+
+00000518 <USB0_Handler>:
+ 518:	b580      	push	{r7, lr}
+ 51a:	af00      	add	r7, sp, #0
+ 51c:	f7ff ff08 	bl	330 <IntDefaultHandler>
+ 520:	bf00      	nop
+ 522:	bd80      	pop	{r7, pc}
+
+00000524 <PWM0Generator3_Handler>:
+ 524:	b580      	push	{r7, lr}
+ 526:	af00      	add	r7, sp, #0
+ 528:	f7ff ff02 	bl	330 <IntDefaultHandler>
+ 52c:	bf00      	nop
+ 52e:	bd80      	pop	{r7, pc}
+
+00000530 <uDMA_Handler>:
+ 530:	b580      	push	{r7, lr}
+ 532:	af00      	add	r7, sp, #0
+ 534:	f7ff fefc 	bl	330 <IntDefaultHandler>
+ 538:	bf00      	nop
+ 53a:	bd80      	pop	{r7, pc}
+
+0000053c <uDMA_Error>:
+ 53c:	b580      	push	{r7, lr}
+ 53e:	af00      	add	r7, sp, #0
+ 540:	f7ff fef6 	bl	330 <IntDefaultHandler>
+ 544:	bf00      	nop
+ 546:	bd80      	pop	{r7, pc}
+
+00000548 <ADC1Seq0_Handler>:
+ 548:	b580      	push	{r7, lr}
+ 54a:	af00      	add	r7, sp, #0
+ 54c:	f7ff fef0 	bl	330 <IntDefaultHandler>
+ 550:	bf00      	nop
+ 552:	bd80      	pop	{r7, pc}
+
+00000554 <ADC1Seq1_Handler>:
+ 554:	b580      	push	{r7, lr}
+ 556:	af00      	add	r7, sp, #0
+ 558:	f7ff feea 	bl	330 <IntDefaultHandler>
+ 55c:	bf00      	nop
+ 55e:	bd80      	pop	{r7, pc}
+
+00000560 <ADC1Seq2_Handler>:
+ 560:	b580      	push	{r7, lr}
+ 562:	af00      	add	r7, sp, #0
+ 564:	f7ff fee4 	bl	330 <IntDefaultHandler>
+ 568:	bf00      	nop
+ 56a:	bd80      	pop	{r7, pc}
+
+0000056c <ADC1Seq3_Handler>:
+ 56c:	b580      	push	{r7, lr}
+ 56e:	af00      	add	r7, sp, #0
+ 570:	f7ff fede 	bl	330 <IntDefaultHandler>
+ 574:	bf00      	nop
+ 576:	bd80      	pop	{r7, pc}
+
+00000578 <I2S0_Handler>:
+ 578:	b580      	push	{r7, lr}
+ 57a:	af00      	add	r7, sp, #0
+ 57c:	f7ff fed8 	bl	330 <IntDefaultHandler>
+ 580:	bf00      	nop
+ 582:	bd80      	pop	{r7, pc}
+
+00000584 <ExtBus_Handler>:
+ 584:	b580      	push	{r7, lr}
+ 586:	af00      	add	r7, sp, #0
+ 588:	f7ff fed2 	bl	330 <IntDefaultHandler>
+ 58c:	bf00      	nop
+ 58e:	bd80      	pop	{r7, pc}
+
+00000590 <GPIOPortJ_Handler>:
+ 590:	b580      	push	{r7, lr}
+ 592:	af00      	add	r7, sp, #0
+ 594:	f7ff fecc 	bl	330 <IntDefaultHandler>
+ 598:	bf00      	nop
+ 59a:	bd80      	pop	{r7, pc}
+
+0000059c <GPIOPortK_Handler>:
+ 59c:	b580      	push	{r7, lr}
+ 59e:	af00      	add	r7, sp, #0
+ 5a0:	f7ff fec6 	bl	330 <IntDefaultHandler>
+ 5a4:	bf00      	nop
+ 5a6:	bd80      	pop	{r7, pc}
+
+000005a8 <GPIOPortL_Handler>:
+ 5a8:	b580      	push	{r7, lr}
+ 5aa:	af00      	add	r7, sp, #0
+ 5ac:	f7ff fec0 	bl	330 <IntDefaultHandler>
+ 5b0:	bf00      	nop
+ 5b2:	bd80      	pop	{r7, pc}
+
+000005b4 <SSI2_Handler>:
+ 5b4:	b580      	push	{r7, lr}
+ 5b6:	af00      	add	r7, sp, #0
+ 5b8:	f7ff feba 	bl	330 <IntDefaultHandler>
+ 5bc:	bf00      	nop
+ 5be:	bd80      	pop	{r7, pc}
+
+000005c0 <SSI3_Handler>:
+ 5c0:	b580      	push	{r7, lr}
+ 5c2:	af00      	add	r7, sp, #0
+ 5c4:	f7ff feb4 	bl	330 <IntDefaultHandler>
+ 5c8:	bf00      	nop
+ 5ca:	bd80      	pop	{r7, pc}
+
+000005cc <UART3_Handler>:
+ 5cc:	b580      	push	{r7, lr}
+ 5ce:	af00      	add	r7, sp, #0
+ 5d0:	f7ff feae 	bl	330 <IntDefaultHandler>
+ 5d4:	bf00      	nop
+ 5d6:	bd80      	pop	{r7, pc}
+
+000005d8 <UART4_Handler>:
+ 5d8:	b580      	push	{r7, lr}
+ 5da:	af00      	add	r7, sp, #0
+ 5dc:	f7ff fea8 	bl	330 <IntDefaultHandler>
+ 5e0:	bf00      	nop
+ 5e2:	bd80      	pop	{r7, pc}
+
+000005e4 <UART5_Handler>:
+ 5e4:	b580      	push	{r7, lr}
+ 5e6:	af00      	add	r7, sp, #0
+ 5e8:	f7ff fea2 	bl	330 <IntDefaultHandler>
+ 5ec:	bf00      	nop
+ 5ee:	bd80      	pop	{r7, pc}
+
+000005f0 <UART6_Handler>:
+ 5f0:	b580      	push	{r7, lr}
+ 5f2:	af00      	add	r7, sp, #0
+ 5f4:	f7ff fe9c 	bl	330 <IntDefaultHandler>
+ 5f8:	bf00      	nop
+ 5fa:	bd80      	pop	{r7, pc}
+
+000005fc <UART7_Handler>:
+ 5fc:	b580      	push	{r7, lr}
+ 5fe:	af00      	add	r7, sp, #0
+ 600:	f7ff fe96 	bl	330 <IntDefaultHandler>
+ 604:	bf00      	nop
+ 606:	bd80      	pop	{r7, pc}
+
+00000608 <I2C2_Handler>:
+ 608:	b580      	push	{r7, lr}
+ 60a:	af00      	add	r7, sp, #0
+ 60c:	f7ff fe90 	bl	330 <IntDefaultHandler>
+ 610:	bf00      	nop
+ 612:	bd80      	pop	{r7, pc}
+
+00000614 <I2C3_Handler>:
+ 614:	b580      	push	{r7, lr}
+ 616:	af00      	add	r7, sp, #0
+ 618:	f7ff fe8a 	bl	330 <IntDefaultHandler>
+ 61c:	bf00      	nop
+ 61e:	bd80      	pop	{r7, pc}
+
+00000620 <Timer4B_Handler>:
+ 620:	b580      	push	{r7, lr}
+ 622:	af00      	add	r7, sp, #0
+ 624:	f7ff fe84 	bl	330 <IntDefaultHandler>
+ 628:	bf00      	nop
+ 62a:	bd80      	pop	{r7, pc}
+
+0000062c <Timer5B_Handler>:
+ 62c:	b580      	push	{r7, lr}
+ 62e:	af00      	add	r7, sp, #0
+ 630:	f7ff fe7e 	bl	330 <IntDefaultHandler>
+ 634:	bf00      	nop
+ 636:	bd80      	pop	{r7, pc}
+
+00000638 <WideTimer0A_Handler>:
+ 638:	b580      	push	{r7, lr}
+ 63a:	af00      	add	r7, sp, #0
+ 63c:	f7ff fe78 	bl	330 <IntDefaultHandler>
+ 640:	bf00      	nop
+ 642:	bd80      	pop	{r7, pc}
+
+00000644 <WideTimer0B_Handler>:
+ 644:	b580      	push	{r7, lr}
+ 646:	af00      	add	r7, sp, #0
+ 648:	f7ff fe72 	bl	330 <IntDefaultHandler>
+ 64c:	bf00      	nop
+ 64e:	bd80      	pop	{r7, pc}
+
+00000650 <WideTimer1A_Handler>:
+ 650:	b580      	push	{r7, lr}
+ 652:	af00      	add	r7, sp, #0
+ 654:	f7ff fe6c 	bl	330 <IntDefaultHandler>
+ 658:	bf00      	nop
+ 65a:	bd80      	pop	{r7, pc}
+
+0000065c <WideTimer1B_Handler>:
+ 65c:	b580      	push	{r7, lr}
+ 65e:	af00      	add	r7, sp, #0
+ 660:	f7ff fe66 	bl	330 <IntDefaultHandler>
+ 664:	bf00      	nop
+ 666:	bd80      	pop	{r7, pc}
+
+00000668 <WideTimer2A_Handler>:
+ 668:	b580      	push	{r7, lr}
+ 66a:	af00      	add	r7, sp, #0
+ 66c:	f7ff fe60 	bl	330 <IntDefaultHandler>
+ 670:	bf00      	nop
+ 672:	bd80      	pop	{r7, pc}
+
+00000674 <WideTimer2B_Handler>:
+ 674:	b580      	push	{r7, lr}
+ 676:	af00      	add	r7, sp, #0
+ 678:	f7ff fe5a 	bl	330 <IntDefaultHandler>
+ 67c:	bf00      	nop
+ 67e:	bd80      	pop	{r7, pc}
+
+00000680 <WideTimer3A_Handler>:
+ 680:	b580      	push	{r7, lr}
+ 682:	af00      	add	r7, sp, #0
+ 684:	f7ff fe54 	bl	330 <IntDefaultHandler>
+ 688:	bf00      	nop
+ 68a:	bd80      	pop	{r7, pc}
+
+0000068c <WideTimer3B_Handler>:
+ 68c:	b580      	push	{r7, lr}
+ 68e:	af00      	add	r7, sp, #0
+ 690:	f7ff fe4e 	bl	330 <IntDefaultHandler>
+ 694:	bf00      	nop
+ 696:	bd80      	pop	{r7, pc}
+
+00000698 <WideTimer4A_Handler>:
+ 698:	b580      	push	{r7, lr}
+ 69a:	af00      	add	r7, sp, #0
+ 69c:	f7ff fe48 	bl	330 <IntDefaultHandler>
+ 6a0:	bf00      	nop
+ 6a2:	bd80      	pop	{r7, pc}
+
+000006a4 <WideTimer4B_Handler>:
+ 6a4:	b580      	push	{r7, lr}
+ 6a6:	af00      	add	r7, sp, #0
+ 6a8:	f7ff fe42 	bl	330 <IntDefaultHandler>
+ 6ac:	bf00      	nop
+ 6ae:	bd80      	pop	{r7, pc}
+
+000006b0 <WideTimer5A_Handler>:
+ 6b0:	b580      	push	{r7, lr}
+ 6b2:	af00      	add	r7, sp, #0
+ 6b4:	f7ff fe3c 	bl	330 <IntDefaultHandler>
+ 6b8:	bf00      	nop
+ 6ba:	bd80      	pop	{r7, pc}
+
+000006bc <WideTimer5B_Handler>:
+ 6bc:	b580      	push	{r7, lr}
+ 6be:	af00      	add	r7, sp, #0
+ 6c0:	f7ff fe36 	bl	330 <IntDefaultHandler>
+ 6c4:	bf00      	nop
+ 6c6:	bd80      	pop	{r7, pc}
+
+000006c8 <FPU_Handler>:
+ 6c8:	b580      	push	{r7, lr}
+ 6ca:	af00      	add	r7, sp, #0
+ 6cc:	f7ff fe30 	bl	330 <IntDefaultHandler>
+ 6d0:	bf00      	nop
+ 6d2:	bd80      	pop	{r7, pc}
+
+000006d4 <PECI0_Handler>:
+ 6d4:	b580      	push	{r7, lr}
+ 6d6:	af00      	add	r7, sp, #0
+ 6d8:	f7ff fe2a 	bl	330 <IntDefaultHandler>
+ 6dc:	bf00      	nop
+ 6de:	bd80      	pop	{r7, pc}
+
+000006e0 <LPC0_Handler>:
+ 6e0:	b580      	push	{r7, lr}
+ 6e2:	af00      	add	r7, sp, #0
+ 6e4:	f7ff fe24 	bl	330 <IntDefaultHandler>
+ 6e8:	bf00      	nop
+ 6ea:	bd80      	pop	{r7, pc}
+
+000006ec <I2C4_Handler>:
+ 6ec:	b580      	push	{r7, lr}
+ 6ee:	af00      	add	r7, sp, #0
+ 6f0:	f7ff fe1e 	bl	330 <IntDefaultHandler>
+ 6f4:	bf00      	nop
+ 6f6:	bd80      	pop	{r7, pc}
+
+000006f8 <I2C5_Handler>:
+ 6f8:	b580      	push	{r7, lr}
+ 6fa:	af00      	add	r7, sp, #0
+ 6fc:	f7ff fe18 	bl	330 <IntDefaultHandler>
+ 700:	bf00      	nop
+ 702:	bd80      	pop	{r7, pc}
+
+00000704 <GPIOPortM_Handler>:
+ 704:	b580      	push	{r7, lr}
+ 706:	af00      	add	r7, sp, #0
+ 708:	f7ff fe12 	bl	330 <IntDefaultHandler>
+ 70c:	bf00      	nop
+ 70e:	bd80      	pop	{r7, pc}
+
+00000710 <GPIOPortN_Handler>:
+ 710:	b580      	push	{r7, lr}
+ 712:	af00      	add	r7, sp, #0
+ 714:	f7ff fe0c 	bl	330 <IntDefaultHandler>
+ 718:	bf00      	nop
+ 71a:	bd80      	pop	{r7, pc}
+
+0000071c <Quadrature2_Handler>:
+ 71c:	b580      	push	{r7, lr}
+ 71e:	af00      	add	r7, sp, #0
+ 720:	f7ff fe06 	bl	330 <IntDefaultHandler>
+ 724:	bf00      	nop
+ 726:	bd80      	pop	{r7, pc}
+
+00000728 <Fan0_Handler>:
+ 728:	b580      	push	{r7, lr}
+ 72a:	af00      	add	r7, sp, #0
+ 72c:	f7ff fe00 	bl	330 <IntDefaultHandler>
+ 730:	bf00      	nop
+ 732:	bd80      	pop	{r7, pc}
+
+00000734 <GPIOPortP_Handler>:
+ 734:	b580      	push	{r7, lr}
+ 736:	af00      	add	r7, sp, #0
+ 738:	f7ff fdfa 	bl	330 <IntDefaultHandler>
+ 73c:	bf00      	nop
+ 73e:	bd80      	pop	{r7, pc}
+
+00000740 <GPIOPortP1_Handler>:
+ 740:	b580      	push	{r7, lr}
+ 742:	af00      	add	r7, sp, #0
+ 744:	f7ff fdf4 	bl	330 <IntDefaultHandler>
+ 748:	bf00      	nop
+ 74a:	bd80      	pop	{r7, pc}
+
+0000074c <GPIOPortP2_Handler>:
+ 74c:	b580      	push	{r7, lr}
+ 74e:	af00      	add	r7, sp, #0
+ 750:	f7ff fdee 	bl	330 <IntDefaultHandler>
+ 754:	bf00      	nop
+ 756:	bd80      	pop	{r7, pc}
+
+00000758 <GPIOPortP3_Handler>:
+ 758:	b580      	push	{r7, lr}
+ 75a:	af00      	add	r7, sp, #0
+ 75c:	f7ff fde8 	bl	330 <IntDefaultHandler>
+ 760:	bf00      	nop
+ 762:	bd80      	pop	{r7, pc}
+
+00000764 <GPIOPortP4_Handler>:
+ 764:	b580      	push	{r7, lr}
+ 766:	af00      	add	r7, sp, #0
+ 768:	f7ff fde2 	bl	330 <IntDefaultHandler>
+ 76c:	bf00      	nop
+ 76e:	bd80      	pop	{r7, pc}
+
+00000770 <GPIOPortP5_Handler>:
+ 770:	b580      	push	{r7, lr}
+ 772:	af00      	add	r7, sp, #0
+ 774:	f7ff fddc 	bl	330 <IntDefaultHandler>
+ 778:	bf00      	nop
+ 77a:	bd80      	pop	{r7, pc}
+
+0000077c <GPIOPortP6_Handler>:
+ 77c:	b580      	push	{r7, lr}
+ 77e:	af00      	add	r7, sp, #0
+ 780:	f7ff fdd6 	bl	330 <IntDefaultHandler>
+ 784:	bf00      	nop
+ 786:	bd80      	pop	{r7, pc}
+
+00000788 <GPIOPortP7_Handler>:
+ 788:	b580      	push	{r7, lr}
+ 78a:	af00      	add	r7, sp, #0
+ 78c:	f7ff fdd0 	bl	330 <IntDefaultHandler>
+ 790:	bf00      	nop
+ 792:	bd80      	pop	{r7, pc}
+
+00000794 <GPIOPortQ_Handler>:
+ 794:	b580      	push	{r7, lr}
+ 796:	af00      	add	r7, sp, #0
+ 798:	f7ff fdca 	bl	330 <IntDefaultHandler>
+ 79c:	bf00      	nop
+ 79e:	bd80      	pop	{r7, pc}
+
+000007a0 <GPIOPortQ1_Handler>:
+ 7a0:	b580      	push	{r7, lr}
+ 7a2:	af00      	add	r7, sp, #0
+ 7a4:	f7ff fdc4 	bl	330 <IntDefaultHandler>
+ 7a8:	bf00      	nop
+ 7aa:	bd80      	pop	{r7, pc}
+
+000007ac <GPIOPortQ2_Handler>:
+ 7ac:	b580      	push	{r7, lr}
+ 7ae:	af00      	add	r7, sp, #0
+ 7b0:	f7ff fdbe 	bl	330 <IntDefaultHandler>
+ 7b4:	bf00      	nop
+ 7b6:	bd80      	pop	{r7, pc}
+
+000007b8 <GPIOPortQ3_Handler>:
+ 7b8:	b580      	push	{r7, lr}
+ 7ba:	af00      	add	r7, sp, #0
+ 7bc:	f7ff fdb8 	bl	330 <IntDefaultHandler>
+ 7c0:	bf00      	nop
+ 7c2:	bd80      	pop	{r7, pc}
+
+000007c4 <GPIOPortQ4_Handler>:
+ 7c4:	b580      	push	{r7, lr}
+ 7c6:	af00      	add	r7, sp, #0
+ 7c8:	f7ff fdb2 	bl	330 <IntDefaultHandler>
+ 7cc:	bf00      	nop
+ 7ce:	bd80      	pop	{r7, pc}
+
+000007d0 <GPIOPortQ5_Handler>:
+ 7d0:	b580      	push	{r7, lr}
+ 7d2:	af00      	add	r7, sp, #0
+ 7d4:	f7ff fdac 	bl	330 <IntDefaultHandler>
+ 7d8:	bf00      	nop
+ 7da:	bd80      	pop	{r7, pc}
+
+000007dc <GPIOPortQ6_Handler>:
+ 7dc:	b580      	push	{r7, lr}
+ 7de:	af00      	add	r7, sp, #0
+ 7e0:	f7ff fda6 	bl	330 <IntDefaultHandler>
+ 7e4:	bf00      	nop
+ 7e6:	bd80      	pop	{r7, pc}
+
+000007e8 <GPIOPortQ7_Handler>:
+ 7e8:	b580      	push	{r7, lr}
+ 7ea:	af00      	add	r7, sp, #0
+ 7ec:	f7ff fda0 	bl	330 <IntDefaultHandler>
+ 7f0:	bf00      	nop
+ 7f2:	bd80      	pop	{r7, pc}
+
+000007f4 <GPIOPortR_Handler>:
+ 7f4:	b580      	push	{r7, lr}
+ 7f6:	af00      	add	r7, sp, #0
+ 7f8:	f7ff fd9a 	bl	330 <IntDefaultHandler>
+ 7fc:	bf00      	nop
+ 7fe:	bd80      	pop	{r7, pc}
+
+00000800 <GPIOPortS_Handler>:
+ 800:	b580      	push	{r7, lr}
+ 802:	af00      	add	r7, sp, #0
+ 804:	f7ff fd94 	bl	330 <IntDefaultHandler>
+ 808:	bf00      	nop
+ 80a:	bd80      	pop	{r7, pc}
+
+0000080c <PWM1Generator0_Handler>:
+ 80c:	b580      	push	{r7, lr}
+ 80e:	af00      	add	r7, sp, #0
+ 810:	f7ff fd8e 	bl	330 <IntDefaultHandler>
+ 814:	bf00      	nop
+ 816:	bd80      	pop	{r7, pc}
+
+00000818 <PWM1Generator1_Handler>:
+ 818:	b580      	push	{r7, lr}
+ 81a:	af00      	add	r7, sp, #0
+ 81c:	f7ff fd88 	bl	330 <IntDefaultHandler>
+ 820:	bf00      	nop
+ 822:	bd80      	pop	{r7, pc}
+
+00000824 <PWM1Generator2_Handler>:
+ 824:	b580      	push	{r7, lr}
+ 826:	af00      	add	r7, sp, #0
+ 828:	f7ff fd82 	bl	330 <IntDefaultHandler>
+ 82c:	bf00      	nop
+ 82e:	bd80      	pop	{r7, pc}
+
+00000830 <PWM1Generator3_Handler>:
+ 830:	b580      	push	{r7, lr}
+ 832:	af00      	add	r7, sp, #0
+ 834:	f7ff fd7c 	bl	330 <IntDefaultHandler>
+ 838:	bf00      	nop
+ 83a:	bd80      	pop	{r7, pc}
+
+0000083c <PWM1Fault_Handler>:
+ 83c:	b580      	push	{r7, lr}
+ 83e:	af00      	add	r7, sp, #0
+ 840:	f7ff fd76 	bl	330 <IntDefaultHandler>
+ 844:	bf00      	nop
+ 846:	bd80      	pop	{r7, pc}
+
+00000848 <DisableInterrupts>:
+ 848:	b480      	push	{r7}
+ 84a:	af00      	add	r7, sp, #0
+ 84c:	b672      	cpsid	i
+ 84e:	bf00      	nop
+ 850:	46bd      	mov	sp, r7
+ 852:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 856:	4770      	bx	lr
+
+00000858 <EnableInterrupts>:
+ 858:	b480      	push	{r7}
+ 85a:	af00      	add	r7, sp, #0
+ 85c:	b662      	cpsie	i
+ 85e:	bf00      	nop
+ 860:	46bd      	mov	sp, r7
+ 862:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 866:	4770      	bx	lr
+
+00000868 <main>:
+ 868:	b580      	push	{r7, lr}
+ 86a:	af00      	add	r7, sp, #0
+ 86c:	f000 f832 	bl	8d4 <startupDelay>
+ 870:	f7ff ffea 	bl	848 <DisableInterrupts>
+ 874:	2004      	movs	r0, #4
+ 876:	f000 f8fd 	bl	a74 <PLL_Init>
+ 87a:	f000 f94f 	bl	b1c <LaunchPad_Init>
+ 87e:	f000 f985 	bl	b8c <UART_Init>
+ 882:	2207      	movs	r2, #7
+ 884:	4903      	ldr	r1, [pc, #12]	@ (894 <main+0x2c>)
+ 886:	4804      	ldr	r0, [pc, #16]	@ (898 <main+0x30>)
+ 888:	f000 f846 	bl	918 <Timer0A_Init>
+ 88c:	f7ff ffe4 	bl	858 <EnableInterrupts>
+ 890:	bf00      	nop
+ 892:	e7fd      	b.n	890 <main+0x28>
+ 894:	04c4b400 	.word	0x04c4b400
+ 898:	0000089d 	.word	0x0000089d
+
+0000089c <HeartBeat>:
+ 89c:	b580      	push	{r7, lr}
+ 89e:	af00      	add	r7, sp, #0
+ 8a0:	4b09      	ldr	r3, [pc, #36]	@ (8c8 <HeartBeat+0x2c>)
+ 8a2:	681b      	ldr	r3, [r3, #0]
+ 8a4:	4a08      	ldr	r2, [pc, #32]	@ (8c8 <HeartBeat+0x2c>)
+ 8a6:	f083 0302 	eor.w	r3, r3, #2
+ 8aa:	6013      	str	r3, [r2, #0]
+ 8ac:	4b07      	ldr	r3, [pc, #28]	@ (8cc <HeartBeat+0x30>)
+ 8ae:	681b      	ldr	r3, [r3, #0]
+ 8b0:	4619      	mov	r1, r3
+ 8b2:	4807      	ldr	r0, [pc, #28]	@ (8d0 <HeartBeat+0x34>)
+ 8b4:	f000 f9da 	bl	c6c <printf_lite>
+ 8b8:	4b04      	ldr	r3, [pc, #16]	@ (8cc <HeartBeat+0x30>)
+ 8ba:	681b      	ldr	r3, [r3, #0]
+ 8bc:	3301      	adds	r3, #1
+ 8be:	4a03      	ldr	r2, [pc, #12]	@ (8cc <HeartBeat+0x30>)
+ 8c0:	6013      	str	r3, [r2, #0]
+ 8c2:	bf00      	nop
+ 8c4:	bd80      	pop	{r7, pc}
+ 8c6:	bf00      	nop
+ 8c8:	400253fc 	.word	0x400253fc
+ 8cc:	20000100 	.word	0x20000100
+ 8d0:	00000e94 	.word	0x00000e94
+
+000008d4 <startupDelay>:
+ 8d4:	b480      	push	{r7}
+ 8d6:	b083      	sub	sp, #12
+ 8d8:	af00      	add	r7, sp, #0
+ 8da:	2300      	movs	r3, #0
+ 8dc:	80fb      	strh	r3, [r7, #6]
+ 8de:	e002      	b.n	8e6 <startupDelay+0x12>
+ 8e0:	88fb      	ldrh	r3, [r7, #6]
+ 8e2:	3301      	adds	r3, #1
+ 8e4:	80fb      	strh	r3, [r7, #6]
+ 8e6:	88fb      	ldrh	r3, [r7, #6]
+ 8e8:	f64f 72ff 	movw	r2, #65535	@ 0xffff
+ 8ec:	4293      	cmp	r3, r2
+ 8ee:	d1f7      	bne.n	8e0 <startupDelay+0xc>
+ 8f0:	bf00      	nop
+ 8f2:	bf00      	nop
+ 8f4:	370c      	adds	r7, #12
+ 8f6:	46bd      	mov	sp, r7
+ 8f8:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8fc:	4770      	bx	lr
+
+000008fe <_putchar>:
+ 8fe:	b580      	push	{r7, lr}
+ 900:	b082      	sub	sp, #8
+ 902:	af00      	add	r7, sp, #0
+ 904:	4603      	mov	r3, r0
+ 906:	71fb      	strb	r3, [r7, #7]
+ 908:	79fb      	ldrb	r3, [r7, #7]
+ 90a:	4618      	mov	r0, r3
+ 90c:	f000 f994 	bl	c38 <UART_OutChar>
+ 910:	bf00      	nop
+ 912:	3708      	adds	r7, #8
+ 914:	46bd      	mov	sp, r7
+ 916:	bd80      	pop	{r7, pc}
+
+00000918 <Timer0A_Init>:
+ 918:	b480      	push	{r7}
+ 91a:	b085      	sub	sp, #20
+ 91c:	af00      	add	r7, sp, #0
+ 91e:	60f8      	str	r0, [r7, #12]
+ 920:	60b9      	str	r1, [r7, #8]
+ 922:	607a      	str	r2, [r7, #4]
+ 924:	4b1e      	ldr	r3, [pc, #120]	@ (9a0 <Timer0A_Init+0x88>)
+ 926:	681b      	ldr	r3, [r3, #0]
+ 928:	4a1d      	ldr	r2, [pc, #116]	@ (9a0 <Timer0A_Init+0x88>)
+ 92a:	f043 0301 	orr.w	r3, r3, #1
+ 92e:	6013      	str	r3, [r2, #0]
+ 930:	4a1c      	ldr	r2, [pc, #112]	@ (9a4 <Timer0A_Init+0x8c>)
+ 932:	68fb      	ldr	r3, [r7, #12]
+ 934:	6013      	str	r3, [r2, #0]
+ 936:	4b1c      	ldr	r3, [pc, #112]	@ (9a8 <Timer0A_Init+0x90>)
+ 938:	681b      	ldr	r3, [r3, #0]
+ 93a:	4a1b      	ldr	r2, [pc, #108]	@ (9a8 <Timer0A_Init+0x90>)
+ 93c:	f023 0301 	bic.w	r3, r3, #1
+ 940:	6013      	str	r3, [r2, #0]
+ 942:	4b1a      	ldr	r3, [pc, #104]	@ (9ac <Timer0A_Init+0x94>)
+ 944:	2200      	movs	r2, #0
+ 946:	601a      	str	r2, [r3, #0]
+ 948:	4b19      	ldr	r3, [pc, #100]	@ (9b0 <Timer0A_Init+0x98>)
+ 94a:	2202      	movs	r2, #2
+ 94c:	601a      	str	r2, [r3, #0]
+ 94e:	4a19      	ldr	r2, [pc, #100]	@ (9b4 <Timer0A_Init+0x9c>)
+ 950:	68bb      	ldr	r3, [r7, #8]
+ 952:	3b01      	subs	r3, #1
+ 954:	6013      	str	r3, [r2, #0]
+ 956:	4b18      	ldr	r3, [pc, #96]	@ (9b8 <Timer0A_Init+0xa0>)
+ 958:	2200      	movs	r2, #0
+ 95a:	601a      	str	r2, [r3, #0]
+ 95c:	4b17      	ldr	r3, [pc, #92]	@ (9bc <Timer0A_Init+0xa4>)
+ 95e:	2201      	movs	r2, #1
+ 960:	601a      	str	r2, [r3, #0]
+ 962:	4b17      	ldr	r3, [pc, #92]	@ (9c0 <Timer0A_Init+0xa8>)
+ 964:	681b      	ldr	r3, [r3, #0]
+ 966:	4a16      	ldr	r2, [pc, #88]	@ (9c0 <Timer0A_Init+0xa8>)
+ 968:	f043 0301 	orr.w	r3, r3, #1
+ 96c:	6013      	str	r3, [r2, #0]
+ 96e:	4b15      	ldr	r3, [pc, #84]	@ (9c4 <Timer0A_Init+0xac>)
+ 970:	681b      	ldr	r3, [r3, #0]
+ 972:	f023 427f 	bic.w	r2, r3, #4278190080	@ 0xff000000
+ 976:	687b      	ldr	r3, [r7, #4]
+ 978:	075b      	lsls	r3, r3, #29
+ 97a:	4912      	ldr	r1, [pc, #72]	@ (9c4 <Timer0A_Init+0xac>)
+ 97c:	4313      	orrs	r3, r2
+ 97e:	600b      	str	r3, [r1, #0]
+ 980:	4b11      	ldr	r3, [pc, #68]	@ (9c8 <Timer0A_Init+0xb0>)
+ 982:	f44f 2200 	mov.w	r2, #524288	@ 0x80000
+ 986:	601a      	str	r2, [r3, #0]
+ 988:	4b07      	ldr	r3, [pc, #28]	@ (9a8 <Timer0A_Init+0x90>)
+ 98a:	681b      	ldr	r3, [r3, #0]
+ 98c:	4a06      	ldr	r2, [pc, #24]	@ (9a8 <Timer0A_Init+0x90>)
+ 98e:	f043 0301 	orr.w	r3, r3, #1
+ 992:	6013      	str	r3, [r2, #0]
+ 994:	bf00      	nop
+ 996:	3714      	adds	r7, #20
+ 998:	46bd      	mov	sp, r7
+ 99a:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 99e:	4770      	bx	lr
+ 9a0:	400fe604 	.word	0x400fe604
+ 9a4:	20000104 	.word	0x20000104
+ 9a8:	4003000c 	.word	0x4003000c
+ 9ac:	40030000 	.word	0x40030000
+ 9b0:	40030004 	.word	0x40030004
+ 9b4:	40030028 	.word	0x40030028
+ 9b8:	40030038 	.word	0x40030038
+ 9bc:	40030024 	.word	0x40030024
+ 9c0:	40030018 	.word	0x40030018
+ 9c4:	e000e410 	.word	0xe000e410
+ 9c8:	e000e100 	.word	0xe000e100
+
+000009cc <Timer0A_Handler>:
+ 9cc:	b580      	push	{r7, lr}
+ 9ce:	af00      	add	r7, sp, #0
+ 9d0:	4b03      	ldr	r3, [pc, #12]	@ (9e0 <Timer0A_Handler+0x14>)
+ 9d2:	2201      	movs	r2, #1
+ 9d4:	601a      	str	r2, [r3, #0]
+ 9d6:	4b03      	ldr	r3, [pc, #12]	@ (9e4 <Timer0A_Handler+0x18>)
+ 9d8:	681b      	ldr	r3, [r3, #0]
+ 9da:	4798      	blx	r3
+ 9dc:	bf00      	nop
+ 9de:	bd80      	pop	{r7, pc}
+ 9e0:	40030024 	.word	0x40030024
+ 9e4:	20000104 	.word	0x20000104
+
+000009e8 <Timer1A_Handler>:
+ 9e8:	b580      	push	{r7, lr}
+ 9ea:	af00      	add	r7, sp, #0
+ 9ec:	4b03      	ldr	r3, [pc, #12]	@ (9fc <Timer1A_Handler+0x14>)
+ 9ee:	2201      	movs	r2, #1
+ 9f0:	601a      	str	r2, [r3, #0]
+ 9f2:	4b03      	ldr	r3, [pc, #12]	@ (a00 <Timer1A_Handler+0x18>)
+ 9f4:	681b      	ldr	r3, [r3, #0]
+ 9f6:	4798      	blx	r3
+ 9f8:	bf00      	nop
+ 9fa:	bd80      	pop	{r7, pc}
+ 9fc:	40031024 	.word	0x40031024
+ a00:	20000108 	.word	0x20000108
+
+00000a04 <Timer2A_Handler>:
+ a04:	b580      	push	{r7, lr}
+ a06:	af00      	add	r7, sp, #0
+ a08:	4b03      	ldr	r3, [pc, #12]	@ (a18 <Timer2A_Handler+0x14>)
+ a0a:	2201      	movs	r2, #1
+ a0c:	601a      	str	r2, [r3, #0]
+ a0e:	4b03      	ldr	r3, [pc, #12]	@ (a1c <Timer2A_Handler+0x18>)
+ a10:	681b      	ldr	r3, [r3, #0]
+ a12:	4798      	blx	r3
+ a14:	bf00      	nop
+ a16:	bd80      	pop	{r7, pc}
+ a18:	40032024 	.word	0x40032024
+ a1c:	2000010c 	.word	0x2000010c
+
+00000a20 <Timer3A_Handler>:
+ a20:	b580      	push	{r7, lr}
+ a22:	af00      	add	r7, sp, #0
+ a24:	4b03      	ldr	r3, [pc, #12]	@ (a34 <Timer3A_Handler+0x14>)
+ a26:	2201      	movs	r2, #1
+ a28:	601a      	str	r2, [r3, #0]
+ a2a:	4b03      	ldr	r3, [pc, #12]	@ (a38 <Timer3A_Handler+0x18>)
+ a2c:	681b      	ldr	r3, [r3, #0]
+ a2e:	4798      	blx	r3
+ a30:	bf00      	nop
+ a32:	bd80      	pop	{r7, pc}
+ a34:	40033024 	.word	0x40033024
+ a38:	20000110 	.word	0x20000110
+
+00000a3c <Timer4A_Handler>:
+ a3c:	b580      	push	{r7, lr}
+ a3e:	af00      	add	r7, sp, #0
+ a40:	4b03      	ldr	r3, [pc, #12]	@ (a50 <Timer4A_Handler+0x14>)
+ a42:	2201      	movs	r2, #1
+ a44:	601a      	str	r2, [r3, #0]
+ a46:	4b03      	ldr	r3, [pc, #12]	@ (a54 <Timer4A_Handler+0x18>)
+ a48:	681b      	ldr	r3, [r3, #0]
+ a4a:	4798      	blx	r3
+ a4c:	bf00      	nop
+ a4e:	bd80      	pop	{r7, pc}
+ a50:	40034024 	.word	0x40034024
+ a54:	20000114 	.word	0x20000114
+
+00000a58 <Timer5A_Handler>:
+ a58:	b580      	push	{r7, lr}
+ a5a:	af00      	add	r7, sp, #0
+ a5c:	4b03      	ldr	r3, [pc, #12]	@ (a6c <Timer5A_Handler+0x14>)
+ a5e:	2201      	movs	r2, #1
+ a60:	601a      	str	r2, [r3, #0]
+ a62:	4b03      	ldr	r3, [pc, #12]	@ (a70 <Timer5A_Handler+0x18>)
+ a64:	681b      	ldr	r3, [r3, #0]
+ a66:	4798      	blx	r3
+ a68:	bf00      	nop
+ a6a:	bd80      	pop	{r7, pc}
+ a6c:	40035024 	.word	0x40035024
+ a70:	20000118 	.word	0x20000118
+
+00000a74 <PLL_Init>:
+ a74:	b480      	push	{r7}
+ a76:	b083      	sub	sp, #12
+ a78:	af00      	add	r7, sp, #0
+ a7a:	6078      	str	r0, [r7, #4]
+ a7c:	4b24      	ldr	r3, [pc, #144]	@ (b10 <PLL_Init+0x9c>)
+ a7e:	681b      	ldr	r3, [r3, #0]
+ a80:	4a23      	ldr	r2, [pc, #140]	@ (b10 <PLL_Init+0x9c>)
+ a82:	f043 4300 	orr.w	r3, r3, #2147483648	@ 0x80000000
+ a86:	6013      	str	r3, [r2, #0]
+ a88:	4b21      	ldr	r3, [pc, #132]	@ (b10 <PLL_Init+0x9c>)
+ a8a:	681b      	ldr	r3, [r3, #0]
+ a8c:	4a20      	ldr	r2, [pc, #128]	@ (b10 <PLL_Init+0x9c>)
+ a8e:	f443 6300 	orr.w	r3, r3, #2048	@ 0x800
+ a92:	6013      	str	r3, [r2, #0]
+ a94:	4b1f      	ldr	r3, [pc, #124]	@ (b14 <PLL_Init+0xa0>)
+ a96:	681b      	ldr	r3, [r3, #0]
+ a98:	4a1e      	ldr	r2, [pc, #120]	@ (b14 <PLL_Init+0xa0>)
+ a9a:	f423 63f8 	bic.w	r3, r3, #1984	@ 0x7c0
+ a9e:	6013      	str	r3, [r2, #0]
+ aa0:	4b1c      	ldr	r3, [pc, #112]	@ (b14 <PLL_Init+0xa0>)
+ aa2:	681b      	ldr	r3, [r3, #0]
+ aa4:	4a1b      	ldr	r2, [pc, #108]	@ (b14 <PLL_Init+0xa0>)
+ aa6:	f503 63a8 	add.w	r3, r3, #1344	@ 0x540
+ aaa:	6013      	str	r3, [r2, #0]
+ aac:	4b18      	ldr	r3, [pc, #96]	@ (b10 <PLL_Init+0x9c>)
+ aae:	681b      	ldr	r3, [r3, #0]
+ ab0:	4a17      	ldr	r2, [pc, #92]	@ (b10 <PLL_Init+0x9c>)
+ ab2:	f023 0370 	bic.w	r3, r3, #112	@ 0x70
+ ab6:	6013      	str	r3, [r2, #0]
+ ab8:	4b15      	ldr	r3, [pc, #84]	@ (b10 <PLL_Init+0x9c>)
+ aba:	4a15      	ldr	r2, [pc, #84]	@ (b10 <PLL_Init+0x9c>)
+ abc:	681b      	ldr	r3, [r3, #0]
+ abe:	6013      	str	r3, [r2, #0]
+ ac0:	4b13      	ldr	r3, [pc, #76]	@ (b10 <PLL_Init+0x9c>)
+ ac2:	681b      	ldr	r3, [r3, #0]
+ ac4:	4a12      	ldr	r2, [pc, #72]	@ (b10 <PLL_Init+0x9c>)
+ ac6:	f423 5300 	bic.w	r3, r3, #8192	@ 0x2000
+ aca:	6013      	str	r3, [r2, #0]
+ acc:	4b10      	ldr	r3, [pc, #64]	@ (b10 <PLL_Init+0x9c>)
+ ace:	681b      	ldr	r3, [r3, #0]
+ ad0:	4a0f      	ldr	r2, [pc, #60]	@ (b10 <PLL_Init+0x9c>)
+ ad2:	f043 4380 	orr.w	r3, r3, #1073741824	@ 0x40000000
+ ad6:	6013      	str	r3, [r2, #0]
+ ad8:	4b0d      	ldr	r3, [pc, #52]	@ (b10 <PLL_Init+0x9c>)
+ ada:	681b      	ldr	r3, [r3, #0]
+ adc:	f023 52fe 	bic.w	r2, r3, #532676608	@ 0x1fc00000
+ ae0:	687b      	ldr	r3, [r7, #4]
+ ae2:	059b      	lsls	r3, r3, #22
+ ae4:	490a      	ldr	r1, [pc, #40]	@ (b10 <PLL_Init+0x9c>)
+ ae6:	4413      	add	r3, r2
+ ae8:	600b      	str	r3, [r1, #0]
+ aea:	bf00      	nop
+ aec:	4b0a      	ldr	r3, [pc, #40]	@ (b18 <PLL_Init+0xa4>)
+ aee:	681b      	ldr	r3, [r3, #0]
+ af0:	f003 0340 	and.w	r3, r3, #64	@ 0x40
+ af4:	2b00      	cmp	r3, #0
+ af6:	d0f9      	beq.n	aec <PLL_Init+0x78>
+ af8:	4b05      	ldr	r3, [pc, #20]	@ (b10 <PLL_Init+0x9c>)
+ afa:	681b      	ldr	r3, [r3, #0]
+ afc:	4a04      	ldr	r2, [pc, #16]	@ (b10 <PLL_Init+0x9c>)
+ afe:	f423 6300 	bic.w	r3, r3, #2048	@ 0x800
+ b02:	6013      	str	r3, [r2, #0]
+ b04:	bf00      	nop
+ b06:	370c      	adds	r7, #12
+ b08:	46bd      	mov	sp, r7
+ b0a:	f85d 7b04 	ldr.w	r7, [sp], #4
+ b0e:	4770      	bx	lr
+ b10:	400fe070 	.word	0x400fe070
+ b14:	400fe060 	.word	0x400fe060
+ b18:	400fe050 	.word	0x400fe050
+
+00000b1c <LaunchPad_Init>:
+ b1c:	b480      	push	{r7}
+ b1e:	af00      	add	r7, sp, #0
+ b20:	4b11      	ldr	r3, [pc, #68]	@ (b68 <LaunchPad_Init+0x4c>)
+ b22:	681b      	ldr	r3, [r3, #0]
+ b24:	4a10      	ldr	r2, [pc, #64]	@ (b68 <LaunchPad_Init+0x4c>)
+ b26:	f043 0320 	orr.w	r3, r3, #32
+ b2a:	6013      	str	r3, [r2, #0]
+ b2c:	bf00      	nop
+ b2e:	4b0f      	ldr	r3, [pc, #60]	@ (b6c <LaunchPad_Init+0x50>)
+ b30:	681b      	ldr	r3, [r3, #0]
+ b32:	f003 0320 	and.w	r3, r3, #32
+ b36:	2b00      	cmp	r3, #0
+ b38:	d0f9      	beq.n	b2e <LaunchPad_Init+0x12>
+ b3a:	4b0d      	ldr	r3, [pc, #52]	@ (b70 <LaunchPad_Init+0x54>)
+ b3c:	4a0d      	ldr	r2, [pc, #52]	@ (b74 <LaunchPad_Init+0x58>)
+ b3e:	601a      	str	r2, [r3, #0]
+ b40:	4b0d      	ldr	r3, [pc, #52]	@ (b78 <LaunchPad_Init+0x5c>)
+ b42:	221f      	movs	r2, #31
+ b44:	601a      	str	r2, [r3, #0]
+ b46:	4b0d      	ldr	r3, [pc, #52]	@ (b7c <LaunchPad_Init+0x60>)
+ b48:	220e      	movs	r2, #14
+ b4a:	601a      	str	r2, [r3, #0]
+ b4c:	4b0c      	ldr	r3, [pc, #48]	@ (b80 <LaunchPad_Init+0x64>)
+ b4e:	2211      	movs	r2, #17
+ b50:	601a      	str	r2, [r3, #0]
+ b52:	4b0c      	ldr	r3, [pc, #48]	@ (b84 <LaunchPad_Init+0x68>)
+ b54:	221f      	movs	r2, #31
+ b56:	601a      	str	r2, [r3, #0]
+ b58:	4b0b      	ldr	r3, [pc, #44]	@ (b88 <LaunchPad_Init+0x6c>)
+ b5a:	2200      	movs	r2, #0
+ b5c:	601a      	str	r2, [r3, #0]
+ b5e:	bf00      	nop
+ b60:	46bd      	mov	sp, r7
+ b62:	f85d 7b04 	ldr.w	r7, [sp], #4
+ b66:	4770      	bx	lr
+ b68:	400fe608 	.word	0x400fe608
+ b6c:	400fea08 	.word	0x400fea08
+ b70:	40025520 	.word	0x40025520
+ b74:	4c4f434b 	.word	0x4c4f434b
+ b78:	40025524 	.word	0x40025524
+ b7c:	40025400 	.word	0x40025400
+ b80:	40025510 	.word	0x40025510
+ b84:	4002551c 	.word	0x4002551c
+ b88:	400253fc 	.word	0x400253fc
+
+00000b8c <UART_Init>:
+ b8c:	b480      	push	{r7}
+ b8e:	af00      	add	r7, sp, #0
+ b90:	4b1f      	ldr	r3, [pc, #124]	@ (c10 <UART_Init+0x84>)
+ b92:	681b      	ldr	r3, [r3, #0]
+ b94:	4a1e      	ldr	r2, [pc, #120]	@ (c10 <UART_Init+0x84>)
+ b96:	f043 0301 	orr.w	r3, r3, #1
+ b9a:	6013      	str	r3, [r2, #0]
+ b9c:	4b1d      	ldr	r3, [pc, #116]	@ (c14 <UART_Init+0x88>)
+ b9e:	681b      	ldr	r3, [r3, #0]
+ ba0:	4a1c      	ldr	r2, [pc, #112]	@ (c14 <UART_Init+0x88>)
+ ba2:	f043 0301 	orr.w	r3, r3, #1
+ ba6:	6013      	str	r3, [r2, #0]
+ ba8:	4b1b      	ldr	r3, [pc, #108]	@ (c18 <UART_Init+0x8c>)
+ baa:	681b      	ldr	r3, [r3, #0]
+ bac:	4a1a      	ldr	r2, [pc, #104]	@ (c18 <UART_Init+0x8c>)
+ bae:	f023 0301 	bic.w	r3, r3, #1
+ bb2:	6013      	str	r3, [r2, #0]
+ bb4:	4b19      	ldr	r3, [pc, #100]	@ (c1c <UART_Init+0x90>)
+ bb6:	222b      	movs	r2, #43	@ 0x2b
+ bb8:	601a      	str	r2, [r3, #0]
+ bba:	4b19      	ldr	r3, [pc, #100]	@ (c20 <UART_Init+0x94>)
+ bbc:	221a      	movs	r2, #26
+ bbe:	601a      	str	r2, [r3, #0]
+ bc0:	4b18      	ldr	r3, [pc, #96]	@ (c24 <UART_Init+0x98>)
+ bc2:	2270      	movs	r2, #112	@ 0x70
+ bc4:	601a      	str	r2, [r3, #0]
+ bc6:	4b14      	ldr	r3, [pc, #80]	@ (c18 <UART_Init+0x8c>)
+ bc8:	681b      	ldr	r3, [r3, #0]
+ bca:	4a13      	ldr	r2, [pc, #76]	@ (c18 <UART_Init+0x8c>)
+ bcc:	f043 0301 	orr.w	r3, r3, #1
+ bd0:	6013      	str	r3, [r2, #0]
+ bd2:	4b15      	ldr	r3, [pc, #84]	@ (c28 <UART_Init+0x9c>)
+ bd4:	681b      	ldr	r3, [r3, #0]
+ bd6:	4a14      	ldr	r2, [pc, #80]	@ (c28 <UART_Init+0x9c>)
+ bd8:	f043 0303 	orr.w	r3, r3, #3
+ bdc:	6013      	str	r3, [r2, #0]
+ bde:	4b13      	ldr	r3, [pc, #76]	@ (c2c <UART_Init+0xa0>)
+ be0:	681b      	ldr	r3, [r3, #0]
+ be2:	4a12      	ldr	r2, [pc, #72]	@ (c2c <UART_Init+0xa0>)
+ be4:	f043 0303 	orr.w	r3, r3, #3
+ be8:	6013      	str	r3, [r2, #0]
+ bea:	4b11      	ldr	r3, [pc, #68]	@ (c30 <UART_Init+0xa4>)
+ bec:	681b      	ldr	r3, [r3, #0]
+ bee:	f023 03ff 	bic.w	r3, r3, #255	@ 0xff
+ bf2:	4a0f      	ldr	r2, [pc, #60]	@ (c30 <UART_Init+0xa4>)
+ bf4:	3311      	adds	r3, #17
+ bf6:	6013      	str	r3, [r2, #0]
+ bf8:	4b0e      	ldr	r3, [pc, #56]	@ (c34 <UART_Init+0xa8>)
+ bfa:	681b      	ldr	r3, [r3, #0]
+ bfc:	4a0d      	ldr	r2, [pc, #52]	@ (c34 <UART_Init+0xa8>)
+ bfe:	f023 0303 	bic.w	r3, r3, #3
+ c02:	6013      	str	r3, [r2, #0]
+ c04:	bf00      	nop
+ c06:	46bd      	mov	sp, r7
+ c08:	f85d 7b04 	ldr.w	r7, [sp], #4
+ c0c:	4770      	bx	lr
+ c0e:	bf00      	nop
+ c10:	400fe618 	.word	0x400fe618
+ c14:	400fe608 	.word	0x400fe608
+ c18:	4000c030 	.word	0x4000c030
+ c1c:	4000c024 	.word	0x4000c024
+ c20:	4000c028 	.word	0x4000c028
+ c24:	4000c02c 	.word	0x4000c02c
+ c28:	40004420 	.word	0x40004420
+ c2c:	4000451c 	.word	0x4000451c
+ c30:	4000452c 	.word	0x4000452c
+ c34:	40004528 	.word	0x40004528
+
+00000c38 <UART_OutChar>:
+ c38:	b480      	push	{r7}
+ c3a:	b083      	sub	sp, #12
+ c3c:	af00      	add	r7, sp, #0
+ c3e:	4603      	mov	r3, r0
+ c40:	71fb      	strb	r3, [r7, #7]
+ c42:	bf00      	nop
+ c44:	4b07      	ldr	r3, [pc, #28]	@ (c64 <UART_OutChar+0x2c>)
+ c46:	681b      	ldr	r3, [r3, #0]
+ c48:	f003 0320 	and.w	r3, r3, #32
+ c4c:	2b00      	cmp	r3, #0
+ c4e:	d1f9      	bne.n	c44 <UART_OutChar+0xc>
+ c50:	4a05      	ldr	r2, [pc, #20]	@ (c68 <UART_OutChar+0x30>)
+ c52:	79fb      	ldrb	r3, [r7, #7]
+ c54:	6013      	str	r3, [r2, #0]
+ c56:	bf00      	nop
+ c58:	370c      	adds	r7, #12
+ c5a:	46bd      	mov	sp, r7
+ c5c:	f85d 7b04 	ldr.w	r7, [sp], #4
+ c60:	4770      	bx	lr
+ c62:	bf00      	nop
+ c64:	4000c018 	.word	0x4000c018
+ c68:	4000c000 	.word	0x4000c000
+
+00000c6c <printf_lite>:
+ c6c:	b40f      	push	{r0, r1, r2, r3}
+ c6e:	b580      	push	{r7, lr}
+ c70:	b08a      	sub	sp, #40	@ 0x28
+ c72:	af00      	add	r7, sp, #0
+ c74:	f107 0334 	add.w	r3, r7, #52	@ 0x34
+ c78:	617b      	str	r3, [r7, #20]
+ c7a:	e066      	b.n	d4a <printf_lite+0xde>
+ c7c:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
+ c7e:	781b      	ldrb	r3, [r3, #0]
+ c80:	2b25      	cmp	r3, #37	@ 0x25
+ c82:	d158      	bne.n	d36 <printf_lite+0xca>
+ c84:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
+ c86:	3301      	adds	r3, #1
+ c88:	633b      	str	r3, [r7, #48]	@ 0x30
+ c8a:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
+ c8c:	781b      	ldrb	r3, [r3, #0]
+ c8e:	2b73      	cmp	r3, #115	@ 0x73
+ c90:	d013      	beq.n	cba <printf_lite+0x4e>
+ c92:	2b73      	cmp	r3, #115	@ 0x73
+ c94:	dc42      	bgt.n	d1c <printf_lite+0xb0>
+ c96:	2b64      	cmp	r3, #100	@ 0x64
+ c98:	d022      	beq.n	ce0 <printf_lite+0x74>
+ c9a:	2b64      	cmp	r3, #100	@ 0x64
+ c9c:	dc3e      	bgt.n	d1c <printf_lite+0xb0>
+ c9e:	2b25      	cmp	r3, #37	@ 0x25
+ ca0:	d038      	beq.n	d14 <printf_lite+0xa8>
+ ca2:	2b63      	cmp	r3, #99	@ 0x63
+ ca4:	d13a      	bne.n	d1c <printf_lite+0xb0>
+ ca6:	697b      	ldr	r3, [r7, #20]
+ ca8:	1d1a      	adds	r2, r3, #4
+ caa:	617a      	str	r2, [r7, #20]
+ cac:	681b      	ldr	r3, [r3, #0]
+ cae:	76fb      	strb	r3, [r7, #27]
+ cb0:	7efb      	ldrb	r3, [r7, #27]
+ cb2:	4618      	mov	r0, r3
+ cb4:	f7ff fe23 	bl	8fe <_putchar>
+ cb8:	e044      	b.n	d44 <printf_lite+0xd8>
+ cba:	697b      	ldr	r3, [r7, #20]
+ cbc:	1d1a      	adds	r2, r3, #4
+ cbe:	617a      	str	r2, [r7, #20]
+ cc0:	681b      	ldr	r3, [r3, #0]
+ cc2:	627b      	str	r3, [r7, #36]	@ 0x24
+ cc4:	e007      	b.n	cd6 <printf_lite+0x6a>
+ cc6:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
+ cc8:	781b      	ldrb	r3, [r3, #0]
+ cca:	4618      	mov	r0, r3
+ ccc:	f7ff fe17 	bl	8fe <_putchar>
+ cd0:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
+ cd2:	3301      	adds	r3, #1
+ cd4:	627b      	str	r3, [r7, #36]	@ 0x24
+ cd6:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
+ cd8:	781b      	ldrb	r3, [r3, #0]
+ cda:	2b00      	cmp	r3, #0
+ cdc:	d1f3      	bne.n	cc6 <printf_lite+0x5a>
+ cde:	e031      	b.n	d44 <printf_lite+0xd8>
+ ce0:	697b      	ldr	r3, [r7, #20]
+ ce2:	1d1a      	adds	r2, r3, #4
+ ce4:	617a      	str	r2, [r7, #20]
+ ce6:	681b      	ldr	r3, [r3, #0]
+ ce8:	61fb      	str	r3, [r7, #28]
+ cea:	463b      	mov	r3, r7
+ cec:	4619      	mov	r1, r3
+ cee:	69f8      	ldr	r0, [r7, #28]
+ cf0:	f000 f838 	bl	d64 <itoa_lite>
+ cf4:	463b      	mov	r3, r7
+ cf6:	623b      	str	r3, [r7, #32]
+ cf8:	e007      	b.n	d0a <printf_lite+0x9e>
+ cfa:	6a3b      	ldr	r3, [r7, #32]
+ cfc:	781b      	ldrb	r3, [r3, #0]
+ cfe:	4618      	mov	r0, r3
+ d00:	f7ff fdfd 	bl	8fe <_putchar>
+ d04:	6a3b      	ldr	r3, [r7, #32]
+ d06:	3301      	adds	r3, #1
+ d08:	623b      	str	r3, [r7, #32]
+ d0a:	6a3b      	ldr	r3, [r7, #32]
+ d0c:	781b      	ldrb	r3, [r3, #0]
+ d0e:	2b00      	cmp	r3, #0
+ d10:	d1f3      	bne.n	cfa <printf_lite+0x8e>
+ d12:	e017      	b.n	d44 <printf_lite+0xd8>
+ d14:	2025      	movs	r0, #37	@ 0x25
+ d16:	f7ff fdf2 	bl	8fe <_putchar>
+ d1a:	e013      	b.n	d44 <printf_lite+0xd8>
+ d1c:	2025      	movs	r0, #37	@ 0x25
+ d1e:	f7ff fdee 	bl	8fe <_putchar>
+ d22:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
+ d24:	781b      	ldrb	r3, [r3, #0]
+ d26:	2b00      	cmp	r3, #0
+ d28:	d00b      	beq.n	d42 <printf_lite+0xd6>
+ d2a:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
+ d2c:	781b      	ldrb	r3, [r3, #0]
+ d2e:	4618      	mov	r0, r3
+ d30:	f7ff fde5 	bl	8fe <_putchar>
+ d34:	e005      	b.n	d42 <printf_lite+0xd6>
+ d36:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
+ d38:	781b      	ldrb	r3, [r3, #0]
+ d3a:	4618      	mov	r0, r3
+ d3c:	f7ff fddf 	bl	8fe <_putchar>
+ d40:	e000      	b.n	d44 <printf_lite+0xd8>
+ d42:	bf00      	nop
+ d44:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
+ d46:	3301      	adds	r3, #1
+ d48:	633b      	str	r3, [r7, #48]	@ 0x30
+ d4a:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
+ d4c:	781b      	ldrb	r3, [r3, #0]
+ d4e:	2b00      	cmp	r3, #0
+ d50:	d194      	bne.n	c7c <printf_lite+0x10>
+ d52:	bf00      	nop
+ d54:	bf00      	nop
+ d56:	3728      	adds	r7, #40	@ 0x28
+ d58:	46bd      	mov	sp, r7
+ d5a:	e8bd 4080 	ldmia.w	sp!, {r7, lr}
+ d5e:	b004      	add	sp, #16
+ d60:	4770      	bx	lr
+	...
+
+00000d64 <itoa_lite>:
+ d64:	b480      	push	{r7}
+ d66:	b089      	sub	sp, #36	@ 0x24
+ d68:	af00      	add	r7, sp, #0
+ d6a:	6078      	str	r0, [r7, #4]
+ d6c:	6039      	str	r1, [r7, #0]
+ d6e:	2300      	movs	r3, #0
+ d70:	61fb      	str	r3, [r7, #28]
+ d72:	2300      	movs	r3, #0
+ d74:	61bb      	str	r3, [r7, #24]
+ d76:	687b      	ldr	r3, [r7, #4]
+ d78:	2b00      	cmp	r3, #0
+ d7a:	d10d      	bne.n	d98 <itoa_lite+0x34>
+ d7c:	69fb      	ldr	r3, [r7, #28]
+ d7e:	1c5a      	adds	r2, r3, #1
+ d80:	61fa      	str	r2, [r7, #28]
+ d82:	461a      	mov	r2, r3
+ d84:	683b      	ldr	r3, [r7, #0]
+ d86:	4413      	add	r3, r2
+ d88:	2230      	movs	r2, #48	@ 0x30
+ d8a:	701a      	strb	r2, [r3, #0]
+ d8c:	69fb      	ldr	r3, [r7, #28]
+ d8e:	683a      	ldr	r2, [r7, #0]
+ d90:	4413      	add	r3, r2
+ d92:	2200      	movs	r2, #0
+ d94:	701a      	strb	r2, [r3, #0]
+ d96:	e076      	b.n	e86 <itoa_lite+0x122>
+ d98:	687b      	ldr	r3, [r7, #4]
+ d9a:	2b00      	cmp	r3, #0
+ d9c:	da2d      	bge.n	dfa <itoa_lite+0x96>
+ d9e:	2301      	movs	r3, #1
+ da0:	61bb      	str	r3, [r7, #24]
+ da2:	687b      	ldr	r3, [r7, #4]
+ da4:	f1b3 4f00 	cmp.w	r3, #2147483648	@ 0x80000000
+ da8:	d103      	bne.n	db2 <itoa_lite+0x4e>
+ daa:	f06f 4300 	mvn.w	r3, #2147483648	@ 0x80000000
+ dae:	607b      	str	r3, [r7, #4]
+ db0:	e023      	b.n	dfa <itoa_lite+0x96>
+ db2:	687b      	ldr	r3, [r7, #4]
+ db4:	425b      	negs	r3, r3
+ db6:	607b      	str	r3, [r7, #4]
+ db8:	e01f      	b.n	dfa <itoa_lite+0x96>
+ dba:	687a      	ldr	r2, [r7, #4]
+ dbc:	4b34      	ldr	r3, [pc, #208]	@ (e90 <itoa_lite+0x12c>)
+ dbe:	fb83 1302 	smull	r1, r3, r3, r2
+ dc2:	1099      	asrs	r1, r3, #2
+ dc4:	17d3      	asrs	r3, r2, #31
+ dc6:	1ac9      	subs	r1, r1, r3
+ dc8:	460b      	mov	r3, r1
+ dca:	009b      	lsls	r3, r3, #2
+ dcc:	440b      	add	r3, r1
+ dce:	005b      	lsls	r3, r3, #1
+ dd0:	1ad3      	subs	r3, r2, r3
+ dd2:	60fb      	str	r3, [r7, #12]
+ dd4:	68fb      	ldr	r3, [r7, #12]
+ dd6:	b2da      	uxtb	r2, r3
+ dd8:	69fb      	ldr	r3, [r7, #28]
+ dda:	1c59      	adds	r1, r3, #1
+ ddc:	61f9      	str	r1, [r7, #28]
+ dde:	4619      	mov	r1, r3
+ de0:	683b      	ldr	r3, [r7, #0]
+ de2:	440b      	add	r3, r1
+ de4:	3230      	adds	r2, #48	@ 0x30
+ de6:	b2d2      	uxtb	r2, r2
+ de8:	701a      	strb	r2, [r3, #0]
+ dea:	687b      	ldr	r3, [r7, #4]
+ dec:	4a28      	ldr	r2, [pc, #160]	@ (e90 <itoa_lite+0x12c>)
+ dee:	fb82 1203 	smull	r1, r2, r2, r3
+ df2:	1092      	asrs	r2, r2, #2
+ df4:	17db      	asrs	r3, r3, #31
+ df6:	1ad3      	subs	r3, r2, r3
+ df8:	607b      	str	r3, [r7, #4]
+ dfa:	687b      	ldr	r3, [r7, #4]
+ dfc:	2b00      	cmp	r3, #0
+ dfe:	d002      	beq.n	e06 <itoa_lite+0xa2>
+ e00:	69fb      	ldr	r3, [r7, #28]
+ e02:	2b09      	cmp	r3, #9
+ e04:	ddd9      	ble.n	dba <itoa_lite+0x56>
+ e06:	69bb      	ldr	r3, [r7, #24]
+ e08:	2b00      	cmp	r3, #0
+ e0a:	d007      	beq.n	e1c <itoa_lite+0xb8>
+ e0c:	687b      	ldr	r3, [r7, #4]
+ e0e:	f06f 4200 	mvn.w	r2, #2147483648	@ 0x80000000
+ e12:	4293      	cmp	r3, r2
+ e14:	d102      	bne.n	e1c <itoa_lite+0xb8>
+ e16:	683b      	ldr	r3, [r7, #0]
+ e18:	2238      	movs	r2, #56	@ 0x38
+ e1a:	701a      	strb	r2, [r3, #0]
+ e1c:	69bb      	ldr	r3, [r7, #24]
+ e1e:	2b00      	cmp	r3, #0
+ e20:	d00a      	beq.n	e38 <itoa_lite+0xd4>
+ e22:	69fb      	ldr	r3, [r7, #28]
+ e24:	2b0a      	cmp	r3, #10
+ e26:	dc07      	bgt.n	e38 <itoa_lite+0xd4>
+ e28:	69fb      	ldr	r3, [r7, #28]
+ e2a:	1c5a      	adds	r2, r3, #1
+ e2c:	61fa      	str	r2, [r7, #28]
+ e2e:	461a      	mov	r2, r3
+ e30:	683b      	ldr	r3, [r7, #0]
+ e32:	4413      	add	r3, r2
+ e34:	222d      	movs	r2, #45	@ 0x2d
+ e36:	701a      	strb	r2, [r3, #0]
+ e38:	69fb      	ldr	r3, [r7, #28]
+ e3a:	683a      	ldr	r2, [r7, #0]
+ e3c:	4413      	add	r3, r2
+ e3e:	2200      	movs	r2, #0
+ e40:	701a      	strb	r2, [r3, #0]
+ e42:	2300      	movs	r3, #0
+ e44:	617b      	str	r3, [r7, #20]
+ e46:	69fb      	ldr	r3, [r7, #28]
+ e48:	3b01      	subs	r3, #1
+ e4a:	613b      	str	r3, [r7, #16]
+ e4c:	e017      	b.n	e7e <itoa_lite+0x11a>
+ e4e:	697b      	ldr	r3, [r7, #20]
+ e50:	683a      	ldr	r2, [r7, #0]
+ e52:	4413      	add	r3, r2
+ e54:	781b      	ldrb	r3, [r3, #0]
+ e56:	72fb      	strb	r3, [r7, #11]
+ e58:	693b      	ldr	r3, [r7, #16]
+ e5a:	683a      	ldr	r2, [r7, #0]
+ e5c:	441a      	add	r2, r3
+ e5e:	697b      	ldr	r3, [r7, #20]
+ e60:	1c59      	adds	r1, r3, #1
+ e62:	6179      	str	r1, [r7, #20]
+ e64:	4619      	mov	r1, r3
+ e66:	683b      	ldr	r3, [r7, #0]
+ e68:	440b      	add	r3, r1
+ e6a:	7812      	ldrb	r2, [r2, #0]
+ e6c:	701a      	strb	r2, [r3, #0]
+ e6e:	693b      	ldr	r3, [r7, #16]
+ e70:	1e5a      	subs	r2, r3, #1
+ e72:	613a      	str	r2, [r7, #16]
+ e74:	461a      	mov	r2, r3
+ e76:	683b      	ldr	r3, [r7, #0]
+ e78:	4413      	add	r3, r2
+ e7a:	7afa      	ldrb	r2, [r7, #11]
+ e7c:	701a      	strb	r2, [r3, #0]
+ e7e:	697a      	ldr	r2, [r7, #20]
+ e80:	693b      	ldr	r3, [r7, #16]
+ e82:	429a      	cmp	r2, r3
+ e84:	dbe3      	blt.n	e4e <itoa_lite+0xea>
+ e86:	3724      	adds	r7, #36	@ 0x24
+ e88:	46bd      	mov	sp, r7
+ e8a:	f85d 7b04 	ldr.w	r7, [sp], #4
+ e8e:	4770      	bx	lr
+ e90:	66666667 	.word	0x66666667
+ e94:	6d756874 	.word	0x6d756874
+ e98:	2520706d 	.word	0x2520706d
+ e9c:	000d0a64 	.word	0x000d0a64
+
+00000ea0 <_init>:
+ ea0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ ea2:	bf00      	nop
+
+00000ea4 <_fini>:
+ ea4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ ea6:	bf00      	nop
