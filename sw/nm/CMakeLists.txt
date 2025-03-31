@@ -1,15 +1,9 @@
-set(LIB_NAME ValvanoWare)
+set(LIB_NAME nm)
 
 set(SRC_FILES 
-  Timer0A.c
-  Timer1A.c
-  Timer2A.c
-  Timer3A.c
-  Timer4A.c
-  Timer5A.c
-  PLL.c
-  LaunchPad.c
-  UART.c
+  nm_bsp_tm4c.c
+  nm_bus_wrapper_tm4c.c
+  nmbus.c
 )
 
 add_library(${LIB_NAME} STATIC ${SRC_FILES})

@@ -32,7 +32,7 @@ int chipEnable, reset;
 /*                    MAIN FUNCTION                   */
 /* ================================================== */
 int main(void){
-    startupDelay(); 
+    startupDelay();
     DisableInterrupts();
     PLL_Init(Bus80MHz);
     LaunchPad_Init();
@@ -43,9 +43,9 @@ int main(void){
 
     buttunpressed = 0;
     while (1) {
-        //if((GPIO_PORTF_DATA_R & 0x10) = 0x10){
+        // if((GPIO_PORTF_DATA_R & 0x10) = 0x10){
         //    buttunpressed = 1;
-        //}
+        // }
     }
 }
 

@@ -63,6 +63,10 @@ set(SRC_FILES
     lib/std/string_lite/string_lite.c
     lib/std/stdio_lite/stdio_lite.c
 
+    nm/nm_bsp_tm4c.c
+    nm/nm_bus_wrapper_tm4c.c
+    nm/nmbus.c
+
     #stm dsp files
 )
 
