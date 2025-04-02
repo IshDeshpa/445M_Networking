@@ -3,6 +3,7 @@ set(LIB_NAME nm)
 set(SRC_FILES 
     nm_bsp.c
     nm_bus_wrapper.c
+    nm_common.c
 )
 
 add_library(${LIB_NAME} STATIC ${SRC_FILES})
