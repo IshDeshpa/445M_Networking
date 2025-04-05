@@ -34,7 +34,8 @@ fp-info-cache
 .ignore
 
 #cmake build dir
-sw/build
+*/build
+build
 
 #not sure what this shit is for
 sw/.cache/
