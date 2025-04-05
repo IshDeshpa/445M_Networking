@@ -61,7 +61,7 @@ static int8_t spi_rw(uint8_t *pu8Mosi, uint8_t *pu8Miso, uint16_t u16Sz) {
 
     for (i = 0; i < u16Sz; i++) {
         // Transmit byte to SPI
-        while (SSIDataGetNonBlocking(SSI1_BASER, 0) == 0);
+        // while (SSIDataGetNonBlocking(SSI1_BASER, 0) == 0);
         SSIDataPut(SSI1_BASER, pu8Mosi ? pu8Mosi[i] : 0);
 
         // Receive byte from SPI if available
@@ -101,7 +101,7 @@ int8_t nm_bus_init(){
     uDMAEnable();
     uDMAControlBaseSet(udmaControlTable);
 
-    // Enable DMA for SSI0 TX and RX
+    // Enable DMA for SSI0 TX and RXl
     SSIDMAEnable(SSI1_BASER, SSI_DMA_TX | SSI_DMA_RX);
 
     // Configure the TX DMA channel (uDMA Channel 24 - SSI0 TX)
@@ -117,7 +117,7 @@ int8_t nm_bus_init(){
 }
 
 // Send/receive data using DMA
-// u8Cmd is ignored but kept for compatibility
+// u8Cmd is ignored but kept for compatibility with other drivers
 int8_t nm_bus_ioctl(uint8_t u8Cmd, void* pvParameter){
     int8_t s8Ret = 0;
 
