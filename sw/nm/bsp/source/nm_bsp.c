@@ -36,8 +36,8 @@
 /*                      INCLUDES                      */
 /* ================================================== */
 #include "nm_bsp.h"
-#include "../inc/tm4c123gh6pm.h"
-#include "../inc/SysTick.h"
+#include "../../../inc/tm4c123gh6pm.h"
+#include "../../../inc/SysTick.h"
 
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */

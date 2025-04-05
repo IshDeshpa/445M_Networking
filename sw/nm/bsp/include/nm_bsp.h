@@ -36,7 +36,7 @@
 
 #include <stdint.h>
 
-#include "../inc/tm4c123gh6pm.h"
+#include "../../../inc/tm4c123gh6pm.h"
 
 #define WILC_DFL_CTRL_PORT (GPIO_PORTC_DATA_BITS_R)
 

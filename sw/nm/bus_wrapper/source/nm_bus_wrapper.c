@@ -1,10 +1,10 @@
 #include "nm_bsp.h"
 #include "nm_bus_wrapper.h"
 
-#include "../driverlib/ssi.h"
-#include "../driverlib/udma.h"
-#include "../driverlib/sysctl.h"
-#include "../inc/hw_sysctl.h"
+#include "../../../driverlib/ssi.h"
+#include "../../../driverlib/udma.h"
+#include "../../../driverlib/sysctl.h"
+#include "../../../inc/hw_sysctl.h"
 
 #define SSI1_BASER (0x40009000)
 #define SSI1_O_DR (0x8)

@@ -9,8 +9,8 @@
 #include "../lib/std/stdio_lite/stdio_lite.h"
 #include "../inc/UART.h"
 #include "../inc/SysTick.h"
-#include "../nm/nm_bsp.h"
-#include "../nm/nm_bus_wrapper.h"
+#include "../nm/bsp/include/nm_bsp.h"
+#include "../nm/bus_wrapper/include/nm_bus_wrapper.h"
 
 #include <stdint.h>
 

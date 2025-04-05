@@ -39,3 +39,5 @@ sw/build
 #not sure what this shit is for
 sw/.cache/
 .vscode
+
+dump.txt
