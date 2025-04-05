@@ -10,6 +10,7 @@
 #include "../inc/UART.h"
 #include "../inc/SysTick.h"
 #include "../nm/nm_bsp.h"
+#include "../nm/nm_bus_wrapper.h"
 
 #include <stdint.h>
 
@@ -38,6 +39,7 @@ int main(void){
     SysTick_Init();
     
     nm_bsp_init();
+    nm_bus_init();
 
     while(1);
 }

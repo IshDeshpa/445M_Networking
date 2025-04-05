@@ -75,7 +75,7 @@ static int8_t spi_rw(uint8_t *pu8Mosi, uint8_t *pu8Miso, uint16_t u16Sz) {
     return 0;
 }
 
-int8_t nm_bus_init(void *){
+int8_t nm_bus_init(){
     // TODO: add mutex protections here
     WILC_WAKE_HI;
 
