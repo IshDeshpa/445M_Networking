@@ -26,13 +26,13 @@ static uint8_t spi_rw_dma(uint8_t *pu8Mosi, uint8_t *pu8Miso, uint16_t u16Sz) {
 
     // Set up the DMA transfer
     uDMAChannelTransferSet(UDMA_CHANNEL_SSI1RX | UDMA_PRI_SELECT,
-                           UDMA_MODE_BASIC,
+                           UDMA_MODE_AUTO,
                            (void *)(SSI1_BASER + SSI1_O_DR),
                            pu8Miso,
                            u16Sz);
 
     uDMAChannelTransferSet(UDMA_CHANNEL_SSI1TX | UDMA_PRI_SELECT,
-                           UDMA_MODE_BASIC,
+                           UDMA_MODE_AUTO,
                            pu8Mosi,
                            (void *)(SSI1_BASER + SSI1_O_DR),
                            u16Sz);

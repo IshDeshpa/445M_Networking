@@ -27,37 +27,51 @@
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
 
-int chipEnable, reset;
 /* ================================================== */
 /*                    MAIN FUNCTION                   */
 /* ================================================== */
-static uint8_t inbuf[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-  0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
-static uint8_t outbuf[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-  0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
+static uint8_t inbuf[64]; // into the chip (out of TM4c)
+static uint8_t outbuf[64]; // out of the chip (into TM4c)
 
-int main(void){
-    for(uint16_t i = 0; i < UINT16_MAX; i++){}
-    DisableInterrupts();
-    PLL_Init(Bus80MHz);
-    LaunchPad_Init();
-    UART_Init();
-    SysTick_Init();
-    
-    nm_bsp_init();
-    nm_bus_init();
+int test_spi(void){
+  tstrNmSpiRw spi_rw = {
+    .pu8InBuf = inbuf,
+    .pu8OutBuf = outbuf,
+    .u16Sz = 16
+  };
 
-    tstrNmSpiRw spi_rw = {
-      .pu8InBuf = inbuf,
-      .pu8OutBuf = outbuf,
-      .u16Sz = 16
-    };
+  for(int i=0;i<16;i++) inbuf[i] = i*2;
 
-    // memset(outbuf, 0xFF, sizeof(outbuf));
+  nm_bus_ioctl(0, &spi_rw);
 
-    nm_bus_ioctl(0, &spi_rw);
+  while(1);
+}
 
-    while(1);
+int test_spi_dma(void){
+  tstrNmSpiRw spi_rw = {
+    .pu8InBuf = inbuf,
+    .pu8OutBuf = outbuf,
+    .u16Sz = 64
+  };
+
+  for(int i=0;i<64;i++) inbuf[i] = i*2;
+
+  nm_bus_ioctl(0, &spi_rw);
+
+  while(1);
+}
+
+int main(){
+  DisableInterrupts();
+  PLL_Init(Bus80MHz);
+  LaunchPad_Init();
+  UART_Init();
+  SysTick_Init();
+  
+  nm_bsp_init();
+  nm_bus_init();
+
+  test_spi_dma();
 }
 
 void _putchar(char character){

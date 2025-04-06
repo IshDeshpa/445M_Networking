@@ -41,4 +41,4 @@ build
 sw/.cache/
 .vscode
 
-dump.txt
+sw/dump.txt
