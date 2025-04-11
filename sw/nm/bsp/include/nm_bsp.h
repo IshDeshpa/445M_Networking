@@ -36,12 +36,9 @@
 
 #include <stdint.h>
 
-#include "../inc/tm4c123gh6pm.h"
+#include "../../../inc/tm4c123gh6pm.h"
 
 #define WILC_DFL_CTRL_PORT (GPIO_PORTC_DATA_BITS_R)
-
-// #define WILC_CS_PORT (WILC_DFL_CTRL_PORT)
-// #define WILC_CS_PIN (1<<4)
 
 #define WILC_RESET_PORT (WILC_DFL_CTRL_PORT)
 #define WILC_RESET_PIN (1<<5)
@@ -51,9 +48,6 @@
 
 #define WILC_WAKE_PORT (WILC_DFL_CTRL_PORT)
 #define WILC_WAKE_PIN (1<<7)
-
-// #define WILC_CS_HI (*(WILC_CS_PORT + WILC_CS_PIN) = WILC_CS_PIN)
-// #define WILC_CS_LO (*(WILC_CS_PORT + WILC_CS_PIN) &= ~WILC_CS_PIN)
 
 #define WILC_RESET_HI (*(WILC_RESET_PORT + WILC_RESET_PIN) = WILC_RESET_PIN)
 #define WILC_RESET_LO (*(WILC_RESET_PORT + WILC_RESET_PIN) &= ~WILC_RESET_PIN)

@@ -19,7 +19,7 @@ typedef struct
  * Initialize the bus wrapper
  * Returns: 0 in case of success and M2M_ERR_BUS_FAIL in case of failure
  */ 
-int8_t nm_bus_init(void *);
+int8_t nm_bus_init();
 
 /*
  * nm_bus_ioctl

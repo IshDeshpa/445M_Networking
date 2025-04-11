@@ -3,6 +3,7 @@ set(LIB_NAME driverlib)
 set(SRC_FILES 
     ssi.c
     udma.c
+    sysctl.c
 )
 
 add_library(${LIB_NAME} STATIC ${SRC_FILES})
