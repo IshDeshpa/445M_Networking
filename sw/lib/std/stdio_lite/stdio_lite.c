@@ -7,12 +7,12 @@
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
-
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
 
 
+extern void _putchar(char character);
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
@@ -49,6 +49,17 @@ void printf_lite(const char* format, ...) {
                     }
                     break;
                 }
+                case 'u': {
+                    int num = va_arg(args, int);
+                    char buf[20]; 
+                    itoa_lite(num, buf); 
+                    char* buftemp = buf;
+                    while(*buftemp){
+                        _putchar(*buftemp);
+                        buftemp++;
+                    }
+                    break;
+                }
                 case '%': {    
                     _putchar('%');
                     break;
@@ -66,6 +77,7 @@ void printf_lite(const char* format, ...) {
     }
 
     va_end(args);
+
 }
 
 // Formats text into a string buffer

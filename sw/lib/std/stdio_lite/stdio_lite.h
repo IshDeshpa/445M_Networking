@@ -1,5 +1,5 @@
-#ifndef STRING_LITE_H
-#define STRING_LITE_H
+#ifndef STDIO_LITE_H
+#define STDIO_LITE_H
 
 /* ================================================== */
 /*                      INCLUDES                      */
@@ -9,12 +9,13 @@
 /* ================================================== */
 /*            GLOBAL VARIABLE DECLARATIONS            */
 /* ================================================== */
-
+#define printf   printf_lite
+#define sprintf  sprintf_lite
+#define snprintf snprintf_lite
+#define itoa     itoa_lite
 /* ================================================== */
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
-void _putchar(char character);
-
 void printf_lite(const char* format, ...);
 
 void sprintf_lite(char* buffer, const char* format, ...);

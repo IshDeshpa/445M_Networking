@@ -201,3 +201,47 @@ char *strchr_lite(const char *str, int c) {
 
     return NULL; // Character not found
 }
+
+long atol_lite(const char* str) {
+    long result = 0;
+    int sign = 1;
+
+    // Skip whitespace
+    while (*str == ' ' || *str == '\t') {
+        str++;
+    }
+
+    if (*str == '-') {
+        sign = -1;
+        str++;
+    } else if (*str == '+') {
+        str++;
+    }
+
+    while (*str >= '0' && *str <= '9') {
+        result = result * 10 + (*str - '0');
+        str++;
+    }
+
+    return result * sign;
+}
+
+char* strstr_lite(const char* haystack, const char* needle) {
+    if (!*needle) return (char*)haystack;
+
+    for (; *haystack; haystack++) {
+        const char* h = haystack;
+        const char* n = needle;
+
+        while (*h && *n && *h == *n) {
+            h++;
+            n++;
+        }
+
+        if (!*n) {
+            return (char*)haystack;
+        }
+    }
+
+    return NULL;
+}
