@@ -33,9 +33,9 @@
  */
 
 #include "../include/m2m_wifi.h"
-#include "driver/source/nmdrv.h"
-#include "driver/source/m2m_hif.h"
-#include "driver/source/nmasic.h"
+#include "nmdrv.h"
+#include "m2m_hif.h"
+#include "nmasic.h"
 #ifdef COMPUTE_PMK_IN_HOST
 #include "drv_hash/crypto.h" 
 #endif

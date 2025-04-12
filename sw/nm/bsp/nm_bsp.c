@@ -96,7 +96,13 @@ void   nm_bsp_register_isr(tpfNmBspIsr pfIsr){
 }
 
 //maybe to turn off or clear flag ?
-void   nm_bsp_interrupt_ctrl(uint8 u8Enable);
+void   nm_bsp_interrupt_ctrl(uint8 u8Enable){
+    if(u8Enable){
+        EnableHandlerInts();
+    }else{
+        DisableHandlerInts();
+    }
+}
 
 //we can just pull code from lab5 and route it
 void*  nm_bsp_malloc(uint32 u32Size);

@@ -15,6 +15,14 @@
 #pragma DATA_ALIGN(udmaControlTable, 1024)
 uint8_t udmaControlTable[1024];
 
+#define MAX_DMA_SPI_TRANSFER 2048
+
+#define NM_BUS_MAX_TRX_SZ 4096
+
+
+tstrNmBusCapabilities egstrNmBusCapabilities ={
+    NM_BUS_MAX_TRX_SZ
+};
 
 static uint8_t spi_rw_dma(uint8_t *pu8Mosi, uint8_t *pu8Miso, uint16_t u16Sz) {
     uint32_t i;
@@ -76,7 +84,7 @@ static int8_t spi_rw(uint8_t *pu8Mosi, uint8_t *pu8Miso, uint16_t u16Sz) {
     return 0;
 }
 
-int8_t nm_bus_init(){
+int8_t nm_bus_init(void*){
     // TODO: add mutex protections here
     WILC_WAKE_HI;
 

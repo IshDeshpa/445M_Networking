@@ -86,7 +86,7 @@ int main(){
     nm_bsp_init();
     nm_bsp_register_isr(TestIRQPin);
 
-    nm_bus_init();
+    //nm_bus_init();
 
     //test_spi_dma();
     EnableInterrupts();

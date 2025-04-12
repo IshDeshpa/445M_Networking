@@ -32,10 +32,10 @@
  *
  */
 
-#include "common/include/nm_common.h"
-#include "driver/source/nmbus.h"
-#include "bsp/include/nm_bsp.h"
-#include "driver/source/nmdrv.h"
+#include "nm_common.h"
+#include "nmbus.h"
+#include "nm_bsp.h"
+#include "nmdrv.h"
 
 #define TIMEOUT 10000 /*MS*/
 #define SPI_FLASH_BASE		(0x10200)

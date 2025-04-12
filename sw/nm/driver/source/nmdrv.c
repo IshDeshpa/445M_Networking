@@ -32,13 +32,13 @@
  *
  */
 
-#include "driver/source/nmbus.h"
-#include "bsp/include/nm_bsp.h"
-#include "driver/source/nmdrv.h"
-#include "driver/source/nmasic.h"
+#include "nmbus.h"
+#include "nm_bsp.h"
+#include "nmdrv.h"
+#include "nmasic.h"
 
 #ifdef CONF_WILC_USE_SPI
-#include "driver/source/nmspi.h"
+#include "nmspi.h"
 #elif defined CONF_WILC_USE_SDIO
 #include "driver/source/nmsdio.h"
 #endif

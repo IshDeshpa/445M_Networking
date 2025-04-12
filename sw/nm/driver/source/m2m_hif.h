@@ -39,7 +39,7 @@
 INCLUDES
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
 
-#include "common/include/nm_common.h"
+#include "../../common/nm_common.h"
 /*!< Include depends on UNO Board is used or not*/
 #ifdef ENABLE_UNO_BOARD
 #include "m2m_uno_hif.h"

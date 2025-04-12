@@ -32,9 +32,9 @@
  *
  */
 
-#include "driver/include/m2m_periph.h"
-#include "driver/source/nmasic.h"
-#include "driver/source/m2m_hif.h"
+#include "../include/m2m_periph.h"
+#include "../source/nmasic.h"
+#include "..//source/m2m_hif.h"
 
 #define GPIO_OP_DIR     0
 #define GPIO_OP_SET     1

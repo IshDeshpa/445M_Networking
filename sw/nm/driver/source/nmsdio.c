@@ -31,7 +31,7 @@
  * \asf_license_stop
  *
  */
-#include "common/include/nm_common.h"
+#include "nm_common.h"
 #ifdef CONF_WILC_USE_SDIO
 
 #include "bus_wrapper/include/nm_bus_wrapper.h"

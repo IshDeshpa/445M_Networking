@@ -32,9 +32,9 @@
  *
  */
 
-#include "driver/source/nmbus.h"
-#include "bsp/include/nm_bsp.h"
-#include "driver/source/nmasic.h"
+#include "nmbus.h"
+#include "../../bsp/nm_bsp.h"
+#include "nmasic.h"
 
 #define NMI_GLB_RESET_0 (NMI_PERIPH_REG_BASE + 0x400)
 #define NMI_GLB_RESET_1 (NMI_PERIPH_REG_BASE + 0x404)
@@ -451,7 +451,7 @@ void* linux_wlan_malloc(uint32_t sz);
 
 #ifndef CONF_WILC_FW_IN_FLASH
 #ifdef CONF_WILC_USE_1000_REV_B
-#include "driver/include/wifi_firmware_1000b.h"
+#include "../include/wifi_firmware_1000b.h"
 #elif defined CONF_WILC_USE_3000_REV_A
 #include "driver/include/wifi_firmware_3000.h"
 #if (defined CONF_WILC_USE_3000_REV_A && !defined WILC_SERIAL_BRIDGE_INTERFACE)

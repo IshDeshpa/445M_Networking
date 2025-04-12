@@ -65,6 +65,24 @@ typedef signed char		sint8;
 typedef signed short	sint16;
 typedef signed long		sint32;
 
+#define __M2M_DMA_BUF_ATT__
+
+#ifdef _NM_BSP_BIG_END
+#define NM_BSP_B_L_32(x) \
+((((x) & 0x000000FF) << 24) + \
+(((x) & 0x0000FF00) << 8)  + \
+(((x) & 0x00FF0000) >> 8)   + \
+(((x) & 0xFF000000) >> 24))
+#define NM_BSP_B_L_16(x) \
+((((x) & 0x00FF) << 8) + \
+(((x)  & 0xFF00) >> 8))
+#else
+#define NM_BSP_B_L_32(x)  (x)
+#define NM_BSP_B_L_16(x)  (x)
+#endif
+
+
+
 #define WILC_DFL_CTRL_PORT (GPIO_PORTE_DATA_R)
 
 //make pe0 the reset pin
@@ -115,6 +133,8 @@ void   nm_bsp_reset(void);
 void nm_bsp_sleep(uint32_t u32TimeMsec);
 
 void   nm_bsp_register_isr(tpfNmBspIsr pfIsr);
+
+void   nm_bsp_interrupt_ctrl(uint8 u8Enable);
 
 void*  nm_bsp_malloc(uint32 u32Size);
 
