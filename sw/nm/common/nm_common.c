@@ -33,8 +33,7 @@
  */
 #include "nm_common.h"
 
-void m2m_memcpy(uint8* pDst,uint8* pSrc,uint32 sz)
-{
+void m2m_memcpy(uint8* pDst,uint8* pSrc,uint32 sz){
 	if(sz == 0) return;
 	do
 	{
@@ -43,8 +42,8 @@ void m2m_memcpy(uint8* pDst,uint8* pSrc,uint32 sz)
 		pSrc++;
 	}while(--sz);
 }
-uint8 m2m_checksum(uint8* buf, int sz)
-{
+
+uint8 m2m_checksum(uint8* buf, int sz){
 	uint8 cs = 0;
 	while(--sz)
 	{
@@ -55,8 +54,7 @@ uint8 m2m_checksum(uint8* buf, int sz)
 	return cs;
 }
 
-void m2m_memset(uint8* pBuf,uint8 val,uint32 sz)
-{
+void m2m_memset(uint8* pBuf,uint8 val,uint32 sz){
 	if(sz == 0) return;
 	do
 	{
@@ -65,8 +63,7 @@ void m2m_memset(uint8* pBuf,uint8 val,uint32 sz)
 	}while(--sz);
 }
 
-uint16 m2m_strlen(uint8 * pcStr)
-{
+uint16 m2m_strlen(uint8 * pcStr){
 	uint16	u16StrLen = 0;
 	while(*pcStr)
 	{
@@ -76,8 +73,7 @@ uint16 m2m_strlen(uint8 * pcStr)
 	return u16StrLen;
 }
 
-uint8 m2m_strncmp(uint8 *pcS1, uint8 *pcS2, uint16 u16Len)
-{
+uint8 m2m_strncmp(uint8 *pcS1, uint8 *pcS2, uint16 u16Len){
     for ( ; u16Len > 0; pcS1++, pcS2++, --u16Len)
 	if (*pcS1 != *pcS2)
 	    return ((*(uint8 *)pcS1 < *(uint8 *)pcS2) ? -1 : +1);
@@ -90,8 +86,7 @@ uint8 m2m_strncmp(uint8 *pcS1, uint8 *pcS2, uint16 u16Len)
 If pcStr is part of pcIn it returns a valid pointer to the start of pcStr within pcIn.
 Otherwise a NULL Pointer is returned.
 */
-uint8 * m2m_strstr(uint8 *pcIn, uint8 *pcStr)
-{
+uint8 * m2m_strstr(uint8 *pcIn, uint8 *pcStr){
     uint8 u8c;
     uint16 u16StrLen;
 
@@ -113,8 +108,7 @@ uint8 * m2m_strstr(uint8 *pcIn, uint8 *pcStr)
     return (uint8 *) (pcIn - 1);
 }
 
-sint8 m2m_memcmp(uint8 *pu8Buff1,uint8 *pu8Buff2 ,uint32 u32Size)
-{
+sint8 m2m_memcmp(uint8 *pu8Buff1,uint8 *pu8Buff2 ,uint32 u32Size){
 	uint32	i;
 	sint8		s8Result = 0;
 	for(i	 = 0 ; i < u32Size ; i++)

@@ -36,47 +36,77 @@
 
 #include <stdint.h>
 
-#include "../../../inc/tm4c123gh6pm.h"
+#include "../../inc/tm4c123gh6pm.h"
+#include "nm_tm4c.h"
+#define NMI_API
+#ifdef __MCF964548__
+#define CONST code
+#else
+#define CONST const
+#endif
+/*!< 
+*     Used for code portability.
+*/
 
-#define WILC_DFL_CTRL_PORT (GPIO_PORTC_DATA_BITS_R)
+typedef void (*tpfNmBspIsr)(void);
 
+
+
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
+#define BSP_MIN(x,y) ((x)>(y)?(y):(x))
+
+typedef unsigned char	uint8;
+typedef unsigned short	uint16;
+typedef unsigned long	uint32;
+typedef signed char		sint8;
+typedef signed short	sint16;
+typedef signed long		sint32;
+
+#define WILC_DFL_CTRL_PORT (GPIO_PORTE_DATA_R)
+
+//make pe0 the reset pin
 #define WILC_RESET_PORT (WILC_DFL_CTRL_PORT)
-#define WILC_RESET_PIN (1<<5)
+#define WILC_RESET_PIN (1<<0)
 
+// pe1 the chipen 
 #define WILC_CHIPEN_PORT (WILC_DFL_CTRL_PORT)
-#define WILC_CHIPEN_PIN (1<<6)
+#define WILC_CHIPEN_PIN (1<<1)
 
+//pe2 the wake pin
 #define WILC_WAKE_PORT (WILC_DFL_CTRL_PORT)
-#define WILC_WAKE_PIN (1<<7)
+#define WILC_WAKE_PIN (1<<2)
 
-#define WILC_RESET_HI (*(WILC_RESET_PORT + WILC_RESET_PIN) = WILC_RESET_PIN)
-#define WILC_RESET_LO (*(WILC_RESET_PORT + WILC_RESET_PIN) &= ~WILC_RESET_PIN)
+// Set all pins directly by manipulating the register
+#define WILC_RESET_HI     (WILC_DFL_CTRL_PORT |= WILC_RESET_PIN)
+#define WILC_RESET_LO     (WILC_DFL_CTRL_PORT &= ~WILC_RESET_PIN)
 
-#define WILC_CHIPEN_HI (*(WILC_CHIPEN_PORT + WILC_CHIPEN_PIN) = WILC_CHIPEN_PIN)
-#define WILC_CHIPEN_LO (*(WILC_CHIPEN_PORT + WILC_CHIPEN_PIN) &= ~WILC_CHIPEN_PIN)
+#define WILC_CHIPEN_HI    (WILC_DFL_CTRL_PORT |= WILC_CHIPEN_PIN)
+#define WILC_CHIPEN_LO    (WILC_DFL_CTRL_PORT &= ~WILC_CHIPEN_PIN)
 
-#define WILC_WAKE_HI (*(WILC_WAKE_PORT + WILC_WAKE_PIN) = WILC_WAKE_PIN)
-#define WILC_WAKE_LO (*(WILC_WAKE_PORT + WILC_WAKE_PIN) &= ~WILC_WAKE_PIN)
-
+#define WILC_WAKE_HI      (WILC_DFL_CTRL_PORT |= WILC_WAKE_PIN)
+#define WILC_WAKE_LO      (WILC_DFL_CTRL_PORT &= ~WILC_WAKE_PIN)
 /* 
  * Initializes the Board Support Package (BSP), including reset and chip enable pins for WILC, delays, 
  * registering ISR, and enabling/disabling IRQ for WILC. This function must be called at the start of 
  * the application to enable communication between WILC and the host driver.
  * Returns M2M_SUCCESS on success, or a negative value on failure.
  */
-int8_t nm_bsp_init(void);
+sint8  nm_bsp_init(void);
 
 /* 
  * Deinitializes the BSP. This function should be called after nm_bsp_init. Missing this call may lead 
  * to undefined behavior during a soft reset. Returns M2M_SUCCESS on success, or a negative value on failure.
  */
-int8_t nm_bsp_deinit(void);
+sint8  nm_bsp_deinit(void);
 
 /* 
  * Resets the NMC1500 SoC by toggling the CHIP_EN and RESET_N signals. This function is host-dependent 
  * and is called by the HIF layer. Ensure nm_bsp_init is called before using this function.
  */
-void nm_bsp_reset(void);
+void   nm_bsp_reset(void);
 
 /* 
  * Puts the system to sleep for the specified time in milliseconds. The maximum value is 4294967295 ms 
@@ -84,4 +114,9 @@ void nm_bsp_reset(void);
  */
 void nm_bsp_sleep(uint32_t u32TimeMsec);
 
+void   nm_bsp_register_isr(tpfNmBspIsr pfIsr);
+
+void*  nm_bsp_malloc(uint32 u32Size);
+
+void   nm_bsp_free(void* pvMemBuffer);
 #endif

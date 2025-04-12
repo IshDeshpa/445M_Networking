@@ -32,7 +32,7 @@
  *
  */
 
-#include "driver/include/m2m_wifi.h"
+#include "../include/m2m_wifi.h"
 #include "driver/source/nmdrv.h"
 #include "driver/source/m2m_hif.h"
 #include "driver/source/nmasic.h"

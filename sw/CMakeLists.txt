@@ -37,9 +37,9 @@ set(CMAKE_EXE_LINKER_FLAGS "${CPU_FLAGS} ${FPU_FLAGS}  -Wl,--gc-sections --entry
 
 
 # Include directories
-add_subdirectory(inc)
-add_subdirectory(nm)
-add_subdirectory(driverlib)
+#add_subdirectory(inc)
+#add_subdirectory(nm)
+#add_subdirectory(driverlib)
 
 #add_subdirectory(RTOS_Labs_common)
 #add_subdirectory(lib/std/stdio_lite)
@@ -53,19 +53,25 @@ set(SRC_FILES
 
     src/main.c
 
-    # inc/Timer0A.c
-    # inc/Timer1A.c
-    # inc/Timer2A.c
-    # inc/Timer3A.c
-    # inc/Timer4A.c
-    # inc/Timer5A.c
-    # inc/PLL.c
-    # inc/LaunchPad.c
-    # inc/UART.c
-    # inc/SysTick.c
+    #lib/std/stdio_lite/stdio_lite.h
+     inc/Timer0A.c
+     inc/Timer1A.c
+     inc/Timer2A.c
+     inc/Timer3A.c
+     inc/Timer4A.c
+     inc/Timer5A.c
+     inc/PLL.c
+     inc/LaunchPad.c
+     inc/UART.c
+     inc/SysTick.c
 
-    # lib/std/string_lite/string_lite.c
-    # lib/std/stdio_lite/stdio_lite.c
+     nm/bsp/nm_bsp.c
+     nm/bus_wrapper/nm_bus_wrapper.c
+     nm/common/nm_common.c
+     nm/driver/
+
+     lib/std/string_lite/string_lite.c
+     lib/std/stdio_lite/stdio_lite.c
 
     # nm/nm_bsp_tm4c.c
     # nm/nm_bus_wrapper_tm4c.c
@@ -78,28 +84,28 @@ set(SRC_FILES
 add_executable(exe.elf ${SRC_FILES})
 
 # Link necessary libraries
-target_link_libraries(exe.elf PRIVATE
-   -Wl,--start-group
-   ValvanoWare
-   nm
-   driverlib
-#    RTOS_Labs_common
-#    stdio_lite
-#    string_lite
-   #printf
-   -lc        # Link the C standard library (Newlib)
-   #-lnosys    # Link system call stubs
-   -Wl,--end-group
-)
+#target_link_libraries(exe.elf PRIVATE
+#    -Wl,--start-group
+#    ValvanoWare
+#    nm
+#    driverlib
+##    RTOS_Labs_common
+#    #stdio_lite
+##    string_lite
+#    #printf
+#    -lc        # Link the C standard library (Newlib)
+#    #-lnosys    # Link system call stubs
+#    -Wl,--end-group
+#)
 
-target_include_directories(exe.elf PRIVATE
-    src
-    inc
-    nm
-    #lib/std/stdio_lite
-    #lib/std/string_lite
-    #RTOS_Labs_common
-)
+#target_include_directories(exe.elf PRIVATE
+#    src
+#    inc
+#    nm
+#    #lib/std/stdio_lite
+#    #lib/std/string_lite
+#    #RTOS_Labs_common
+#)
 
 
 ## Convert the ELF to BIN

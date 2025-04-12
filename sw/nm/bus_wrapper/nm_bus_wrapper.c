@@ -1,10 +1,10 @@
-#include "nm_bsp.h"
+#include "../bsp/nm_bsp.h"
 #include "nm_bus_wrapper.h"
 
-#include "../../../driverlib/ssi.h"
-#include "../../../driverlib/udma.h"
-#include "../../../driverlib/sysctl.h"
-#include "../../../inc/hw_sysctl.h"
+#include "../../driverlib/ssi.h"
+#include "../../driverlib/udma.h"
+#include "../../driverlib/sysctl.h"
+#include "../../inc/hw_sysctl.h"
 
 #define SSI1_BASER (0x40009000)
 #define SSI1_O_DR (0x8)
@@ -57,6 +57,7 @@ static int8_t spi_rw(uint8_t *pu8Mosi, uint8_t *pu8Miso, uint16_t u16Sz) {
 
     // Assert chip select
     // Don't think we need to assert chip select here; Fss should be doing that for us?
+    // shoudl be fine as long as Fss is only used for data and not power on and off
     // WILC_CS_LO;
 
     for (i = 0; i < u16Sz; i++) {
@@ -136,3 +137,5 @@ int8_t nm_bus_deinit(void){
     WILC_RESET_LO;
     return 0;
 }
+
+

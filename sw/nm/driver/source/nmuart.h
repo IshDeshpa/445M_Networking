@@ -35,7 +35,7 @@
 #ifndef _NMUART_H_
 #define _NMUART_H_
 
-#include "../../common/include/nm_common.h"
+#include "../../common/nm_common.h"
 
 /*
 *	@fn			nm_uart_sync_cmd
