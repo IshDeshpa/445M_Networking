@@ -108,14 +108,18 @@ sint8 nm_drv_init(void * arg)
 	if (M2M_SUCCESS != ret) {
 		M2M_ERR("[nmi start]: fail init bus\n");
 		goto ERR1;
-	}
+	}else{
+        NM_BSP_PRINTF("nm_drv_init/nm_bus_iface_init sucess\n");
+    }
 
 #ifdef BUS_ONLY
 	return;
 #endif
 
 #ifdef CONF_WILC_USE_SPI
+    NM_BSP_PRINTF("Starting up nm_spi_init");
 	nm_spi_init();
+    NM_BSP_PRINTF("nm_spi_init success");
 #elif defined CONF_WILC_USE_SDIO
 	nm_sdio_init();
 #endif

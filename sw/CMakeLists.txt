@@ -70,6 +70,7 @@ set(SRC_FILES
 #gcc-files/syscalls.c
 
     src/main.c
+    src/Networking.c
 
 #lib/std/stdio_lite/stdio_lite.h
 #    inc/Timer0A.c

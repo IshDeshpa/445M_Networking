@@ -115,7 +115,7 @@ extern tstrNmBusCapabilities egstrNmBusCapabilities;
 *	@brief	Initialize the bus wrapper
 *	@return	ZERO in case of success and M2M_ERR_BUS_FAIL in case of failure
 */ 
-sint8 nm_bus_init(void *);
+sint8 nm_bus_init(void*);
 
 /**
 *	@fn		nm_bus_ioctl

@@ -7,18 +7,20 @@
 #include "../inc/Timer0A.h"
 #include "../inc/Timer1A.h"
 #include "../inc/LaunchPad.h"
-#include "../lib/std/stdio_lite/stdio_lite.h"
 #include "../inc/UART.h"
 #include "../inc/SysTick.h"
+
 #include "../nm/bsp/nm_bsp.h"
 #include "../nm/bus_wrapper/nm_bus_wrapper.h"
+#include "../nm/driver/include/m2m_wifi.h"
+
+#include "Networking.h"
 #include "../lib/std/stdio_lite/stdio_lite.h"
 #include <stdint.h>
 
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
-
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
@@ -27,7 +29,6 @@
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
 void StartupDelay(void);
-
 /* ================================================== */
 /*                    MAIN FUNCTION                   */
 /* ================================================== */
@@ -81,10 +82,12 @@ int main(){
     SysTick_Init();
 
     Timer0A_Init(HeartBeat, 80000, 7);
+
+    Wifi_Init(); 
+    get_mac_test();
     //Timer1A_Init(void (*task)(void), uint32_t period, uint32_t priority)
-    
-    nm_bsp_init();
-    nm_bsp_register_isr(TestIRQPin);
+    //nm_bsp_init();
+    //nm_bsp_register_isr(TestIRQPin);
 
     //nm_bus_init();
 

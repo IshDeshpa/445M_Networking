@@ -25,7 +25,7 @@
 
 // U0Rx (VCP receive) connected to PA0
 // U0Tx (VCP transmit) connected to PA1
-
+#include <stdint.h>
 // standard ASCII symbols
 #define CR   0x0D
 #define LF   0x0A

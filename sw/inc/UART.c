@@ -27,7 +27,7 @@
 // U0Tx (VCP transmit) connected to PA1
 
 #include <stdint.h>
-#include <stdio.h>
+
 #include "../inc/UART.h"
 #include "../inc/tm4c123gh6pm.h"
 
@@ -254,26 +254,26 @@ char character;
 }
 
 // Print a character to UART.
-int fputc(int ch, FILE *f){
-  if((ch == 10) || (ch == 13) || (ch == 27)){
-    UART_OutChar(13);
-    UART_OutChar(10);
-    return 1;
-  }
-  UART_OutChar(ch);
-  return 1;
-}
-// Get input from UART, echo
-int fgetc (FILE *f){
-  char ch = UART_InChar();  // receive from keyboard
-  UART_OutChar(ch);            // echo
-  return ch;
-}
-// Function called when file error occurs.
-int my_ferror(FILE *f){
-  /* Your implementation of ferror */
-  return EOF;
-}
+//int fputc(int ch, FILE *f){
+//  if((ch == 10) || (ch == 13) || (ch == 27)){
+//    UART_OutChar(13);
+//    UART_OutChar(10);
+//    return 1;
+//  }
+//  UART_OutChar(ch);
+//  return 1;
+//}
+//// Get input from UART, echo
+//int fgetc (FILE *f){
+//  char ch = UART_InChar();  // receive from keyboard
+//  UART_OutChar(ch);            // echo
+//  return ch;
+//}
+//// Function called when file error occurs.
+//int my_ferror(FILE *f){
+//  /* Your implementation of ferror */
+//  return EOF;
+//}
 
 // Abstraction of general output device
 // Volume 2 section 3.4.5

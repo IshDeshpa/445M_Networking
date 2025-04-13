@@ -451,7 +451,7 @@ void HardFault_Handler(void){
     //
     // Enter an infinite loop.
     //
-    GPIO_PORTF_DATA_R |= 0x0E;
+    GPIO_PORTF_DATA_R |= 0x0E; 
     while(1)
     {
     }
