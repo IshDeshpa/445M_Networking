@@ -16,7 +16,11 @@ extern uint16_t ADC_Vals_Buf[NUMBER_OF_SENSORS];
 /* ================================================== */
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
+void ADC_IC_Init(void);
+void SSI0_Init(void);
+void SSI1_Init(void);
+void SSI2_Init(void);
+void SSI3_Init(void);
 void SensorsInit(void);
-void Notes_State_Update(void);
 #endif 
 

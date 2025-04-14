@@ -2,6 +2,7 @@
 #define _NM_BSP_TM4C_H_
 
 #include "../../lib/std/stdio_lite/stdio_lite.h"
+//#include "../../lib/std/printf/printf.h"
 #include "../conf_wilc.h"
 // Use level-triggered IRQ (WILC IRQ is active-low and held until handled)
 #define NM_LEVEL_INTERRUPT      (1)

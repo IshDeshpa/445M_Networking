@@ -71,7 +71,7 @@ set(SRC_FILES
 
     src/main.c
     src/Networking.c
-
+    src/SensorIn.c
 #lib/std/stdio_lite/stdio_lite.h
 #    inc/Timer0A.c
 #    inc/Timer1A.c

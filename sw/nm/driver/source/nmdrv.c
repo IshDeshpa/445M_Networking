@@ -117,9 +117,9 @@ sint8 nm_drv_init(void * arg)
 #endif
 
 #ifdef CONF_WILC_USE_SPI
-    NM_BSP_PRINTF("Starting up nm_spi_init");
+    NM_BSP_PRINTF("Starting up nm_spi_init\n\r");
 	nm_spi_init();
-    NM_BSP_PRINTF("nm_spi_init success");
+    NM_BSP_PRINTF("nm_spi_init success\n\r");
 #elif defined CONF_WILC_USE_SDIO
 	nm_sdio_init();
 #endif

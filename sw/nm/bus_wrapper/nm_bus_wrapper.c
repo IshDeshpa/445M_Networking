@@ -5,7 +5,7 @@
 #include "../../driverlib/udma.h"
 #include "../../driverlib/sysctl.h"
 #include "../../inc/hw_sysctl.h"
-
+#include "../../src/SensorIn.h"
 #define SSI1_BASER (0x40009000)
 #define SSI1_O_DR (0x8)
 
@@ -20,6 +20,7 @@ uint8_t udmaControlTable[1024];
 #define NM_BUS_MAX_TRX_SZ 4096
 
 
+// Configure Port F pins for SSI1 (PF0: SSI1Rx, PF1: SSI1Tx, PF2: SSI1Clk, PF3: SSI1Fss)
 tstrNmBusCapabilities egstrNmBusCapabilities ={
     NM_BUS_MAX_TRX_SZ
 };
@@ -87,41 +88,41 @@ static int8_t spi_rw(uint8_t *pu8Mosi, uint8_t *pu8Miso, uint16_t u16Sz) {
 int8_t nm_bus_init(void*){
     // TODO: add mutex protections here
     WILC_WAKE_HI;
-
+    SSI1_Init();
     // Configure SPI
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1);  // activate SSI1
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD); // activate port D
-    
-    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_SSI1)); // allow time for SSI1 clock to start
-    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOD)); // allow time for GPIO D clock to start
+    //SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1);  // activate SSI1
+    //SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD); // activate port D
+    //
+    //while (!SysCtlPeripheralReady(SYSCTL_PERIPH_SSI1)); // allow time for SSI1 clock to start
+    //while (!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOD)); // allow time for GPIO D clock to start
 
-    GPIO_PORTD_DIR_R |= 0x0B;        // make PD3,1,0 output
-    GPIO_PORTD_AFSEL_R |= 0x0F;     // enable alt funct on PD3-0
-    GPIO_PORTD_DEN_R |= 0x0F;        // enable digital I/O on PD3-0
-    GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R & ~0x0000FFFF) | 0x00002222; // set to SSI0
-    GPIO_PORTD_AMSEL_R &= ~0x0F;    // disable analog functionality on PD
-    
-    SSIConfigSetExpClk(SSI1_BASER, 8000000, SSI_FRF_MOTO_MODE_0, SSI_MODE_MASTER, 1000000, 8); // 8MHz clock, 1Mbps baud rate, 8-bit data
-    SSIEnable(SSI1_BASER); // enable SSI
+    //GPIO_PORTD_DIR_R |= 0x0B;        // make PD3,1,0 output
+    //GPIO_PORTD_AFSEL_R |= 0x0F;     // enable alt funct on PD3-0
+    //GPIO_PORTD_DEN_R |= 0x0F;        // enable digital I/O on PD3-0
+    //GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R & ~0x0000FFFF) | 0x00002222; // set to SSI0
+    //GPIO_PORTD_AMSEL_R &= ~0x0F;    // disable analog functionality on PD
+    //
+    //SSIConfigSetExpClk(SSI1_BASER, 8000000, SSI_FRF_MOTO_MODE_0, SSI_MODE_MASTER, 1000000, 8); // 8MHz clock, 1Mbps baud rate, 8-bit data
+    //SSIEnable(SSI1_BASER); // enable SSI
 
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UDMA);
-    while (!SysCtlPeripheralReady(SYSCTL_PERIPH_UDMA));
+    //SysCtlPeripheralEnable(SYSCTL_PERIPH_UDMA);
+    //while (!SysCtlPeripheralReady(SYSCTL_PERIPH_UDMA));
 
-    uDMAEnable();
-    uDMAControlBaseSet(udmaControlTable);
+    //uDMAEnable();
+    //uDMAControlBaseSet(udmaControlTable);
 
-    // Enable DMA for SSI0 TX and RXl
-    SSIDMAEnable(SSI1_BASER, SSI_DMA_TX | SSI_DMA_RX);
+    //// Enable DMA for SSI0 TX and RXl
+    //SSIDMAEnable(SSI1_BASER, SSI_DMA_TX | SSI_DMA_RX);
 
-    // Configure the TX DMA channel (uDMA Channel 24 - SSI0 TX)
-    uDMAChannelAttributeDisable(UDMA_CHANNEL_SSI0TX, UDMA_ATTR_ALL);
-    uDMAChannelControlSet(UDMA_CHANNEL_SSI0TX | UDMA_PRI_SELECT,
-                          UDMA_SIZE_8 | UDMA_SRC_INC_8 | UDMA_DST_INC_NONE | UDMA_ARB_4);
+    //// Configure the TX DMA channel (uDMA Channel 24 - SSI0 TX)
+    //uDMAChannelAttributeDisable(UDMA_CHANNEL_SSI1TX, UDMA_ATTR_ALL);
+    //uDMAChannelControlSet(UDMA_CHANNEL_SSI1TX | UDMA_PRI_SELECT,
+    //                      UDMA_SIZE_8 | UDMA_SRC_INC_8 | UDMA_DST_INC_NONE | UDMA_ARB_4);
 
-    // Configure the RX DMA channel (uDMA Channel 25 - SSI0 RX)
-    uDMAChannelAttributeDisable(UDMA_CHANNEL_SSI0RX, UDMA_ATTR_ALL);
-    uDMAChannelControlSet(UDMA_CHANNEL_SSI0RX | UDMA_PRI_SELECT,
-                          UDMA_SIZE_8 | UDMA_SRC_INC_NONE | UDMA_DST_INC_8 | UDMA_ARB_4);
+    //// Configure the RX DMA channel (uDMA Channel 25 - SSI0 RX)
+    //uDMAChannelAttributeDisable(UDMA_CHANNEL_SSI1RX, UDMA_ATTR_ALL);
+    //uDMAChannelControlSet(UDMA_CHANNEL_SSI1RX | UDMA_PRI_SELECT,
+    //                      UDMA_SIZE_8 | UDMA_SRC_INC_NONE | UDMA_DST_INC_8 | UDMA_ARB_4);
     return M2M_SUCCESS;
     
 }
@@ -132,11 +133,11 @@ int8_t nm_bus_ioctl(uint8_t u8Cmd, void* pvParameter){
     int8_t s8Ret = 0;
 
     tstrNmSpiRw *pstrParam = (tstrNmSpiRw *) pvParameter;
-    if (pstrParam->u16Sz > MIN_DMA_SPI_SIZE) {
-        s8Ret = spi_rw_dma(pstrParam->pu8InBuf, pstrParam->pu8OutBuf, pstrParam->u16Sz);
-    } else {
+    //if (pstrParam->u16Sz > MIN_DMA_SPI_SIZE) {
+    //    s8Ret = spi_rw_dma(pstrParam->pu8InBuf, pstrParam->pu8OutBuf, pstrParam->u16Sz);
+    //} else {
         s8Ret = spi_rw(pstrParam->pu8InBuf, pstrParam->pu8OutBuf, pstrParam->u16Sz);
-    }
+    //}
 
     return s8Ret;
 }

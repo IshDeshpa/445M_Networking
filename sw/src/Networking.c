@@ -55,7 +55,7 @@ int Wifi_Init(void){
 
     LOG("Starting Up Wifi Init\n\r");
 
-    wifi_init_param.pfAppWifiCb = wifi_callback;
+    wifi_init_param.pfAppWifiCb = &wifi_callback;
     wifi_init_param.pfAppMonCb = NULL;
     wifi_init_param.strEthInitParam.au8ethRcvBuf = NULL;
     wifi_init_param.strEthInitParam.u16ethRcvBufSize = 0;
