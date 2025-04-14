@@ -51,10 +51,13 @@ int test_spi(void){
   };
     
   for(int i=0;i<16;i++) inbuf[i] = i*2;
-    printf("statring printf test\n\r");
-  nm_bus_ioctl(0, &spi_rw);
-    printf("passed spi test\n\r");
-  while(1);
+
+    while(1){
+        printf("statring printf test\n\r");
+        nm_bus_ioctl(0, &spi_rw);
+        nm_bsp_sleep(80000000);
+        printf("passed spi test\n\r");
+    }
 }
 
 int test_spi_dma(void){
@@ -92,16 +95,16 @@ int main(){
     PortD_Init();
     Timer0A_Init(HeartBeat, 80000000, 7);
 
-    //Wifi_Init(); 
     nm_bsp_init();
-    nm_bus_init(NULL);
+    Wifi_Init(); 
+    //nm_bus_init(NULL);
     //get_mac_test();
     //Timer1A_Init(void (*task)(void), uint32_t period, uint32_t priority)
     //nm_bsp_init();
     //nm_bsp_register_isr(TestIRQPin);
 
     //nm_bus_init();
-    test_spi();
+    //test_spi();
     //test_spi_dma();
     EnableInterrupts();
 
