@@ -1,3 +1,33 @@
+#ifndef CONF_WILC_H_INCLUDED
+#define CONF_WILC_H_INCLUDED
+
+#include "tm4c123gh6pm.h"
+
+/*  */
+#define WILC_DFL_CTRL_PORT (GPIO_PORTE_DATA_R)
+
+//make pe0 the reset pin
+#define WILC_RESET_PORT (WILC_DFL_CTRL_PORT)
+#define WILC_RESET_PIN (1<<0)
+
+// pe1 the chipen 
+#define WILC_CHIPEN_PORT (WILC_DFL_CTRL_PORT)
+#define WILC_CHIPEN_PIN (1<<1)
+
+//pe2 the wake pin
+#define WILC_WAKE_PORT (WILC_DFL_CTRL_PORT)
+#define WILC_WAKE_PIN (1<<2)
+
+// Set all pins directly by manipulating the register
+#define WILC_RESET_HI     (WILC_DFL_CTRL_PORT |= WILC_RESET_PIN)
+#define WILC_RESET_LO     (WILC_DFL_CTRL_PORT &= ~WILC_RESET_PIN)
+
+#define WILC_CHIPEN_HI    (WILC_DFL_CTRL_PORT |= WILC_CHIPEN_PIN)
+#define WILC_CHIPEN_LO    (WILC_DFL_CTRL_PORT &= ~WILC_CHIPEN_PIN)
+
+#define WILC_WAKE_HI      (WILC_DFL_CTRL_PORT |= WILC_WAKE_PIN)
+#define WILC_WAKE_LO      (WILC_DFL_CTRL_PORT &= ~WILC_WAKE_PIN)
+
 #define CONF_WILC_USE_SPI				
 
 /** SPI pin and instance settings. */
