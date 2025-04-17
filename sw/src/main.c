@@ -140,3 +140,10 @@ void PortD_Init(void){
   GPIO_PORTD_AMSEL_R &= ~0xFF;;    // disable analog functionality on PD
 }
 
+void _exit(int status)
+{
+    (void)status;
+    while (1) {
+        __asm__("wfi");
+    }
+}
