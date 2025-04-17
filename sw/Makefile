@@ -56,7 +56,6 @@ SRC_FILES = \
 	FreakyRTOS/Interpreter.c \
 	FreakyRTOS/FIFOsimple.c \
 	FreakyRTOS/eDisk.c \
-	FreakyRTOS/can0.c \
 	FreakyRTOS/OS_CLI_Commands/cat.c \
 	FreakyRTOS/OS_CLI_Commands/CLI_Commands.c \
 	FreakyRTOS/OS_CLI_Commands/write.c \

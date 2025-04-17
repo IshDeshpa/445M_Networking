@@ -1000,33 +1000,33 @@ void PWM1Fault_Handler(void){
 //*****************************************************************************
 //these are the funcitons that DR.Valvano gave us in his startup.s file for keil
 //*****************************************************************************
-// Disable interrupts
-void DisableInterrupts(void) {
-    __asm volatile ("CPSID I" : : : "memory");
-}
+// // Disable interrupts
+// void DisableInterrupts(void) {
+//     __asm volatile ("CPSID I" : : : "memory");
+// }
 
-// Enable interrupts
-void EnableInterrupts(void) {
-    __asm volatile ("CPSIE I" : : : "memory");
-}
+// // Enable interrupts
+// void EnableInterrupts(void) {
+//     __asm volatile ("CPSIE I" : : : "memory");
+// }
 
-// Make a copy of the current interrupt state and disable interrupts
-uint32_t StartCritical(void) {
-    uint32_t primask;
-    __asm volatile ("MRS %0, PRIMASK" : "=r" (primask) :: "memory");
-    __asm volatile ("CPSID I" : : : "memory");
-    return primask;
-}
+// // Make a copy of the current interrupt state and disable interrupts
+// uint32_t StartCritical(void) {
+//     uint32_t primask;
+//     __asm volatile ("MRS %0, PRIMASK" : "=r" (primask) :: "memory");
+//     __asm volatile ("CPSID I" : : : "memory");
+//     return primask;
+// }
 
-// Restore the previous interrupt state using the copy of PRIMASK
-void EndCritical(uint32_t primask) {
-    __asm volatile ("MSR PRIMASK, %0" : : "r" (primask) : "memory");
-}
+// // Restore the previous interrupt state using the copy of PRIMASK
+// void EndCritical(uint32_t primask) {
+//     __asm volatile ("MSR PRIMASK, %0" : : "r" (primask) : "memory");
+// }
 
-// Wait for an interrupt (put the processor in low power mode)
-void WaitForInterrupt(void) {
-    __asm volatile ("WFI" : : : "memory");
-}
+// // Wait for an interrupt (put the processor in low power mode)
+// void WaitForInterrupt(void) {
+//     __asm volatile ("WFI" : : : "memory");
+// }
 
 //*****************************************************************************
 //these are ISR handlers

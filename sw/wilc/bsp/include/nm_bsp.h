@@ -367,6 +367,10 @@ void nm_bsp_free(void* pvMemBuffer);
 #define __M2M_DMA_BUF_ATT__
 #endif
 
+#include "conf_wilc.h"
+#include "tm4c123gh6pm.h"
+#define __M2M_DMA_BUF_ATT__
+
 
 #ifdef _NM_BSP_BIG_END
 #define NM_BSP_B_L_32(x) \

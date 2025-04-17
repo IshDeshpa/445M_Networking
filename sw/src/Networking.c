@@ -5,9 +5,9 @@
 #include <stdint.h>
 #include "../lib/std/stdio_lite/stdio_lite.h"
 
-#include "../nm/bsp/nm_bsp.h"
-#include "../nm/bus_wrapper/nm_bus_wrapper.h"
-#include "../nm/driver/include/m2m_wifi.h"
+#include "bsp/include/nm_bsp.h"
+#include "bus_wrapper/include/nm_bus_wrapper.h"
+#include "driver/include/m2m_wifi.h"
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
@@ -50,8 +50,7 @@ void get_mac_test() {
 
 int Wifi_Init(void){
 
-    nm_bsp_init();
-    LOG("nm bsp init finised, gpio is on :)\n\r");
+    // nm_bsp_init();
 
     LOG("Starting Up Wifi Init\n\r");
 

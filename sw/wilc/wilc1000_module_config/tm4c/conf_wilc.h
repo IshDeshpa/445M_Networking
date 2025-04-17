@@ -3,6 +3,9 @@
 
 #include "tm4c123gh6pm.h"
 
+#define CONF_WILC_USE_1000_REV_B
+#define NM_EDGE_INTERRUPT
+
 /*  */
 #define WILC_DFL_CTRL_PORT (GPIO_PORTE_DATA_R)
 
@@ -62,19 +65,21 @@
 /** SPI clock. */
 #define CONF_WILC_SPI_CLOCK				(48000000)
 
+#define CONF_WILC_IRQ_PRI          (2)
+#define IRQ_PIN_BIT (0x10) // PE4
 /*
    ---------------------------------
    ----------- OS options ----------
    ---------------------------------
 */
 
-#define CONF_DRIVER_LOCK				1
-#if CONF_DRIVER_LOCK
-#  include <os/include/os_hook.h>
-#  define DRIVER_SIGNAL_ISR				os_hook_isr
-#else
-#  define DRIVER_SIGNAL_ISR()
-#endif
+// #define CONF_DRIVER_LOCK				1
+// #if CONF_DRIVER_LOCK
+// // #  include <os/include/os_hook.h>
+// #  define DRIVER_SIGNAL_ISR				os_hook_isr
+// #else
+// #  define DRIVER_SIGNAL_ISR()
+// #endif
 
 /*
    ---------------------------------

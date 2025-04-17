@@ -10,14 +10,15 @@
 #include "../inc/UART.h"
 #include "../inc/SysTick.h"
 
-#include "../nm/bsp/nm_bsp.h"
-#include "../nm/bus_wrapper/nm_bus_wrapper.h"
-#include "../nm/driver/include/m2m_wifi.h"
+#include "bsp/include/nm_bsp.h"
+#include "bus_wrapper/include/nm_bus_wrapper.h"
+#include "driver/include/m2m_wifi.h"
 
 #include "Networking.h"
 #include "../lib/std/stdio_lite/stdio_lite.h"
 //#include "../lib/std/printf/printf.h"
 #include <stdint.h>
+#include "OS.h"
 
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
@@ -80,23 +81,33 @@ void TestIRQPin(void){
 }
 
 void HeartBeat(void){
-    PD0 ^= 0x01;
+    GPIO_PORTF_DATA_R ^= 0x02; // toggle PF1
     //printf("thump\n\r");
+}
 
+void TestThread(void){
+  nm_bsp_init();
+  // LOG("nm bsp init finished, gpio is on :)\n\r");
+  Wifi_Init();
+  while(1){}
+}
+
+void IdleThread(void){
+  while(1){
+  }
 }
 
 int main(){
-    DisableInterrupts();
-    StartupDelay();
-    PLL_Init(Bus80MHz);
+    // DisableInterrupts();
+    // StartupDelay();
+    // PLL_Init(Bus80MHz);
     //LaunchPad_Init();
-    UART_Init();
-    SysTick_Init();
-    PortD_Init();
-    Timer0A_Init(HeartBeat, 80000000, 7);
+    // UART_Init();
+    // SysTick_Init();
+    // PortD_Init();
+    // Timer0A_Init(HeartBeat, 80000000, 7);
 
-    nm_bsp_init();
-    Wifi_Init(); 
+    
     //nm_bus_init(NULL);
     //get_mac_test();
     //Timer1A_Init(void (*task)(void), uint32_t period, uint32_t priority)
@@ -106,22 +117,18 @@ int main(){
     // nm_bus_init(NULL);
     // test_spi();
     //test_spi_dma();
-    EnableInterrupts();
 
+    OS_Init();
+
+    OS_AddPeriodicThread(HeartBeat, 80000000, 1);
+    OS_AddThread(TestThread, 128, 1);
+    OS_AddThread(IdleThread, 128, 2);
+
+    OS_Launch(TIME_2MS);
     while(1){
 
     }
 }
-
-void _putchar(char character){
-  // send char to console etc.
-  UART_OutChar(character);
-}
-
-void StartupDelay(void){
-    for(uint16 i = 0; i < UINT16_MAX; i++){}
-}
-
 
 void PortD_Init(void){ 
   SYSCTL_RCGCGPIO_R |= 0x08;       // activate port D

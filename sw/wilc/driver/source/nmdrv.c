@@ -116,6 +116,7 @@ sint8 nm_drv_init(void * arg)
 
 #ifdef CONF_WILC_USE_SPI
 	nm_spi_init();
+	M2M_INFO("Calling nm_spi_init\n\r");
 #elif defined CONF_WILC_USE_SDIO
 	nm_sdio_init();
 #endif

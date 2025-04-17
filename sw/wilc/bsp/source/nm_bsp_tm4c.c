@@ -1,9 +1,11 @@
 #include "bsp/include/nm_bsp.h"
 #include "tm4c123gh6pm.h"
 #include "common/include/nm_common.h"
-#include "component/component_cmcc.h"
-#include "asf.h"
+// #include "component/component_cmcc.h"
+// #include "asf.h"
 #include "conf_wilc.h"
+
+#include "OS.h"
 
 static tpfNmBspIsr gpfIsr;
 
@@ -157,24 +159,26 @@ void nm_bsp_interrupt_ctrl(uint8 u8Enable)
 *               Size of the requested memory 
 *	@return       Pointer to the allocated buffer, or NULL otherwise
 */
-void* nm_bsp_malloc(uint32 u32Size)
-{
-    while(1){
-        printf("malloc %d\n", u32Size);
-    };
-    return malloc(u32Size);
-}
+// void* nm_bsp_malloc(uint32 u32Size)
+// {
+//     while(1){
+//         printf("malloc %d\n", u32Size);
+//     };
+//     // return malloc(u32Size);
+//     return 0;
+// }
 
-/*
-*	@fn		nm_bsp_free
-*	@brief	Free memory
-*	@param [in]   pvMemBuffer
-*               Pointer to the buffer to be freed 
-*/
-void nm_bsp_free(void* pvMemBuffer)
-{
-    while(1){
-        printf("free %p\n", pvMemBuffer);
-    };
-    free(pvMemBuffer);
-}
+// /*
+// *	@fn		nm_bsp_free
+// *	@brief	Free memory
+// *	@param [in]   pvMemBuffer
+// *               Pointer to the buffer to be freed 
+// */
+// void nm_bsp_free(void* pvMemBuffer)
+// {
+//     while(1){
+//         printf("free %p\n", pvMemBuffer);
+//     };
+//     // free(pvMemBuffer);
+//     return 0;
+// }

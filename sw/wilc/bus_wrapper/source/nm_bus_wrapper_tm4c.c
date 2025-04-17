@@ -37,7 +37,7 @@
  #include "common/include/nm_common.h"
  #include "bus_wrapper/include/nm_bus_wrapper.h"
  #include "tm4c123gh6pm.h"
- #include "asf.h"
+//  #include "asf.h"
  #include "conf_wilc.h"
  
  #define NM_BUS_MAX_TRX_SZ 4096
@@ -75,15 +75,9 @@
  #endif
  
  #ifdef CONF_WILC_USE_SPI
- /** PIO instance used by CS. */
- Pio *p_pio_cs;
- 
  /** Fast CS macro. */
- #define SPI_ASSERT_CS()	GPIO_PORTA_DATA_R &= ~0x08 // Chip Select low
- #define SPI_DEASSERT_CS()	GPIO_PORTA_DATA_R |= 0x08 // Chip Select high
- 
- /** Pointer to PDC SPI data structure. */
- static Pdc *g_p_pdc_spi;
+ #define SPI_ASSERT_CS()	GPIO_PORTE_DATA_R &= ~0x20 // Chip Select low
+ #define SPI_DEASSERT_CS()	GPIO_PORTE_DATA_R |= 0x20 // Chip Select high
  
  static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
  {
@@ -95,6 +89,7 @@
 		SSI0_DR_R = pu8Mosi[i];  // Send data
 		if (SSI0_SR_R & SSI_SR_RNE) {pu8Miso[in] = SSI0_DR_R; in++;} // Wait for SSI0 to be ready
 	}
+	for(int i=0; i<200; i++);
 	SPI_DEASSERT_CS(); // De-assert chip select
 
 	return M2M_SUCCESS;
