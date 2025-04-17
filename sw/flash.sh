@@ -1,12 +1,9 @@
 #!/bin/bash
 
-# Get the current directory
-Root="$(pwd)"
 builddir="build/"
+NUM_CORES=$(nproc) # On Linux
 
-./build.sh
-#openocd -f ti_ek-tm4c123gxl.cfg -c "program build/exe.elf verify reset exit"
-
-echo -e "\nflashing...\n"
-# Flash the binary to the microcontroller
-lm4flash -E "${Root}/${builddir}exe.bin"
+make flash -j$NUM_CORES -s -B
+#make dump
+echo -e "Used $NUM_CORES for buidling\n"
+echo -e "Flashing to Target..."
