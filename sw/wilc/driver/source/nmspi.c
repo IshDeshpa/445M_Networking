@@ -564,7 +564,7 @@ static int spi_cmd_complete(uint8_t cmd, uint32_t adr, uint8_t *b, uint32_t sz, 
 
 
 	if (rsp != cmd) {
-		M2M_ERR("[nmi spi]: Failed cmd response, cmd (%02x), resp (%02x)\n", cmd, rsp);
+		M2M_ERR("[nmi spi]: Failed cmd response, cmd (%d), resp (%d)\n", cmd, rsp);
 		result = N_FAIL;
 		return result;
 	}

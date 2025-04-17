@@ -81,12 +81,11 @@
  
  static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
  {
-
 	uint16_t in = 0;
 	SPI_ASSERT_CS(); // Assert chip select
 	for(uint16_t i = 0; i < u16Sz; i++) {
 		while (SSI0_SR_R & SSI_SR_BSY) {}; // Wait for SSI0 to be ready
-		SSI0_DR_R = pu8Mosi[i];  // Send data
+		SSI0_DR_R = (pu8Mosi == NULL)?0:pu8Mosi[i];  // Send data
 		if (SSI0_SR_R & SSI_SR_RNE) {pu8Miso[in] = SSI0_DR_R; in++;} // Wait for SSI0 to be ready
 	}
 	for(int i=0; i<200; i++);
