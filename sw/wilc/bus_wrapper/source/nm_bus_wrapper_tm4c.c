@@ -149,7 +149,7 @@
 	SSI0_CPSR_R = 10;         // Set CPSR = 10 (prescale divisor)
 	SSI0_CR0_R = 0;           // Clear the CR0 register
 	SSI0_CR0_R |= (7 << 8);   // Set SCR = 7 for 1 MHz SSI clock
-	SSI0_CR0_R |= (0 << 7);   // Set SPH = 0 (capture data on the first clock edge)
+	SSI0_CR0_R |= (1 << 7);   // Set SPH = 0 (capture data on the first clock edge)
 	SSI0_CR0_R |= (0 << 6);   // Set SPO = 0 (clock is idle low)
 	SSI0_CR0_R |= (0 << 4);   // Set FRF = 00 (Freescale SPI format)
 	SSI0_CR0_R |= 0x07;       // Set DSS = 8 bits (0x07 = 7 for 8-bit data)
