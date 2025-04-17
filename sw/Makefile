@@ -39,7 +39,7 @@ LDFLAGS = \
     -mthumb \
     $(CPU_FLAGS) \
     -Wl,--gc-sections \
-    -T gcc-files/tm4c123gh6pm.ld
+    -T gcc-files/tm4c123gh6pm.ld.exception.bak
 
 # Source files
 SRC_FILES = \
@@ -78,7 +78,6 @@ SRC_FILES = \
 	inc/PLL.c \
 	inc/LaunchPad.c \
 	lib/std/string_lite/string_lite.c \
-	lib/std/stdio_lite/stdio_lite.c \
 	lib/std/printf/printf.c \
 	wilc/bsp/source/nm_bsp_tm4c.c \
     wilc/bus_wrapper/source/nm_bus_wrapper_tm4c.c \

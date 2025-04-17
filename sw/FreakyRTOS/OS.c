@@ -17,8 +17,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "../lib/std/stdio_lite/stdio_lite.h"
-
+//#include "../lib/std/stdio_lite/stdio_lite.h"
+#include "printf.h"
 #include "../inc/tm4c123gh6pm.h"
 #include "../inc/CortexM.h"
 #include "../inc/PLL.h"
@@ -175,7 +175,7 @@ void OS_Launch(uint32_t theTimeSlice){
 
 
     if(totalThreadCount < 1){//if there are no thread kill os
-        printf_lite("No Threads added\n");
+        printf("No Threads added\n");
         StartupDelay();
         OSStartHang();
     }

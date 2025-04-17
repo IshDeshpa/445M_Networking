@@ -128,7 +128,7 @@
 #define M2M_REQ(...)
 #define M2M_DBG(...)
 
-#include "stdio_lite.h"
+#include "printf.h"
 #define NM_BSP_PRINTF(...)      printf(__VA_ARGS__)
 
 #if (NM_DEBUG == 1)
