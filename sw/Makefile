@@ -28,7 +28,8 @@ CFLAGS = \
     -pedantic \
     -O0 \
     -g3 \
-    -Wno-unused-but-set-variable
+    -Wno-unused-but-set-variable \
+	-include stdint.h
 
 LDFLAGS = \
     $(FPU_FLAGS) \
@@ -96,7 +97,7 @@ SRC_FILES = \
     wilc/driver/source/spi_flash.c \
 	src/main.c \
 	src/Networking.c \
-	src/SensorIn.c
+	# src/SensorIn.c
 
 # Include paths
 INCLUDES = $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
@@ -104,9 +105,8 @@ INCLUDES += -Iwilc/bsp/include
 INCLUDES += -Iwilc/bus_wrapper/include
 INCLUDES += -Iwilc/common/include
 INCLUDES += -Iwilc/driver/include
+INCLUDES += -Iwilc/wilc1000_module_config/tm4c
 INCLUDES += -Iwilc
-
-$(info INCLUDES: $(INCLUDES))
 
 # Object files
 OBJ_FILES = $(patsubst %.c,build/%.o,$(filter %.c,$(SRC_FILES))) \
