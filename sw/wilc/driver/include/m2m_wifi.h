@@ -317,7 +317,7 @@ typedef struct {
 	*/
 	tstrEthInitParam strEthInitParam;
 	/*!<
-		Structure to hold Ethernet interface parameters.
+		Structure to hold Ethernet interfaceinterface parameters.
 	*/
 
 } tstrWifiInitParam;
@@ -1853,7 +1853,7 @@ NMI_API sint8 m2m_wifi_send_wlan_pkt(uint8 *pu8WlanPacket, uint16 u16WlanHeaderL
  * @fn           NMI_API sint8 m2m_wifi_send_ethernet_pkt(uint8* pu8Packet, uint16 u16PacketSize, uint8	u8IfcId)
  * @param [in]     pu8Packet
  *                  Pointer to a buffer holding the whole Ethernet frame at an offset of M2M_ETHERNET_HDR_OFFSET + M2M_ETH_PAD_SIZE bytes.
- *                  This buffer has to be aligned appropriately for DMA operations according to the host's constraints (Word Aligned, cache line aligned… etc)
+ *                  This buffer has to be aligned appropriately for DMA operations according to the host's constraints (Word Aligned, cache line alignedï¿½ etc)
  * @param [in]     u16PacketSize
  * 		            The size of the whole bytes in packet.
  * @param [in]     u8IfcId

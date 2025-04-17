@@ -97,7 +97,7 @@ static sint8 nmi_spi_read(uint8* b, uint16 sz)
 	spi.u16Sz = sz;
 	return nm_bus_ioctl(NM_BUS_IOCTL_RW, &spi);
 }
-
+#include <stdint.h>
 static sint8 nmi_spi_write(uint8* b, uint16 sz)
 {
 	tstrNmSpiRw spi;
@@ -284,6 +284,8 @@ static sint8 spi_cmd(uint8 cmd, uint32 adr, uint32 u32data, uint32 sz,uint8 cloc
 		}
 	}
 
+	if(result == N_OK) {M2M_PRINT("[nmi spi]: Success command write");}
+
 	return result;
 }
 
@@ -311,7 +313,9 @@ static sint8 spi_data_rsp(uint8 cmd)
 		goto _fail_;
 	}
 _fail_:
-
+	
+	if(result == N_OK) {M2M_PRINT("[nmi spi]: Success response read");}
+	
 	return result;
 }
 
@@ -372,6 +376,7 @@ static sint8 spi_cmd_rsp(uint8 cmd)
 	}
 
 _fail_:
+	if(result == N_OK) {M2M_PRINT("[nmi spi]: Success command response read");}
 
 	return result;
 }
@@ -561,8 +566,7 @@ static int spi_cmd_complete(uint8_t cmd, uint32_t adr, uint8_t *b, uint32_t sz, 
 	}
 
 	rsp = rb[rix++];
-
-
+	
 	if (rsp != cmd) {
 		M2M_ERR("[nmi spi]: Failed cmd response, cmd (%d), resp (%d)\n", cmd, rsp);
 		result = N_FAIL;
@@ -739,6 +743,7 @@ static int spi_cmd_complete(uint8_t cmd, uint32_t adr, uint8_t *b, uint32_t sz, 
 			}
 	}
 _error_:
+	if(result == N_OK) {M2M_PRINT("[nmi spi]: Success spi command complete");}
 	return result;
 }
 #endif

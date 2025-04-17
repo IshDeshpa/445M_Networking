@@ -48,6 +48,8 @@ void get_mac_test() {
     }
 }
 
+uint8_t rcv_buf[1024];
+
 int Wifi_Init(void){
 
     // nm_bsp_init();
@@ -56,7 +58,7 @@ int Wifi_Init(void){
 
     wifi_init_param.pfAppWifiCb = &wifi_callback;
     wifi_init_param.pfAppMonCb = NULL;
-    wifi_init_param.strEthInitParam.au8ethRcvBuf = NULL;
+    wifi_init_param.strEthInitParam.au8ethRcvBuf = rcv_buf;
     wifi_init_param.strEthInitParam.u16ethRcvBufSize = 0;
     wifi_init_param.strEthInitParam.pfAppEthCb = NULL;
     int8_t ret = m2m_wifi_init(&wifi_init_param);
