@@ -98,14 +98,13 @@ SRC_FILES = \
 	src/Networking.c \
 	src/SensorIn.c
 
-vpath %.h wilc/
-
 # Include paths
 INCLUDES = $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
 INCLUDES += -Iwilc/bsp/include
 INCLUDES += -Iwilc/bus_wrapper/include
 INCLUDES += -Iwilc/common/include
 INCLUDES += -Iwilc/driver/include
+INCLUDES += -Iwilc
 
 $(info INCLUDES: $(INCLUDES))
 
