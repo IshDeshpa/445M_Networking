@@ -136,7 +136,7 @@ int8_t nm_bus_ioctl(uint8_t u8Cmd, void* pvParameter){
     //if (pstrParam->u16Sz > MIN_DMA_SPI_SIZE) {
     //    s8Ret = spi_rw_dma(pstrParam->pu8InBuf, pstrParam->pu8OutBuf, pstrParam->u16Sz);
     //} else {
-        s8Ret = spi_rw(pstrParam->pu8InBuf, pstrParam->pu8OutBuf, pstrParam->u16Sz);
+    s8Ret = spi_rw(pstrParam->pu8InBuf, pstrParam->pu8OutBuf, pstrParam->u16Sz);
     //}
 
     return s8Ret;

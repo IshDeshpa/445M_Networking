@@ -1,8 +1,4 @@
 # See: https://makefiletutorial.com/
-
-# Board selection: MotorBoard or SensorBoard
-BOARD ?= MotorBoard
-
 # Cross-compiler and flags
 CC = arm-none-eabi-gcc
 OBJCOPY = arm-none-eabi-objcopy
@@ -72,7 +68,6 @@ SRC_FILES = \
 	FreakyRTOS/OS_CLI_Commands/umount.c \
 	FreakyRTOS/OS_CLI_Commands/mkfs.c \
 	FreakyRTOS/OS_CLI_Commands/mkdir.c \
-	driverlib/interrupt.c \
 	inc/Timer0A.c \
 	inc/Timer1A.c \
 	inc/Timer2A.c \
@@ -80,33 +75,39 @@ SRC_FILES = \
 	inc/Timer4A.c \
 	inc/Timer5A.c \
 	inc/PLL.c \
-	inc/ADCSWTrigger.c \
-	inc/LPF.c \
-	inc/IRDistance.c \
-	inc/ADCT0ATrigger.c \
 	inc/LaunchPad.c \
-	inc/can.c \
-	inc/PWMrobot.c \
 	lib/std/string_lite/string_lite.c \
 	lib/std/stdio_lite/stdio_lite.c \
-	gcc-files/STM32F10x_DSP_Lib/src/PID_stm32.s \
-	gcc-files/STM32F10x_DSP_Lib/src/cr4_fft_64_stm32.s
+	wilc/bsp/source/nm_bsp_tm4c.c \
+    wilc/bus_wrapper/source/nm_bus_wrapper_tm4c.c \
+    wilc/common/source/nm_common.c \
+    wilc/driver/source/m2m_wifi.c \
+    wilc/driver/source/m2m_hif.c \
+    wilc/driver/source/m2m_periph.c \
+    wilc/driver/source/m2m_coex.c \
+    wilc/driver/source/nmdrv.c \
+    wilc/driver/source/nmdrv_crt.c \
+    wilc/driver/source/nmasic.c \
+    wilc/driver/source/nmbus.c \
+    wilc/driver/source/nmi2c.c \
+    wilc/driver/source/nmsdio.c \
+    wilc/driver/source/nmspi.c \
+    wilc/driver/source/nmuart.c \
+    wilc/driver/source/spi_flash.c \
+	src/main.c \
+	src/Networking.c \
+	src/SensorIn.c
 
-ifeq ($(BOARD),MotorBoard)
-	SRC_FILES += MotorBoard/MotorTestmain.c
-	SRC_FILES += MotorBoard/ChipComms_Motor.c
-	SRC_FILES += MotorBoard/Motor.c
-else ifeq ($(BOARD),SensorBoard)
-	SRC_FILES += SensorBoard/SensorBoardTestMain.c
-	SRC_FILES += SensorBoard/ChipComms_SensorBoard.c
-	SRC_FILES += SensorBoard/Sensor.c
-	SRC_FILES += SensorBoard/TFLuna.c
-else
-	$(error TARGET must be either MotorBoard or SensorBoard)
-endif
+vpath %.h wilc/
 
 # Include paths
 INCLUDES = $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
+INCLUDES += -Iwilc/bsp/include
+INCLUDES += -Iwilc/bus_wrapper/include
+INCLUDES += -Iwilc/common/include
+INCLUDES += -Iwilc/driver/include
+
+$(info INCLUDES: $(INCLUDES))
 
 # Object files
 OBJ_FILES = $(patsubst %.c,build/%.o,$(filter %.c,$(SRC_FILES))) \

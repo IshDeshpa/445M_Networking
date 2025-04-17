@@ -103,8 +103,8 @@ int main(){
     //nm_bsp_init();
     //nm_bsp_register_isr(TestIRQPin);
 
-    //nm_bus_init();
-    //test_spi();
+    // nm_bus_init(NULL);
+    // test_spi();
     //test_spi_dma();
     EnableInterrupts();
 

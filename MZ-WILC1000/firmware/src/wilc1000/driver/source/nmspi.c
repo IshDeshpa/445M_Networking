@@ -171,7 +171,7 @@ static uint8 crc7(uint8 crc, const uint8 *buffer, uint32 len)
 	return crc;
 }
 
-/********************************************
+/*************************crc7*******************
 
 	Spi protocol Function
 

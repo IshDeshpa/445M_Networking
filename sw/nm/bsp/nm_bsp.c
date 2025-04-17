@@ -73,7 +73,7 @@ void nm_bsp_reset(void) {
 /* Sleep in units of mSec */
 void nm_bsp_sleep(uint32_t u32TimeMsec) {
     // TODO: Replace with OS_Sleep
-    SysTick_Wait(u32TimeMsec * 80000); // Assuming 80MHz clock
+    SysTick_Wait(u32TimeMsec * 8000000); // Assuming 80MHz clock
 }
 
 
