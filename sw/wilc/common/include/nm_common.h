@@ -128,6 +128,9 @@
 #define M2M_REQ(...)
 #define M2M_DBG(...)
 
+#include "stdio_lite.h"
+#define NM_BSP_PRINTF(...)      printf(__VA_ARGS__)
+
 #if (NM_DEBUG == 1)
 #define M2M_PRINT(...)							do{NM_BSP_PRINTF(__VA_ARGS__);NM_BSP_PRINTF("\r");}while(0)
 	#if (M2M_LOG_LEVEL >= M2M_LOG_ERROR)
