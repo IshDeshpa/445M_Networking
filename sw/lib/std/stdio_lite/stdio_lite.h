@@ -24,5 +24,6 @@ void snprintf_lite(char* buffer, int buffer_size, const char* format, ...);
 
 void itoa_lite(int32_t num, char* buffer);
 
+void itoa_hex_lite(unsigned int value, char *buf, int uppercase);
 #endif 
 

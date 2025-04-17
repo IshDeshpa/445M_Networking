@@ -53,7 +53,7 @@ uint8_t rcv_buf[1024];
 int Wifi_Init(void){
 
     // nm_bsp_init();
-
+    
     LOG("Starting Up Wifi Init\n\r");
 
     wifi_init_param.pfAppWifiCb = &wifi_callback;

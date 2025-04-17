@@ -81,7 +81,7 @@ void TestIRQPin(void){
 }
 
 void HeartBeat(void){
-    GPIO_PORTF_DATA_R ^= 0x02; // toggle PF1
+    GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
     //printf("thump\n\r");
 }
 
@@ -122,8 +122,8 @@ int main(){
 
     OS_AddPeriodicThread(HeartBeat, 80000000, 1);
     OS_AddThread(TestThread, 128, 1);
-    OS_AddThread(IdleThread, 128, 2);
-
+    OS_AddThread(IdleThread, 128, 7);
+    //OS_AddThread(HeartBeat, 128, 6);
     OS_Launch(TIME_2MS);
     while(1){
 

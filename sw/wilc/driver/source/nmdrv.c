@@ -36,6 +36,7 @@
 #include "bsp/include/nm_bsp.h"
 #include "driver/source/nmdrv.h"
 #include "driver/source/nmasic.h"
+#include "nm_common.h"
 
 #ifdef CONF_WILC_USE_SPI
 #include "driver/source/nmspi.h"
@@ -115,8 +116,9 @@ sint8 nm_drv_init(void * arg)
 #endif
 
 #ifdef CONF_WILC_USE_SPI
+	M2M_PRINT("Calling nm_spi_init\n\r");
 	nm_spi_init();
-	M2M_INFO("Calling nm_spi_init\n\r");
+	M2M_INFO("nm_init_spi sucess\n\r");
 #elif defined CONF_WILC_USE_SDIO
 	nm_sdio_init();
 #endif
@@ -124,7 +126,7 @@ sint8 nm_drv_init(void * arg)
 #ifdef WILC_SERIAL_BRIDGE_INTERFACE
 	return M2M_SUCCESS;
 #endif
-	M2M_INFO("Chip ID %lx\n", nmi_get_chipid());
+	M2M_INFO("Chip ID %d\n", nmi_get_chipid());
 #ifndef CONF_WILC_FW_IN_FLASH
 	ret = firmware_download();
 	if (M2M_SUCCESS != ret) {

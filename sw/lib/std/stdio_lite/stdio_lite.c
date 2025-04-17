@@ -22,64 +22,79 @@ void printf_lite(const char* format, ...) {
     va_start(args, format);
 
     while (*format) {
-        if (*format == '%') {  // Handle format specifiers
-            format++;          // Move past '%'
+        if (*format == '%') {
+            format++;
             switch (*format) {
-                case 'c': {    // Character
+                case 'c': { // Character
                     char c = va_arg(args, int);
                     _putchar(c);
                     break;
                 }
-                case 's': {    // String
+                case 's': { // String
                     const char* s = va_arg(args, const char*);
-                    while(*s){
-                        _putchar(*s);
-                        s++;
+                    while (*s) {
+                        _putchar(*s++);
                     }
                     break;
                 }
-                case 'd': {    
+                case 'd': { // Signed integer
                     int num = va_arg(args, int);
-                    char buf[20]; 
-                    itoa_lite(num, buf); 
+                    char buf[20];
+                    itoa_lite(num, buf); // Assumes itoa_lite handles signed numbers
                     char* buftemp = buf;
-                    while(*buftemp){
-                        _putchar(*buftemp);
-                        buftemp++;
+                    while (*buftemp) {
+                        _putchar(*buftemp++);
                     }
                     break;
                 }
-                case 'u': {
-                    int num = va_arg(args, int);
-                    char buf[20]; 
-                    itoa_lite(num, buf); 
+                case 'u': { // Unsigned integer
+                    unsigned int num = va_arg(args, unsigned int);
+                    char buf[20];
+                    itoa_lite(num, buf); // You should have a utoa_lite() for unsigned
                     char* buftemp = buf;
-                    while(*buftemp){
-                        _putchar(*buftemp);
-                        buftemp++;
+                    while (*buftemp) {
+                        _putchar(*buftemp++);
                     }
                     break;
                 }
-                case '%': {    
+                case 'x': { // Hexadecimal (lowercase)
+                    unsigned int num = va_arg(args, unsigned int);
+                    char hexbuf[20];
+                    itoa_hex_lite(num, hexbuf, 0); // 0 = lowercase
+                    char* buftemp = hexbuf;
+                    while (*buftemp) {
+                        _putchar(*buftemp++);
+                    }
+                    break;
+                }
+                case 'X': { // Hexadecimal (uppercase)
+                    unsigned int num = va_arg(args, unsigned int);
+                    char hexbuf[20];
+                    itoa_hex_lite(num, hexbuf, 1); // 1 = uppercase
+                    char* buftemp = hexbuf;
+                    while (*buftemp) {
+                        _putchar(*buftemp++);
+                    }
+                    break;
+                }
+                case '%': { // Literal '%'
                     _putchar('%');
                     break;
                 }
-                default: {     
+                default: { // Unknown specifier
                     _putchar('%');
                     if (*format) _putchar(*format);
                     break;
                 }
             }
-        } else {               // Regular characters
+        } else {
             _putchar(*format);
         }
-        format++;              // Move to next character
+        format++;
     }
 
     va_end(args);
-
 }
-
 // Formats text into a string buffer
 void sprintf_lite(char* buffer, const char* format, ...) {
     va_list args;
@@ -253,3 +268,27 @@ void itoa_lite(int32_t num, char* buffer) {
         buffer[end--] = temp;
     }
 }
+
+void itoa_hex_lite(unsigned int value, char *buf, int uppercase) {
+    const char *digits = uppercase ? "0123456789ABCDEF" : "0123456789abcdef";
+    char temp[20];
+    int i = 0;
+
+    if (value == 0) {
+        buf[0] = '0';
+        buf[1] = '\0';
+        return;
+    }
+
+    while (value > 0) {
+        temp[i++] = digits[value % 16];
+        value /= 16;
+    }
+
+    // Reverse into buf
+    for (int j = 0; j < i; j++) {
+        buf[j] = temp[i - j - 1];
+    }
+    buf[i] = '\0';
+}
+

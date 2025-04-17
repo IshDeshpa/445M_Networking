@@ -79,6 +79,7 @@ SRC_FILES = \
 	inc/LaunchPad.c \
 	lib/std/string_lite/string_lite.c \
 	lib/std/stdio_lite/stdio_lite.c \
+	lib/std/printf/printf.c \
 	wilc/bsp/source/nm_bsp_tm4c.c \
     wilc/bus_wrapper/source/nm_bus_wrapper_tm4c.c \
     wilc/common/source/nm_common.c \
@@ -113,7 +114,7 @@ OBJ_FILES = $(patsubst %.c,build/%.o,$(filter %.c,$(SRC_FILES))) \
 			$(patsubst %.s,build/%.o,$(filter %.s,$(SRC_FILES)))
 
 # Target executable
-TARGET = build/tm4c123gh6pm
+TARGET = build/exe
 
 # Default target
 all: $(TARGET).elf $(TARGET).bin
