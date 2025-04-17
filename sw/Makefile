@@ -39,7 +39,7 @@ LDFLAGS = \
     -mthumb \
     $(CPU_FLAGS) \
     -Wl,--gc-sections \
-    -T gcc-files/tm4c123gh6pm.ld.exception.bak
+    -T gcc-files/tm4c123gh6pm.ld.exception
 
 # Source files
 SRC_FILES = \
