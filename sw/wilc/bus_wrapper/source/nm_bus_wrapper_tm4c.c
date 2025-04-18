@@ -32,13 +32,13 @@
  *
  */
 
- #include <stdio.h>
  #include "bsp/include/nm_bsp.h"
  #include "common/include/nm_common.h"
  #include "bus_wrapper/include/nm_bus_wrapper.h"
  #include "tm4c123gh6pm.h"
 //  #include "asf.h"
  #include "conf_wilc.h"
+#include <stdint.h>
  
  #define NM_BUS_MAX_TRX_SZ 4096
  
@@ -81,39 +81,30 @@
  
  static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
  {
-	uint16_t in = 0;
+
 	SPI_ASSERT_CS(); // Assert chip select
+    // Clear receive FIFO
+    //while (SSI0_SR_R & SSI_SR_RNE && !(SSI0_SR_R & SSI_SR_BSY)) {
+    //    uint16_t poop = SSI0_DR_R;
+    //}
+
+	uint16_t in = 0;
+
+    
 	for(uint16_t i = 0; i < u16Sz; i++) {
 		while (SSI0_SR_R & SSI_SR_BSY) {}; // Wait for SSI0 to be ready
 		SSI0_DR_R = (pu8Mosi == NULL)?0:pu8Mosi[i];  // Send data
-		if ((SSI0_SR_R & SSI_SR_RNE) && pu8Miso) {pu8Miso[in] = SSI0_DR_R; in++;} // Wait for SSI0 to be ready
+        if (SSI0_SR_R & SSI_SR_RNE) {
+            uint32_t rx = SSI0_DR_R; // Always read to clear RX FIFO
+            if (pu8Miso) {
+                pu8Miso[in++] = (uint8_t)rx;
+            }
+        }
 	}
 	for(int i=0; i<200; i++);
-	SPI_DEASSERT_CS(); // De-assert chip select
 
+	SPI_DEASSERT_CS(); // De-assert chip select
 	return M2M_SUCCESS;
-	//  pdc_packet_t pdc_spi_tx_packet, pdc_spi_rx_packet;
- 
-	//  pdc_spi_tx_packet.ul_addr = (uint32_t)pu8Mosi;;
-	//  pdc_spi_rx_packet.ul_addr = (uint32_t)pu8Miso;
-	//  pdc_spi_tx_packet.ul_size = u16Sz;
-	//  pdc_spi_rx_packet.ul_size = u16Sz;
- 
-	//  if (pu8Miso == 0) {
-	// 	 pdc_spi_rx_packet.ul_addr = (uint32_t)0x400000;
-	//  }
- 
-	//  /* Trigger SPI PDC transfer. */
-	//  SPI_ASSERT_CS();
-	//  pdc_tx_init(g_p_pdc_spi, &pdc_spi_tx_packet, NULL);
-	//  pdc_rx_init(g_p_pdc_spi, &pdc_spi_rx_packet, NULL);
-	//  g_p_pdc_spi->PERIPH_PTCR = PERIPH_PTCR_RXTEN | PERIPH_PTCR_TXTEN;
-	//  while ((CONF_WILC_SPI->SPI_SR & SPI_SR_RXBUFF) == 0)
-	// 	 ;
-	//  SPI_DEASSERT_CS();
-	//  g_p_pdc_spi->PERIPH_PTCR = PERIPH_PTCR_TXTDIS | PERIPH_PTCR_RXTDIS;
-		 
-	//  return M2M_SUCCESS;
  }
  #endif
  

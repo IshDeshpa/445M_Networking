@@ -15,8 +15,8 @@
 #include "driver/include/m2m_wifi.h"
 
 #include "Networking.h"
-#include "../lib/std/stdio_lite/stdio_lite.h"
-//#include "../lib/std/printf/printf.h"
+//#include "../lib/std/stdio_lite/stdio_lite.h"
+#include "../lib/std/printf/printf.h"
 #include <stdint.h>
 #include "OS.h"
 
@@ -88,6 +88,7 @@ void HeartBeat(void){
 void TestThread(void){
   nm_bsp_init();
   // LOG("nm bsp init finished, gpio is on :)\n\r");
+    printf("\n\n\n\n\n\n\n\r");
   Wifi_Init();
   while(1){}
 }
@@ -120,8 +121,8 @@ int main(){
 
     OS_Init();
 
-    OS_AddPeriodicThread(HeartBeat, 80000000, 1);
-    OS_AddThread(TestThread, 128, 1);
+    //OS_AddPeriodicThread(HeartBeat, 80000000, 1);
+    OS_AddThread(TestThread, 1024, 1);
     OS_AddThread(IdleThread, 128, 7);
     //OS_AddThread(HeartBeat, 128, 6);
     OS_Launch(TIME_2MS);

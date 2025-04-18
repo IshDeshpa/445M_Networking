@@ -955,7 +955,7 @@ _FAIL_:
 		nm_bsp_sleep(1);
 		spi_cmd(CMD_RESET, 0, 0, 0, 0);
 		spi_cmd_rsp(CMD_RESET);
-		M2M_ERR("Reset and retry %d %x %x\n",retry,addr,u32data);
+		M2M_ERR("Reset and retry %d %lx %lx\n",retry,addr,u32data);
 		nm_bsp_sleep(1);
 		retry--;
 		if(retry) goto _RETRY_;
@@ -1002,6 +1002,7 @@ _RETRY_:
 	/**
 		Data
 	**/
+    GPIO_PORTF_DATA_R |= 0x04; // toggle PF2, blue led
 	result = spi_data_write(buf, size);
 	if (result != N_OK) {
 		M2M_ERR("[nmi spi]: Failed block data write...\n");
@@ -1010,6 +1011,7 @@ _RETRY_:
 	/**
 		Data RESP
 	**/
+    GPIO_PORTF_DATA_R |= 0x08; // toggle PF2, blue led
 	result = spi_data_rsp(cmd);
 	if (result != N_OK) {
 		M2M_ERR("[nmi spi]: Failed block data write...\n");
@@ -1227,13 +1229,13 @@ static int spi_int_enable(void)
 	**/
 	ret = spi_read_reg(NMI_PIN_MUX_0, &reg);
 	if (!ret) {
-		M2M_ERR("[nmi spi]: Failed read reg (%x)...\n", NMI_PIN_MUX_0);
+		M2M_ERR("[nmi spi]: Failed read reg (%08x)...\n", NMI_PIN_MUX_0);
 		return 0;
 	}
 	reg |= (1<<8);
 	ret = spi_write_reg(NMI_PIN_MUX_0, reg);
 	if (!ret) {
-		M2M_ERR("[nmi spi]: Failed write reg (%x)...\n", NMI_PIN_MUX_0);
+		M2M_ERR("[nmi spi]: Failed write reg (%08x)...\n", NMI_PIN_MUX_0);
 		return 0;
 	}
 
@@ -1308,7 +1310,7 @@ sint8 nm_spi_init(void)
 		return M2M_ERR_BUS_FAIL;
 	}
 
-	M2M_DBG("[nmi spi]: chipid (%u)\n", (unsigned int)chipid);
+	M2M_DBG("[nmi spi]: chipid (%08x)\n", (unsigned int)chipid);
 	spi_init_pkt_sz();
 	spi_int_enable();
 

@@ -485,6 +485,7 @@ sint8 firmware_download(void)
 
 	pu8FirmwareBuffer = (uint8_t *)firmware;
 	M2M_DBG("firmware size = %d\n",sizeof(firmware));
+    //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
 
 	while((uint32_t)pu8FirmwareBuffer < (uint32_t)(firmware+sizeof(firmware)))
 	{		
@@ -503,6 +504,7 @@ sint8 firmware_download(void)
 				ChunkSize = CurrentSecSize;
 			
 			m2m_memcpy(u8TransferChunk,pu8FirmwareBuffer+BuffIndex,ChunkSize);
+            //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
 			nm_write_block(u32SecAddress,u8TransferChunk,ChunkSize);
 			u32SecAddress += ChunkSize;
 			BuffIndex += ChunkSize;

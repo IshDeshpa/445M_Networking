@@ -32,11 +32,13 @@
  *
  */
 
+#include "OS.h"
 #include "driver/source/nmbus.h"
 #include "bsp/include/nm_bsp.h"
 #include "driver/source/nmdrv.h"
 #include "driver/source/nmasic.h"
 #include "nm_common.h"
+#include "tm4c123gh6pm.h"
 
 #ifdef CONF_WILC_USE_SPI
 #include "driver/source/nmspi.h"
@@ -116,9 +118,17 @@ sint8 nm_drv_init(void * arg)
 #endif
 
 #ifdef CONF_WILC_USE_SPI
-	M2M_PRINT("Calling nm_spi_init\n\r");
-	nm_spi_init();
-	M2M_INFO("nm_init_spi sucess\n\r");
+	M2M_DBG("Calling nm_spi_init\n");
+	ret = nm_spi_init();
+    if(ret != M2M_SUCCESS){
+        M2M_DBG("nm_init_spi fail\n");
+    }
+
+	M2M_DBG("nm_init_spi sucess\n");
+    //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
+    OS_Sleep(250);
+    //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
+    
 #elif defined CONF_WILC_USE_SDIO
 	nm_sdio_init();
 #endif
@@ -126,12 +136,21 @@ sint8 nm_drv_init(void * arg)
 #ifdef WILC_SERIAL_BRIDGE_INTERFACE
 	return M2M_SUCCESS;
 #endif
-	M2M_INFO("Chip ID %d\n", nmi_get_chipid());
+
+	M2M_INFO("Chip ID %08x\n", nmi_get_chipid());
+
+    //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
+    OS_Sleep(250);
+    //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
+    
 #ifndef CONF_WILC_FW_IN_FLASH
+    M2M_DBG("Firmware download Starting\n");
 	ret = firmware_download();
 	if (M2M_SUCCESS != ret) {
+        M2M_DBG("Firmware download Failed\n"); 
 		goto ERR2;
 	}
+    M2M_DBG("Firmware download success\n");
 #endif /* CONF_WILC_FW_IN_FLASH */
 	chip_apply_conf();
 
