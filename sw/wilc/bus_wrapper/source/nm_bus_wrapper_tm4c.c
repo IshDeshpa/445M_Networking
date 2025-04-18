@@ -82,14 +82,13 @@
  static sint8 spi_rw(uint8 *pu8Mosi, uint8 *pu8Miso, uint16 u16Sz)
  {
 
-	SPI_ASSERT_CS(); // Assert chip select
     // Clear receive FIFO
-    //while (SSI0_SR_R & SSI_SR_RNE && !(SSI0_SR_R & SSI_SR_BSY)) {
-    //    uint16_t poop = SSI0_DR_R;
-    //}
+    while ((SSI0_SR_R & SSI_SR_RNE) && !(SSI0_SR_R & SSI_SR_BSY)) {
+        uint16_t poop = SSI0_DR_R;
+    }
 
 	uint16_t in = 0;
-
+	SPI_ASSERT_CS(); // Assert chip select
     
 	for(uint16_t i = 0; i < u16Sz; i++) {
 		while (SSI0_SR_R & SSI_SR_BSY) {}; // Wait for SSI0 to be ready
