@@ -11,6 +11,9 @@
 #include "m2m_types.h"
 #include "OS.h"
 #include "tm4c123gh6pm.h"
+
+#include "string_lite.h"
+
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
