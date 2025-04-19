@@ -2,15 +2,12 @@
 /*                      INCLUDES                      */
 /* ================================================== */
 #include "Networking.h"
-#include "OS.h"
 #include <stdint.h>
 #include "../lib/std/stdio_lite/stdio_lite.h"
 
-#include "nm_bsp.h"
-#include "nm_bus_wrapper.h"
-#include "m2m_wifi.h"
-#include "string_lite.h"
-
+#include "bsp/include/nm_bsp.h"
+#include "bus_wrapper/include/nm_bus_wrapper.h"
+#include "driver/include/m2m_wifi.h"
 #include "m2m_types.h"
 #include "OS.h"
 #include "tm4c123gh6pm.h"
@@ -106,96 +103,5 @@ void Task_TestNetworking(void){
         //printf("TestThread Sleeping\n\r");
         GPIO_PORTF_DATA_R ^= 0x04;
         OS_Sleep(1000);
-    }
-}
-
-
-#define NETWORK_COMMAND_FIFO_SIZE 32
-OS_FIFO_t network_command_fifo;
-sema4_t network_command_sema4;
-network_command_t network_command_fifo_buffer[NETWORK_COMMAND_FIFO_SIZE];
-
-void Network_Receive_IRQ(void){
-    network_command_t cmd;
-    cmd.command = NW_RECEIVE_IRQ;
-    memset(cmd.data, 0, sizeof(cmd.data));
-
-    OS_Fifo_Put(&cmd, &network_command_fifo);
-}
-
-void Task_NetworkThread(void){
-    OS_InitSemaphore(&network_command_sema4, 1);
-    OS_Fifo_Init(NETWORK_COMMAND_FIFO_SIZE, 
-                &network_command_fifo, 
-                network_command_fifo_buffer,
-                sizeof(network_command_t),
-                &network_command_sema4);
-
-    nm_bsp_init();
-    LOG("NM BSP init finished\n\r");
-    Wifi_Init();
-    LOG("Wifi Init finished\n\r");
-
-    while(1){
-        // Handle incoming commands
-        network_command_t *cmd;
-        OS_Fifo_Get(&cmd, &network_command_fifo);
-
-        switch(cmd->command){
-            case NW_SCAN:
-                LOG("Scan command received");
-                // Call the scan function here
-                sint8 res = m2m_wifi_request_scan(M2M_WIFI_CH_ALL);
-                if(res == M2M_SUCCESS)
-                    LOG("Scan request sent");
-                break;
-            case NW_CONNECT:
-                LOG("Connect command received");
-                // Call the connect function here
-                
-                // Arg parsing
-                char ssid[32];
-                tuniM2MWifiAuth auth_param = {0};
-                
-                strncpy(ssid, cmd->data, 32);
-                strncpy(auth_param.au8PMK, cmd->data + 32, 40);
-                LOG("SSID: %s", ssid);
-                LOG("Password: %s", auth_param.au8PMK);
-
-                LOG("Connecting to SSID: %s", ssid);
-                sint8 res = m2m_wifi_connect(ssid, strlen(ssid), M2M_WIFI_SEC_WPA_PSK, &auth_param, M2M_WIFI_CH_ALL);
-                if(res == M2M_SUCCESS)
-                    LOG("Connection request sent");
-
-                break;
-            case NW_DISCONNECT:
-                LOG("Disconnect command received");
-                // Call the disconnect function here
-                m2m_wifi_disconnect();
-                LOG("Disconnect request sent");
-
-                break;
-            case NW_GET_MAC:
-                LOG("Get MAC command received");
-                get_mac_test();
-                break;
-            case NW_SEND_RAW:
-                LOG("Send raw command received");
-                // Call the send raw function here
-                
-                break;
-            case NW_RECEIVE_RAW:
-                LOG("Receive raw command received");
-                // Call the receive raw function here
-                break;
-            case NW_RECEIVE_IRQ:
-                LOG("Receive IRQ command received");
-                m2m_wifi_handle_events(NULL);
-                break;
-            default:
-                LOG("Unknown command received");
-                break;
-            
-        } 
     }
 }

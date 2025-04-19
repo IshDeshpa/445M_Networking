@@ -21,7 +21,8 @@
 #define strtok   strtok_lite
 #define strstr   strstr_lite 
 #define atol     atol_lite
-
+#define memset   memset_lite
+#define memcpy   memcpy_lite
 /* ================================================== */
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
@@ -44,10 +45,13 @@ char *strchr_lite(const char *str, int c);
 
 char *strtok_lite(char *str, const char *delim);
 
-void* memcpy(void* dest, const void* src, size_t n);
+void memcpy_lite(void *dest, const void *src, uint32_t size);
+
+void memset_lite(void *ptr, uint8_t value, uint32_t size);
 
 char* strstr_lite(const char* haystack, const char* needle);
 
 long atol_lite(const char* str);
+
 #endif 
 

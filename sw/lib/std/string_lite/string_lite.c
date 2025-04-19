@@ -245,3 +245,18 @@ char* strstr_lite(const char* haystack, const char* needle) {
 
     return NULL;
 }
+
+void memset_lite(void *ptr, uint8_t value, uint32_t size){
+    uint8_t *p = (uint8_t *)ptr;
+    while (size--) {
+        *p++ = value;
+    }
+}
+
+void memcpy_lite(void *dest, const void *src, uint32_t size){
+    uint8_t *d = (uint8_t *)dest;
+    const uint8_t *s = (const uint8_t *)src;
+    while (size--) {
+        *d++ = *s++;
+    }
+}

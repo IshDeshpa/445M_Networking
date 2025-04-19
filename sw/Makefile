@@ -30,7 +30,8 @@ CFLAGS = \
     -O0 \
     -g3 \
     -Wno-unused-but-set-variable \
-	-include stdint.h
+	-include stdint.h \
+	-w
 
 LDFLAGS = \
     $(FPU_FLAGS) \
