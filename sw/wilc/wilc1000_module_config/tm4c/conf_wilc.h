@@ -88,7 +88,10 @@
 */
 
 #define CONF_WILC_DEBUG					(0)
-#define CONF_WILC_PRINTF				osprintf
+#define CONF_WILC_PRINTF				printf
+
+#define NM_DEBUG				CONF_WILC_DEBUG
+#define NM_BSP_PRINTF			CONF_WILC_PRINTF
 
 #ifdef __cplusplus
 }

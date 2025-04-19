@@ -32,6 +32,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "OS.h"
 
 #include "printf.h"
 #define PRINTF_DISABLE_SUPPORT_FLOAT
@@ -858,13 +859,15 @@ static int _vsnprintf(out_fct_type out, char* buffer, const size_t maxlen, const
 
 
 ///////////////////////////////////////////////////////////////////////////////
-
+extern sema4_t printf_sema4;
 int printf_(const char* format, ...)
 {
   va_list va;
   va_start(va, format);
   char buffer[1];
+  OS_Wait(&printf_sema4);
   const int ret = _vsnprintf(_out_char, buffer, (size_t)-1, format, va);
+  OS_Signal(&printf_sema4);
   va_end(va);
   return ret;
 }

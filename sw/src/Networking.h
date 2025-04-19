@@ -3,6 +3,7 @@
 
 typedef enum {
     NW_SCAN,
+    NW_GET_SCAN_DATA,
     NW_CONNECT,
     NW_DISCONNECT,
     NW_GET_MAC,
@@ -15,9 +16,6 @@ typedef struct {
     network_command_type command;
     uint8_t data[96]; // Example data buffer, adjust size as needed
 } network_command_t;
-
-extern sema4_t num_channels_sem4;
-extern uint8_t num_channels;
 
 /* ================================================== */
 /*                      INCLUDES                      */
@@ -37,6 +35,9 @@ typedef enum {
 /* ================================================== */
 
 void Task_NetworkThread(void);
+void Task_ReceiveIRQ(void);
+void Task_NetworkingInit(void);
+
 void Network_Receive_IRQ(void);
 void Network_Scan(void);
 void Network_Connect(char *ssid, char *password);

@@ -36,6 +36,7 @@
 #define _NM_COMMON_H_
 
 #include "bsp/include/nm_bsp.h"
+#include "conf_wilc.h"
 
 #ifdef CONF_WILC_USE_3000_REV_A
 #define COMPUTE_PMK_IN_HOST

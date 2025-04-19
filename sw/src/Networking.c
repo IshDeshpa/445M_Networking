@@ -14,6 +14,8 @@
 
 #include "string_lite.h"
 
+#include "main.h"
+
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
@@ -23,21 +25,19 @@ tstrWifiInitParam wifi_init_param;
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
 
-#define LOG(...) printf(__VA_ARGS__); printf("\n\r")
+#define LOG(...) printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
 
-sema4_t num_channels_sem4;
-uint8_t num_channels;
-
+sema4_t data_captured;
+sema4_t data_captured2;
 void wifi_callback(uint8 u8MsgType, void *pvMsg) {
     LOG("Wi-Fi callback triggered! Message type: %d", u8MsgType);
     
     tenuM2mStaCmd val = u8MsgType;
-
-    switch (u8MsgType) {
+    switch (val) {
         case M2M_WIFI_REQ_CONNECT:
             LOG("Wi-Fi request to connect received.");
             break;
@@ -60,15 +60,14 @@ void wifi_callback(uint8 u8MsgType, void *pvMsg) {
             LOG("Wi-Fi scan request received.");
             break;
         case M2M_WIFI_RESP_SCAN_DONE:
+            OS_Signal(&data_captured);
             LOG("Wi-Fi scan done response received.");
-            tstrM2mScanDone *pstrState = (tstrM2mScanDone *)pvMsg;
-
-
             break;
         case M2M_WIFI_REQ_SCAN_RESULT:
             LOG("Wi-Fi scan result request received.");
             break;
         case M2M_WIFI_RESP_SCAN_RESULT:
+            OS_Signal(&data_captured2);
             LOG("Wi-Fi scan result response received.");
             break;
         case M2M_WIFI_REQ_START_WPS:
@@ -207,20 +206,49 @@ OS_FIFO_t network_command_fifo;
 sema4_t network_command_sema4[3];
 network_command_t network_command_fifo_buffer[NETWORK_COMMAND_FIFO_SIZE];
 
-void Network_Receive_IRQ(void){
-    network_command_t cmd;
-    cmd.command = NW_RECEIVE_IRQ;
-    memset(cmd.data, 0, sizeof(cmd.data));
+sema4_t receiveIRQ_sem4;
 
-    OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
+void Network_Receive_IRQ(void){
+    OS_Signal(&receiveIRQ_sem4);
 }
 
 void Network_Scan(void){
+    LOG("Starting Scan");
     network_command_t cmd;
     cmd.command = NW_SCAN;
     memset(cmd.data, 0, sizeof(cmd.data));
 
     OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
+    
+    // parse data
+    tstrM2mScanDone *data1 = (tstrM2mScanDone*)irq_rcv_buf;
+    LOG("Num channels: %d", data1->u8NumofCh);
+
+    for(int i=0; i<data1->u8NumofCh; i++){
+        cmd.command = NW_GET_SCAN_DATA;
+        cmd.data[0] = i;
+        OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
+        OS_Wait(&data_captured2);
+        OS_Sleep(1000);
+        
+        tstrM2mWifiscanResult *data2 = (tstrM2mWifiscanResult*)irq_rcv_buf;
+        LOG("Scan Result:");
+        LOG("Index: %d", data2->u8index);
+        LOG("RSSI: %d", data2->s8rssi);
+        LOG("Auth Type: %d", data2->u8AuthType);
+        LOG("Channel: %d", data2->u8ch);
+        LOG("BSSID: %02X:%02X:%02X:%02X:%02X:%02X",
+            data2->au8BSSID[0], data2->au8BSSID[1], data2->au8BSSID[2],
+            data2->au8BSSID[3], data2->au8BSSID[4], data2->au8BSSID[5]);
+        LOG("SSID: %s", data2->au8SSID);
+        LOG("Device Name: %s", data2->au8DeviceName);
+    }
+    LOG("Scan Done");
+
+    // busy wait
+    LOG("Waiting for scan to finish");
+    OS_Wait(&data_captured);
+    OS_Sleep(1000);
 }
 
 void Network_Connect(char *ssid, char *password){
@@ -273,18 +301,8 @@ void Network_Get_Mac(void){
     OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
 }
 
+sema4_t wifi_mutex;
 void Task_NetworkThread(void){
-    OS_Fifo_Init(NETWORK_COMMAND_FIFO_SIZE, 
-                &network_command_fifo, 
-                (uint8_t*)network_command_fifo_buffer,
-                sizeof(network_command_t),
-                network_command_sema4);
-    OS_InitSemaphore(&num_channels_sem4, 0);
-
-    nm_bsp_init();
-    LOG("NM BSP init finished\n\r");
-    Wifi_Init();
-    LOG("Wifi Init finished\n\r");
     
     while(1){
         // Handle incoming commands
@@ -295,7 +313,8 @@ void Task_NetworkThread(void){
 
         // LOG("Fifo dump:");
         // OS_Fifo_Print(&network_command_fifo);
-
+        
+        OS_Wait(&wifi_mutex);
         sint8 res;
         switch(cmd.command){
             case NW_SCAN:
@@ -304,6 +323,13 @@ void Task_NetworkThread(void){
                 res = m2m_wifi_request_scan(M2M_WIFI_CH_ALL);
                 if(res == M2M_SUCCESS)
                     LOG("Scan request sent");
+                break;
+            case NW_GET_SCAN_DATA:
+                LOG("Get scan data command received");
+                // Call the get scan data function here
+                res = m2m_wifi_req_scan_result(cmd.data[0]);
+                if(res == M2M_SUCCESS)
+                    LOG("Scan data request sent");
                 break;
             case NW_CONNECT:
                 LOG("Connect command received");
@@ -344,14 +370,48 @@ void Task_NetworkThread(void){
                 LOG("Receive raw command received");
                 // Call the receive raw function here
                 break;
-            case NW_RECEIVE_IRQ:
-                LOG("Receive IRQ command received");
-                m2m_wifi_handle_events(NULL);
-                break;
+            
             default:
                 LOG("Unknown command received");
                 break;
             
-        } 
+        }
+        OS_Signal(&wifi_mutex); 
     }
+}
+
+void Task_ReceiveIRQ(void){
+    while(1){
+        OS_Wait(&receiveIRQ_sem4);
+        LOG("IRQ received");
+        
+        OS_Wait(&wifi_mutex);
+        m2m_wifi_handle_events(NULL);
+        OS_Signal(&wifi_mutex);
+    }
+}
+
+void Task_NetworkingInit(){
+    OS_Fifo_Init(NETWORK_COMMAND_FIFO_SIZE, 
+        &network_command_fifo, 
+        (uint8_t*)network_command_fifo_buffer,
+        sizeof(network_command_t),
+        network_command_sema4);
+    OS_InitSemaphore(&receiveIRQ_sem4, 0);
+    OS_InitSemaphore(&data_captured, 0);
+    OS_InitSemaphore(&data_captured2, 0);
+    OS_InitSemaphore(&wifi_mutex, 1);
+
+    nm_bsp_init();
+    LOG("NM BSP init finished\n\r");
+    Wifi_Init();
+    LOG("Wifi Init finished\n\r");
+
+    m2m_wifi_set_scan_options(4, 240);
+
+    OS_AddThread(Task_ReceiveIRQ, 1024, 1);
+    OS_AddThread(Task_NetworkThread, 1024, 2);
+    OS_AddThread(Task_TestNetworking, 1024, 3);
+
+    OS_Kill();
 }

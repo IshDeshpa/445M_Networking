@@ -13,8 +13,7 @@ FPU_FLAGS = \
 DEFINES = \
     -DPART_TM4C123GH6PM \
     -DTARGET_IS_BLIZZARD_RA1 \
-    -Dgcc \
-	-DNM_DEBUG
+    -Dgcc
 
 CFLAGS = \
     $(FPU_FLAGS) \

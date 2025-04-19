@@ -244,7 +244,7 @@ void OS_Kill(void){
     EndCritical(status);
     //add support for killing pcb
 
-    //while(1){}
+    while(1){}
 }
 
 void OS_Suspend(void){

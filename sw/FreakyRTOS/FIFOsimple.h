@@ -30,7 +30,7 @@
 #include <stdint.h>
 // Transmit FIFO
 // can hold 0 to TXFIFOSIZE elements
-#define TXFIFOSIZE 1024 // must be a power of 2
+#define TXFIFOSIZE 4096 // must be a power of 2
 #define TXFIFOSUCCESS 1
 #define TXFIFOFAIL    0
 typedef char txDataType;
