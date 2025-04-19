@@ -180,9 +180,11 @@ sint8 m2m_wifi_init(tstrWifiInitParam * param)
 	/* Apply device specific initialization. */
 	ret = nm_drv_init(NULL);
 	if(ret != M2M_SUCCESS) 	goto _EXIT0;
+
 	/* Initialize host interface module */
 	strHifInitParam.pu8RcvBuff = gpu8ethRcvBuf;
 	strHifInitParam.u32RcvBuffSize = gu16ethRcvBufSize;
+    
 	ret = hif_init(&strHifInitParam);
 	if(ret != M2M_SUCCESS) 	goto _EXIT1;
 

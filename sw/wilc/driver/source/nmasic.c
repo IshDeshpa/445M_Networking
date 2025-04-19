@@ -35,7 +35,7 @@
 #include "driver/source/nmbus.h"
 #include "bsp/include/nm_bsp.h"
 #include "driver/source/nmasic.h"
-
+#include "tm4c123gh6pm.h"
 #define NMI_GLB_RESET_0 (NMI_PERIPH_REG_BASE + 0x400)
 #define NMI_GLB_RESET_1 (NMI_PERIPH_REG_BASE + 0x404)
 #define NMI_INTR_REG_BASE (NMI_PERIPH_REG_BASE+0xa00)
@@ -78,11 +78,14 @@ sint8 enable_interrupts(void)
 	interrupt enable
 	**/
 	ret = nm_read_reg_with_ret(NMI_INTR_ENABLE, &reg);
+
 	if (M2M_SUCCESS != ret) {
 		return M2M_ERR_BUS_FAIL;
 	}
+
 	reg |= ((uint32) 1 << 16);
 	ret = nm_write_reg(NMI_INTR_ENABLE, reg);
+
 	if (M2M_SUCCESS != ret) {
 		return M2M_ERR_BUS_FAIL;
 	}
@@ -125,7 +128,7 @@ sint8 cpu_start(void) {
 
 	reg |= (1ul << 10);
 	ret += nm_write_reg(NMI_GLB_RESET_0, reg);
-	nm_bsp_sleep(1); /* TODO: Why bus error if this delay is not here. */
+	nm_bsp_sleep(5); /* TODO: Why bus error if this delay is not here. */
 #else
 	
 	#if defined CONF_WILC_USE_SPI
@@ -611,9 +614,11 @@ sint8 wait_for_firmware_start(void)
 	
 	while (reg != M2M_FINISH_INIT_STATE)
 	{
-		nm_bsp_sleep(1); /* TODO: Why bus error if this delay is not here. */
-		M2M_DBG("%x %x %x\n",(unsigned int)nm_read_reg(0x108c),(unsigned int)nm_read_reg(0x108c),(unsigned int)nm_read_reg(0x14A0));
+		nm_bsp_sleep(10); /* TODO: Why bus error if this delay is not here. */
+		//M2M_DBG("%x %x %x\n",(unsigned int)nm_read_reg(0x108c),(unsigned int)nm_read_reg(0x108c),(unsigned int)nm_read_reg(0x14A0));
 		reg = nm_read_reg(NMI_STATE_REG);
+        M2M_DBG("NMI State Reg: %08x\n", reg);
+
 		if(++cnt > TIMEOUT)
 		{
 			M2M_DBG("Time out for wait firmware Run\n");

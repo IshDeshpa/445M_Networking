@@ -26,7 +26,6 @@
 #include "../inc/hw_nvic.h"
 #include "../inc/hw_types.h"
 #include "../inc/tm4c123gh6pm.h"
-
 //*****************************************************************************
 //
 // Forward declaration of the fault handlers.

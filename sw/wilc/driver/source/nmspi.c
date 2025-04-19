@@ -1002,7 +1002,6 @@ _RETRY_:
 	/**
 		Data
 	**/
-    GPIO_PORTF_DATA_R |= 0x04; // toggle PF2, blue led
 	result = spi_data_write(buf, size);
 	if (result != N_OK) {
 		M2M_ERR("[nmi spi]: Failed block data write...\n");
@@ -1011,7 +1010,6 @@ _RETRY_:
 	/**
 		Data RESP
 	**/
-    GPIO_PORTF_DATA_R |= 0x08; // toggle PF2, blue led
 	result = spi_data_rsp(cmd);
 	if (result != N_OK) {
 		M2M_ERR("[nmi spi]: Failed block data write...\n");

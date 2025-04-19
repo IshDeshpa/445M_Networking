@@ -126,7 +126,6 @@ sint8 nm_drv_init(void * arg)
 
 	M2M_DBG("nm_init_spi sucess\n");
     //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
-    OS_Sleep(250);
     //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
     
 #elif defined CONF_WILC_USE_SDIO
@@ -140,35 +139,48 @@ sint8 nm_drv_init(void * arg)
 	M2M_INFO("Chip ID %08x\n", nmi_get_chipid());
 
     //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
-    OS_Sleep(250);
     //GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
     
 #ifndef CONF_WILC_FW_IN_FLASH
     M2M_DBG("Firmware download Starting\n");
 	ret = firmware_download();
+
 	if (M2M_SUCCESS != ret) {
         M2M_DBG("Firmware download Failed\n"); 
 		goto ERR2;
 	}
     M2M_DBG("Firmware download success\n");
 #endif /* CONF_WILC_FW_IN_FLASH */
-	chip_apply_conf();
+    M2M_DBG("Applying Chip Conf\n");
 
+	chip_apply_conf();
+    M2M_DBG("Applying Chip Conf success\n");
+    
+    OS_Sleep(100);
+    M2M_DBG("Starting Cpu\n");
 	ret = cpu_start();
 	if (M2M_SUCCESS != ret) {
+        M2M_DBG("Starting Cpu failed\n");
 		goto ERR2;
 	}
+
+    M2M_DBG("Starting Cpu success\n");
 
 #ifdef CONF_WILC_FW_IN_FLASH
 	ret = wait_for_bootrom();
 	if (M2M_SUCCESS != ret) {
 		goto ERR2;
 	}
+
 #endif /*CONF_WILC_FW_IN_FLASH */
+    M2M_DBG("Starting to Wait for Firmware start\n");
+    OS_Sleep(100);
 	ret = wait_for_firmware_start();
 	if (M2M_SUCCESS != ret) {
+        M2M_DBG("Failed on Wait for Firmware start\n");
 		goto ERR2;
 	}
+    M2M_DBG("Success on Wait for Firmware start\n");
 
 #if (defined CONF_WILC_USE_3000_REV_A && !defined WILC_SERIAL_BRIDGE_INTERFACE)
 #ifndef CONF_WILC_FW_IN_FLASH
@@ -182,11 +194,18 @@ sint8 nm_drv_init(void * arg)
 		goto ERR2;
 	}
 #endif /* (defined CONF_WILC_USE_3000_REV_A && !defined WILC_SERIAL_BRIDGE_INTERFACE) */
+    OS_Sleep(100);
+    //GPIO_PORTF_DATA_R |= 0x4;
+    //nm_bsp_interrupt_ctrl(1);
+    
+    M2M_DBG("Turning On ASIC inptrreupts\n");
+
 	ret = enable_interrupts();
 	if (M2M_SUCCESS != ret) {
 		M2M_ERR("failed to enable interrupts..\n");
 		goto ERR2;
 	}
+    //GPIO_PORTF_DATA_R |= 0x8;
 		
 	if(M2M_ERR_FW_VER_MISMATCH == nm_get_firmware_info(&strtmp))
 	{
@@ -202,6 +221,7 @@ ERR2:
 #ifdef CONF_WILC_USE_SDIO
 	nm_sdio_deinit();
 #endif
+    OS_Sleep(1000);
 	nm_bus_iface_deinit();
 ERR1:	
 	return ret;

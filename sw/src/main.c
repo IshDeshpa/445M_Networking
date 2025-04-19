@@ -27,11 +27,11 @@
 #define PD1  (*((volatile uint32_t *)0x40007008))
 #define PD2  (*((volatile uint32_t *)0x40007010))
 #define PD3  (*((volatile uint32_t *)0x40007020))
+
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
 void PortD_Init(void);
-
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
@@ -81,16 +81,8 @@ void TestIRQPin(void){
 }
 
 void HeartBeat(void){
-    GPIO_PORTF_DATA_R ^= 0x04; // toggle PF2, blue led
+    PD0 ^= 0x1; // toggle PF2, blue led
     //printf("thump\n\r");
-}
-
-void TestThread(void){
-  nm_bsp_init();
-  // LOG("nm bsp init finished, gpio is on :)\n\r");
-    printf("\n\n\n\n\n\n\n\r");
-  Wifi_Init();
-  while(1){}
 }
 
 void IdleThread(void){
@@ -120,9 +112,9 @@ int main(){
     //test_spi_dma();
 
     OS_Init();
-
+    PortD_Init();
     //OS_AddPeriodicThread(HeartBeat, 80000000, 1);
-    OS_AddThread(TestThread, 1024, 1);
+    OS_AddThread(Task_TestNetworking, 1024, 1);
     OS_AddThread(IdleThread, 128, 7);
     //OS_AddThread(HeartBeat, 128, 6);
     OS_Launch(TIME_2MS);

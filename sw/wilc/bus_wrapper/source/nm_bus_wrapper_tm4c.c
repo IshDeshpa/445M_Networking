@@ -83,9 +83,9 @@
  {
 
     // Clear receive FIFO
-    while ((SSI0_SR_R & SSI_SR_RNE) && !(SSI0_SR_R & SSI_SR_BSY)) {
-        uint16_t poop = SSI0_DR_R;
-    }
+    //while ((SSI0_SR_R & SSI_SR_RNE) && !(SSI0_SR_R & SSI_SR_BSY)) {
+    //    uint16_t poop = SSI0_DR_R;
+    //}
 
 	uint16_t in = 0;
 	SPI_ASSERT_CS(); // Assert chip select
@@ -93,13 +93,12 @@
 	for(uint16_t i = 0; i < u16Sz; i++) {
 		while (SSI0_SR_R & SSI_SR_BSY) {}; // Wait for SSI0 to be ready
 		SSI0_DR_R = (pu8Mosi == NULL)?0:pu8Mosi[i];  // Send data
-        if (SSI0_SR_R & SSI_SR_RNE) {
-            uint32_t rx = SSI0_DR_R; // Always read to clear RX FIFO
-            if (pu8Miso) {
-                pu8Miso[in++] = (uint8_t)rx;
-            }
+        while(!(SSI0_SR_R & SSI_SR_RNE)) {}
+        uint32_t rx = SSI0_DR_R; // Always read to clear RX FIFO
+        if (pu8Miso) {
+            pu8Miso[i] = (uint8_t)rx;
         }
-	}
+    }	
 	for(int i=0; i<200; i++);
 
 	SPI_DEASSERT_CS(); // De-assert chip select
@@ -136,7 +135,7 @@
 	// Configure SSI0
 	SSI0_CR1_R = 0x00000000;  // Disable SSI to configure
 	SSI0_CC_R = 0;            // Use system clock
-	SSI0_CPSR_R = 10;         // Set CPSR = 10 (prescale divisor)
+	SSI0_CPSR_R = 1;         // Set CPSR = 10 (prescale divisor)
 	SSI0_CR0_R = 0;           // Clear the CR0 register
 	SSI0_CR0_R |= (7 << 8);   // Set SCR = 7 for 1 MHz SSI clock
 	SSI0_CR0_R |= (0 << 7);   // Set SPH = 0 (capture data on the first clock edge)

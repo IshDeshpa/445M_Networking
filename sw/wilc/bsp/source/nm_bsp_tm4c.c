@@ -45,7 +45,7 @@ static void init_chip_pins(void)
     GPIO_PORTE_IBE_R &= ~0x10;       // Not both edges
     GPIO_PORTE_IEV_R &= ~0x10;       // Falling edge
     GPIO_PORTE_ICR_R |=  0x10;       // Clear any prior interrupt flag
-    GPIO_PORTE_IM_R |=  0x10;        // Arm interrupt on PE4
+    //GPIO_PORTE_IM_R |=  0x10;        // Arm interrupt on PE4
 
     NVIC_PRI1_R = (NVIC_PRI1_R & ~0x000000E0) | (CONF_WILC_IRQ_PRI << 5);  // Priority 2
 
@@ -114,6 +114,7 @@ void nm_bsp_sleep(uint32 u32TimeMsec)
 void nm_bsp_register_isr(tpfNmBspIsr pfIsr)
 {
     gpfIsr = pfIsr;
+    nm_bsp_interrupt_ctrl(1);
 
 //     /* Configure PGIO pin for interrupt from SPI slave, used when slave has data to send. */
 //     sysclk_enable_peripheral_clock(CONF_WILC_SPI_INT_PIO_ID);
@@ -142,14 +143,6 @@ void nm_bsp_interrupt_ctrl(uint8 u8Enable)
         GPIO_PORTE_IM_R &= ~0x10; // Disable interrupt on PE4
     }
     
-    // if (u8Enable) {
-    //     /* The status register of the PIO controller is cleared prior to enabling the interrupt */
-    //     pio_get_interrupt_status(CONF_WILC_SPI_INT_PIO);
-    //     pio_enable_interrupt(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK);
-    // }
-    // else {
-    //     pio_disable_interrupt(CONF_WILC_SPI_INT_PIO, CONF_WILC_SPI_INT_MASK);
-    // }
 }
 
 /*

@@ -7,14 +7,20 @@
 /* ================================================== */
 /*            GLOBAL VARIABLE DECLARATIONS            */
 /* ================================================== */
-#define WIFI_INIT_SUCESS 1
-#define WIFI_INIT_FAIL 0
+typedef enum {
+    NETWORKING_SUCCESS,
+    WIFI_INIT_FAIL,
+    GET_MAC_FAIL,
+    LIST_SSID_FAIL
+}errNetworking_t;
 /* ================================================== */
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
 
-void get_mac_test();
-int Wifi_Init(void);
+errNetworking_t Wifi_Init(void);
+errNetworking_t get_mac(void);
+errNetworking_t List_SSID(void);
+void Task_TestNetworking(void);
 
 #endif 
 
