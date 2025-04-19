@@ -13,7 +13,7 @@ typedef enum {
 
 typedef struct {
     network_command_type command;
-    uint8_t data[32]; // Example data buffer, adjust size as needed
+    uint8_t data[96]; // Example data buffer, adjust size as needed
 } network_command_t;
 
 /* ================================================== */
@@ -37,6 +37,8 @@ errNetworking_t Wifi_Init(void);
 errNetworking_t get_mac(void);
 errNetworking_t List_SSID(void);
 void Task_TestNetworking(void);
+
+void Network_Receive_IRQ(void);
 
 #endif 
 

@@ -39,6 +39,8 @@
 #include "driver/source/nmasic.h"
 #include "driver/include/m2m_periph.h"
 
+#include "Networking.h"
+
 #if (defined NM_EDGE_INTERRUPT)&&(defined NM_LEVEL_INTERRUPT)
 #error "only one type of interrupt NM_EDGE_INTERRUPT,NM_LEVEL_INTERRUPT"
 #endif
@@ -86,6 +88,7 @@ static void isr(void)
 #ifdef __FREERTOS__
 	DRIVER_SIGNAL_ISR();
 #endif
+	Network_Receive_IRQ();
 }
 static sint8 hif_set_rx_done(void)
 {
