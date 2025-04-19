@@ -93,22 +93,6 @@ errNetworking_t List_SSID(void){
     return ret; 
 }
 
-
-void Task_TestNetworking(void){
-    printf("\n\n\n\n\n\n\n\r");
-    nm_bsp_init();
-    LOG("nm_bsp_init success");
-
-    Wifi_Init();
-    get_mac();
-    List_SSID();
-    while(1){
-        //printf("TestThread Sleeping\n\r");
-        GPIO_PORTF_DATA_R ^= 0x04;
-        OS_Sleep(1000);
-    }
-}
-
 #define NETWORK_COMMAND_FIFO_SIZE 32
 OS_FIFO_t network_command_fifo;
 sema4_t network_command_sema4;
@@ -162,6 +146,13 @@ void Network_Receive_Raw(void){
     cmd.command = NW_RECEIVE_RAW;
     memset(cmd.data, 0, sizeof(cmd.data));
 
+    OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
+}
+
+void Network_Get_Mac(void){
+    network_command_t cmd;
+    cmd.command = NW_GET_MAC;
+    memset(cmd.data, 0, sizeof(cmd.data));
     OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
 }
 

@@ -33,17 +33,14 @@ typedef enum {
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
 
-errNetworking_t Wifi_Init(void);
-errNetworking_t get_mac(void);
-errNetworking_t List_SSID(void);
-void Task_TestNetworking(void);
-
+void Task_NetworkThread(void);
 void Network_Receive_IRQ(void);
 void Network_Scan(void);
 void Network_Connect(char *ssid, char *password);
 void Network_Disconnect(void);
 void Network_Send_Raw(void);
 void Network_Receive_Raw(void);
+void Network_Get_Mac(void);
 
 #endif 
 

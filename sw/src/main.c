@@ -85,36 +85,26 @@ void HeartBeat(void){
     //printf("thump\n\r");
 }
 
+void Task_TestNetworking(void){
+    Network_Get_Mac();
+    while(1){
+        //printf("TestThread Sleeping\n\r");
+        GPIO_PORTF_DATA_R ^= 0x04;
+        OS_Sleep(1000);
+    }
+}
+
 void IdleThread(void){
   while(1){
   }
 }
 
 int main(){
-    // DisableInterrupts();
-    // StartupDelay();
-    // PLL_Init(Bus80MHz);
-    //LaunchPad_Init();
-    // UART_Init();
-    // SysTick_Init();
-    // PortD_Init();
-    // Timer0A_Init(HeartBeat, 80000000, 7);
-
-    
-    //nm_bus_init(NULL);
-    //get_mac_test();
-    //Timer1A_Init(void (*task)(void), uint32_t period, uint32_t priority)
-    //nm_bsp_init();
-    //nm_bsp_register_isr(TestIRQPin);
-
-    // nm_bus_init(NULL);
-    // test_spi();
-    //test_spi_dma();
-
     OS_Init();
     PortD_Init();
     //OS_AddPeriodicThread(HeartBeat, 80000000, 1);
-    OS_AddThread(Task_TestNetworking, 1024, 1);
+    OS_AddThread(Task_NetworkThread, 1024, 1);
+    OS_AddThread(Task_TestNetworking, 1024, 2);
     OS_AddThread(IdleThread, 128, 7);
     //OS_AddThread(HeartBeat, 128, 6);
     OS_Launch(TIME_2MS);
