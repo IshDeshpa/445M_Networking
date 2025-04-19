@@ -95,7 +95,7 @@ errNetworking_t List_SSID(void){
 
 #define NETWORK_COMMAND_FIFO_SIZE 32
 OS_FIFO_t network_command_fifo;
-sema4_t network_command_sema4;
+sema4_t network_command_sema4[3];
 network_command_t network_command_fifo_buffer[NETWORK_COMMAND_FIFO_SIZE];
 
 void Network_Receive_IRQ(void){
@@ -157,12 +157,11 @@ void Network_Get_Mac(void){
 }
 
 void Task_NetworkThread(void){
-    OS_InitSemaphore(&network_command_sema4, 1);
     OS_Fifo_Init(NETWORK_COMMAND_FIFO_SIZE, 
                 &network_command_fifo, 
                 (uint8_t*)network_command_fifo_buffer,
                 sizeof(network_command_t),
-                &network_command_sema4);
+                network_command_sema4);
 
     nm_bsp_init();
     LOG("NM BSP init finished\n\r");
