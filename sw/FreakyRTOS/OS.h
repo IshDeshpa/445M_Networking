@@ -79,7 +79,8 @@ typedef struct heap_stats {
 
 typedef struct OS_FIFO_t{
     int16_t head_OSFIFO, tail_OSFIFO, size_OSFIFO;
-    uint32_t* OS_FIFO;
+    uint8_t* OS_FIFO;
+    uint8_t elem_size;
     sema4_t* mutex;
     sema4_t* DataRoomAvailable;
     sema4_t* DataAvailable;
@@ -343,7 +344,7 @@ int OS_AddSW2Task(void(*task)(void), uint32_t priority);
 // In Lab 3, you can put whatever restrictions you want on size
 //    e.g., 4 to 64 elements
 //    e.g., must be a power of 2,4,8,16,32,64,128
-OS_Return_t OS_Fifo_Init(uint32_t size, OS_FIFO_t* fifo, uint32_t* buffer, sema4_t semaphores[3]);
+OS_Return_t OS_Fifo_Init(uint32_t size, OS_FIFO_t* fifo, uint8_t* buffer, uint8_t elem_size, sema4_t semaphores[3]);
 
 // ******** OS_Fifo_Put ************
 // Enter one data sample into the Fifo
@@ -353,14 +354,15 @@ OS_Return_t OS_Fifo_Init(uint32_t size, OS_FIFO_t* fifo, uint32_t* buffer, sema4
 //          false if data not saved, because it was full
 // Since this is called by interrupt handlers 
 //  this function can not disable or enable interrupts
-OS_Return_t OS_Fifo_Put(uint32_t data, OS_FIFO_t* fifo);
+OS_Return_t OS_Fifo_Put(uint8_t *data, OS_FIFO_t* fifo);
 
 // ******** OS_Fifo_Get ************
 // Remove one data sample from the Fifo
 // Called in foreground, will spin/block if empty
 // Inputs:  none
 // Outputs: data 
-uint32_t OS_Fifo_Get(OS_FIFO_t* fifo);
+uint8_t OS_Fifo_Get(uint8_t* dataOut, OS_FIFO_t* fifo);
+
 // ******** OS_Fifo_Size ************
 // Check the status of the Fifo
 // Inputs: none

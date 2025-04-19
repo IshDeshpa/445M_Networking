@@ -42,3 +42,4 @@ sw/.cache/
 .vscode
 
 sw/dump.txt
+*/compile_commands.json

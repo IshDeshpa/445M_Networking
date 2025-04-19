@@ -635,14 +635,3 @@ void _putchar(char character){
 void StartupDelay(void){
   for(uint16_t i = 0; i < UINT16_MAX; i++){}
 }
-
-
-void Task_OS_Bookkeeping(void){
-    //free from free fifo
-    void* ptrToFree;
-    while(1){
-        ptrToFree = (void*) OS_Fifo_Get(OS_FreePtrs_FIFO);
-        Free(ptrToFree);
-    }
-}
-
