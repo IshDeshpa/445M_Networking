@@ -1,5 +1,21 @@
 #ifndef NETWORKING_H 
 #define NETWORKING_H
+
+typedef enum {
+    NW_SCAN,
+    NW_CONNECT,
+    NW_DISCONNECT,
+    NW_GET_MAC,
+    NW_SEND_RAW,
+    NW_RECEIVE_RAW,
+    NW_RECEIVE_IRQ
+} network_command_type;
+
+typedef struct {
+    network_command_type command;
+    uint8_t data[32]; // Example data buffer, adjust size as needed
+} network_command_t;
+
 /* ================================================== */
 /*                      INCLUDES                      */
 /* ================================================== */
