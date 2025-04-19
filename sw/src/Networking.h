@@ -16,6 +16,9 @@ typedef struct {
     uint8_t data[96]; // Example data buffer, adjust size as needed
 } network_command_t;
 
+extern sema4_t num_channels_sem4;
+extern uint8_t num_channels;
+
 /* ================================================== */
 /*                      INCLUDES                      */
 /* ================================================== */

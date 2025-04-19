@@ -135,7 +135,7 @@
 	// Configure SSI0
 	SSI0_CR1_R = 0x00000000;  // Disable SSI to configure
 	SSI0_CC_R = 0;            // Use system clock
-	SSI0_CPSR_R = 1;         // Set CPSR = 10 (prescale divisor)
+	SSI0_CPSR_R = 2;         // Set CPSR = 10 (prescale divisor)
 	SSI0_CR0_R = 0;           // Clear the CR0 register
 	SSI0_CR0_R |= (7 << 8);   // Set SCR = 7 for 1 MHz SSI clock
 	SSI0_CR0_R |= (0 << 7);   // Set SPH = 0 (capture data on the first clock edge)

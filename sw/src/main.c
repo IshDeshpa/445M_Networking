@@ -87,10 +87,17 @@ void HeartBeat(void){
 
 void Task_TestNetworking(void){
     Network_Get_Mac();
+    Network_Scan();
+
+    OS_Wait(&num_channels_sem4);
+    LOG("Number of channels: %d\n\r", num_channels);
+
+    for()
+
     while(1){
-        //printf("TestThread Sleeping\n\r");
-        GPIO_PORTF_DATA_R ^= 0x04;
-        OS_Sleep(1000);
+      //printf("TestThread Sleeping\n\r");
+      GPIO_PORTF_DATA_R ^= 0x04;
+      OS_Sleep(1000);
     }
 }
 

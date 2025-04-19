@@ -372,6 +372,8 @@ uint8_t OS_Fifo_Get(uint8_t* dataOut, OS_FIFO_t* fifo);
 //          zero or less than zero if a call to OS_Fifo_Get will spin or block
 int32_t OS_Fifo_Size(OS_FIFO_t* fifo);
 
+void OS_Fifo_Print(OS_FIFO_t* fifo);
+
 // ******** OS_MailBox_Init ************
 // Initialize communication channel
 // Inputs:  none

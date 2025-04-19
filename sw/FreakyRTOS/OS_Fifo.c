@@ -5,7 +5,9 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+
 #include "string_lite.h"
+#include "printf.h"
 
 #include "OS.h"
 
@@ -45,7 +47,8 @@ OS_Return_t OS_Fifo_Put(uint8_t *data, OS_FIFO_t* fifo){
     if (fifo->DataRoomAvailable->Value == 0) {
         return 0; // Fail immediately if FIFO is full (non-blocking for ISR)
     }
-
+    
+    OS_Wait(fifo->DataRoomAvailable); // Wait for space in FIFO
     OS_Wait(fifo->mutex); // Lock FIFO (critical section)
 
     bool success = Enqueue(data, fifo);
@@ -84,14 +87,28 @@ OS_Return_t OS_Fifo_Init(uint32_t size, OS_FIFO_t* fifo, uint8_t* buffer, uint8_
 
     fifo->head_OSFIFO = 0;
     fifo->tail_OSFIFO = 0;
-    fifo->size_OSFIFO = size + 1;  // +1 for distinguishing full vs empty
+    fifo->size_OSFIFO = size;  // +1 for distinguishing full vs empty
     fifo->elem_size = elem_size;
 
     OS_InitSemaphore(fifo->mutex, 1);                       // Mutex initially unlocked
     OS_InitSemaphore(fifo->DataAvailable, 0);               // FIFO initially empty
-    OS_InitSemaphore(fifo->DataRoomAvailable, size + 1);    // All slots available
+    OS_InitSemaphore(fifo->DataRoomAvailable, size);    // All slots available
 
     return OS_SUCCESS;
 }
 
+
+void OS_Fifo_Print(OS_FIFO_t* fifo){
+    printf("FIFO Size: %d\n\r", fifo->size_OSFIFO);
+    printf("FIFO Head: %d\n\r", fifo->head_OSFIFO);
+    printf("FIFO Tail: %d\n\r", fifo->tail_OSFIFO);
+    printf("FIFO Element Size: %d\n\r", fifo->elem_size);
+    printf("FIFO Data Available: %d\n\r", fifo->DataAvailable->Value);
+    printf("FIFO Data Room Available: %d\n\r", fifo->DataRoomAvailable->Value);
+
+    printf("FIFO Buffer: ");
+    for (int i = 0; i < fifo->size_OSFIFO; i++) {
+        printf("%02X ", *(fifo->OS_FIFO + (i * fifo->elem_size)));
+    }
+}
 
