@@ -535,12 +535,13 @@ static sint8 hif_isr(void)
 					goto ERR1;
 				}
 				pstrHif = (tstrHifHdr*)strHifInitParam.pu8RcvBuff;
+
 				pstrHif->u16Length = NM_BSP_B_L_16(pstrHif->u16Length);
 				if(pstrHif->u16Length != size)
 				{
 					if((size - pstrHif->u16Length) > 4)
 					{
-						M2M_ERR("(hif) Corrupted packet Address: %08lx, xSize = %u <L = %u, G = %u, OP = %02X>\n",
+						M2M_ERR("(hif) Corrupted packet Address: %08lx, xSize = %u <L = %u, G = %u, OP = %02X>\n\r",
 							address, size, pstrHif->u16Length, pstrHif->u8Gid, pstrHif->u8Opcode);
 						hif_set_rx_done();
 						nm_bsp_interrupt_ctrl(1);

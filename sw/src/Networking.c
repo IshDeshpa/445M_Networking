@@ -2,6 +2,7 @@
 /*                      INCLUDES                      */
 /* ================================================== */
 #include "Networking.h"
+#include "Networking_Globs.h"
 #include <stdint.h>
 #include "../lib/std/stdio_lite/stdio_lite.h"
 
@@ -24,8 +25,6 @@ tstrWifiInitParam wifi_init_param;
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
-
-#define LOG(...) printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
@@ -139,6 +138,31 @@ void wifi_callback(uint8 u8MsgType, void *pvMsg) {
     }
 }
 
+void eth_callback(uint8 u8MsgType, void *pvMsg, void *pvCtrlBuf) {
+    LOG("Ethernet callback triggered! Message type: %d", u8MsgType);
+    
+    switch (u8MsgType) {
+        case M2M_WIFI_RESP_ETHERNET_RX_PACKET:
+            LOG("Ethernet RX packet response received.");
+            uint8 au8RemoteIpAddr[4];
+            uint8 *au8packet = (uint8*)pvMsg;
+            tstrM2MDataBufCtrl *PstrM2mIpCtrlBuf =( tstrM2MDataBufCtrl *)pvCtrlBuf;
+            LOG("Ethernet Frame Received buffer, Size = %d , Remaining = %d, Data offset = %d, Ifc ID =%d",
+                PstrM2mIpCtrlBuf->u16DataSize,
+                PstrM2mIpCtrlBuf->u16RemainigDataSize,
+                PstrM2mIpCtrlBuf->u8DataOffset,
+                PstrM2mIpCtrlBuf->u8IfcId);
+            
+            for(int i=0; i<PstrM2mIpCtrlBuf->u16DataSize; i++){
+                printf("0x%02X ", i, au8packet[i]);
+            }
+            break;
+        default:
+            LOG("Unknown Ethernet message type received.");
+            break;
+    }
+}
+
 void print_mac(uint8_t *mac) {
     printf("%02X:%02X:%02X:%02X:%02X:%02X\n\r",
            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
@@ -156,7 +180,7 @@ errNetworking_t Wifi_Init(void){
     wifi_init_param.pfAppMonCb = NULL;
     wifi_init_param.strEthInitParam.au8ethRcvBuf = irq_rcv_buf;
     wifi_init_param.strEthInitParam.u16ethRcvBufSize = 2048;
-    wifi_init_param.strEthInitParam.pfAppEthCb = NULL;
+    wifi_init_param.strEthInitParam.pfAppEthCb = &eth_callback;
 
     int8_t ret = m2m_wifi_init(&wifi_init_param);
     if(ret == M2M_SUCCESS){

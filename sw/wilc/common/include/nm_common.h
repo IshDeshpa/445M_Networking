@@ -118,7 +118,8 @@
 #if (defined __APP_APS3_CORTUS__)
 #define M2M_LOG_LEVEL									M2M_LOG_ERROR
 #else
-#define M2M_LOG_LEVEL									M2M_LOG_DBG
+// #define NM_DEBUG	1
+#define M2M_LOG_LEVEL	(M2M_LOG_ERROR)
 //#define M2M_LOG_LEVEL									M2M_INFO
 #endif
 

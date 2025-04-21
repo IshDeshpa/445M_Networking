@@ -30,6 +30,9 @@ typedef enum {
     GET_MAC_FAIL,
     LIST_SSID_FAIL
 }errNetworking_t;
+
+extern 
+
 /* ================================================== */
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
