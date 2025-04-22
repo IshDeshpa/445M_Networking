@@ -4,7 +4,9 @@
 #include "ip.h"
 #include <stdint.h>
 #include "string_lite.h"
-#include ""
+#include "Networking.h"
+#include "string_lite.h"
+#include "Networking_Globs.h"
 
 /* ================================================== */
 /*            DEFAULTS                                */           
@@ -22,11 +24,14 @@
 
 #define HEADER_SIZE_DEFAULT (20) //shoud be 20 bytes
 
+#define MTU_DEFAULT (1500)
+
+
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
 
-uint16_t indentfication = 0x1234;
+uint16_t identification = 0x1234;
 
 typedef enum {
     IP_SUCCESS,
@@ -53,54 +58,117 @@ typedef struct __attribute__((packed)) {
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
 
-uint16_t generate_ip4_checksum(uint8_t* IP4pkt_populated, ipHeader_t* header);
+uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize);
 
-uint16_t ntohs(uint16_t data);
 
-uint16_t htons(uint16_t data);
+uint16_t packet_ntohs(uint16_t* network_short);
+uint32_t packet_ntohl(uint32_t* network_long);
+uint16_t packet_htons(uint16_t* host_short);
+uint32_t packet_htonl(uint32_t* host_long);
+
+void headerToBigEndian(ipHeader_t* header);
+void headerTolittleEndian(ipHeader_t* header);
+
+int dropPkt(ipHeader_t* header);
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
-errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protcol, uint32_t destinationIP){
+errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_t destinationIP) {
     ipHeader_t header;
 
-    header.version_ihl = ((IHL_DEFAULT << 4) & 0xF0) | (VERSION_DEFAULT & 0xF);
-    
-    header.DSCP_ECN = ((ECN_DEFAULT << 6) & 0xFC) | (DSCP_DEFAULT & 0x03);
-
+    // Step 1: Populate fields in little-endian (host order)
+    header.version_ihl = ((IHL_DEFAULT << 4) & 0xF0) | (VERSION_DEFAULT & 0x0F);
+    header.DSCP_ECN = ((ECN_DEFAULT << 6) & 0xC0) | (DSCP_DEFAULT & 0x3F);
     header.totalPacketLength = payloadsize + HEADER_SIZE_DEFAULT;
-
+    header.identification = identification++;
     header.flags_fragmentOffset = FRAG_DEFAULT;
-
-    header.TTL_protocol = TTL_DEFAULT;
-
-    //header.sourceIP = //TODO: use the defalt ip from the hdear
-     
+    header.TTL_protocol = ((protocol << 4) & 0xF0) | (TTL_DEFAULT & 0x0F);
+    header.headerChecksum = 0; // must be 0 before computing
+    header.sourceIP = *(uint32_t*)host_ip_address;
     header.destinationIP = destinationIP;
+
+    // Step 2: Generate checksum in little-endian
+    header.headerChecksum = generate_ip4_checksum(&header, HEADER_SIZE_DEFAULT);
+
+    // Step 3: Convert all 16/32-bit fields to big-endian
+    headerToBigEndian(&header);
+
+    // Step 4: Move payload to make room for header
     memmove(payload + HEADER_SIZE_DEFAULT, payload, payloadsize);
 
-    memcpy(payload, &header,  HEADER_SIZE_DEFAULT);
-    //checksum shoudl be gierneated after the hdear is fully popluated 
-    header.headerChecksum = generate_ip4_checksum(payload, (ipHeader_t*)payload);
+    // Step 5: Copy header into front of buffer
+    memcpy(payload, &header, HEADER_SIZE_DEFAULT);
+
+    return NETWORKING_SUCCESS; // or whatever your success enum is
 }
 
-uint16_t generate_ip4_checksum(uint8_t* IP4pkt_populated, ipHeader_t* header){
-    
+errIP_t ip4_rx(uint8_t* payload, uint16_t payloadsize){
+    ipHeader_t* header = (ipHeader_t*)payload;
+    headerTolittleEndian(&header);
+
+    //checksum;
+    uint16_t savedCksm = header->headerChecksum;
+    header->headerChecksum = 0;
+    uint16_t computed_checksum = generate_ip4_checksum(&header, HEADER_SIZE_DEFAULT);
+    if(savedCksm != computed_checksum){
+        LOG("Packet Dropped");
+        return IP_RX_FAIL;
+    }
+
+    if(dropPkt(&header)){
+        LOG("Packet Dropped");
+        return IP_RX_FAIL;
+    }
+
+
 }
 
-uint16_t packet_ntohs(uint16_t network_short){
-    __builtin_bswap16(network_short);
+int dropPkt(ipHeader_t* header){
+    uint8_t version = header->version_ihl & 0x0F; //pull out version
+    if(version != VERSION_DEFAULT){
+        LOG("Got a invalid version");
+    }
+}
+uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize) {
+    uint32_t sum = 0;
+    uint16_t* data = (uint16_t*)header;
+    for (uint16_t i = 0; i < headersize / 2; i++) {
+        sum += data[i]; // Convert each 16-bit word from network to host byte order
+        if (sum > 0xFFFF) {
+            sum = (sum & 0xFFFF) + 1; // Wrap around carry
+        }
+    }
+    return ~((uint16_t)sum); // Final ones' complement
 }
 
-uint32_t packet_ntohl(uint32_t network_long){
-    __builtin_bswap32(network_long);
+void headerTolittleEndian(ipHeader_t* header){
+    packet_ntohs(&(header->totalPacketLength));
+    packet_ntohs(&(header->identification));
+    packet_ntohs(&(header->flags_fragmentOffset));
+    packet_ntohl(&(header->sourceIP)); 
+    packet_ntohl(&(header->destinationIP)); 
 }
 
-uint16_t packet_htons(uint16_t host_short){
-    __builtin_bswap16(host_short);
+void headerToBigEndian(ipHeader_t* header){
+    packet_htons(&(header->totalPacketLength));
+    packet_htons(&(header->identification));
+    packet_htons(&(header->flags_fragmentOffset));
+    packet_htonl(&(header->sourceIP)); 
+    packet_htonl(&(header->destinationIP));
+}
+uint16_t packet_ntohs(uint16_t* network_short){
+    __builtin_bswap16(*network_short);
+}
+
+uint32_t packet_ntohl(uint32_t* network_long){
+    __builtin_bswap32(*network_long);
+}
+
+uint16_t packet_htons(uint16_t* host_short){
+    __builtin_bswap16(*host_short);
 
 }
 
-uint32_t packet_htonl(uint32_t host_long){
-    __builtin_bswap32(host_long);
+uint32_t packet_htonl(uint32_t* host_long){
+    __builtin_bswap32(*host_long);
 }

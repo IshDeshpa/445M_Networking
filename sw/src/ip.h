@@ -15,9 +15,17 @@
 #define IP_PROTOCOL_OSPF   89
 #define IP_PROTOCOL_SCTP   132
 
+typedef enum {
+    IP_SUCCESS,
+    IP_TX_FAIL,
+    IP_RX_FAIL,
+}errIP_t;
+
 /* ================================================== */
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
 
+errIP_t ip4_rx(uint8_t* payload, uint16_t payloadsize);
+errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_t destinationIP);
 #endif 
 
