@@ -109,7 +109,7 @@ int main(){
     PortD_Init();
     //OS_AddPeriodicThread(HeartBeat, 80000000, 1);
     
-    OS_AddThread(Task_NetworkingInit, 1024, 0);
+    OS_AddThread(Task_NetworkingInit, 1024, 1);
 
     OS_AddThread(IdleThread, 128, 7);
     //OS_AddThread(HeartBeat, 128, 6);

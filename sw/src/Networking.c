@@ -434,9 +434,9 @@ void Task_NetworkingInit(){
 
     m2m_wifi_set_scan_options(4, 240);
 
-    OS_AddThread(Task_ReceiveIRQ, 1024, 1);
-    OS_AddThread(Task_NetworkThread, 1024, 2);
-    OS_AddThread(Task_TestNetworking, 1024, 3);
+    OS_AddThread(Task_ReceiveIRQ, 1024, 2);
+    OS_AddThread(Task_NetworkThread, 1024, 3);
+    OS_AddThread(Task_TestNetworking, 1024, 4);
 
     OS_Kill();
 }
