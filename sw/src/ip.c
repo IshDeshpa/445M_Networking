@@ -54,6 +54,10 @@ typedef struct __attribute__((packed)) {
 /* ================================================== */
 
 uint16_t generate_ip4_checksum(uint8_t* IP4pkt_populated, ipHeader_t* header);
+
+uint16_t ntohs(uint16_t data);
+
+uint16_t htons(uint16_t data);
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
@@ -78,11 +82,25 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protcol, uint32_t
     memcpy(payload, &header,  HEADER_SIZE_DEFAULT);
     //checksum shoudl be gierneated after the hdear is fully popluated 
     header.headerChecksum = generate_ip4_checksum(payload, (ipHeader_t*)payload);
-
 }
 
 uint16_t generate_ip4_checksum(uint8_t* IP4pkt_populated, ipHeader_t* header){
+    
+}
+
+uint16_t packet_ntohs(uint16_t network_short){
+    __builtin_bswap16(network_short);
+}
+
+uint32_t packet_ntohl(uint32_t network_long){
+    __builtin_bswap32(network_long);
+}
+
+uint16_t packet_htons(uint16_t host_short){
+    __builtin_bswap16(host_short);
 
 }
 
-
+uint32_t packet_htonl(uint32_t host_long){
+    __builtin_bswap32(host_long);
+}
