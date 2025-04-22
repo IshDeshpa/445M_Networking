@@ -70,6 +70,7 @@ static tpfAppMonCb  gpfAppMonCb  = NULL;
 */
 static void m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint8* pu8Buffer)
 {
+	printf("m2m_wifi_cb: %d\n", u8OpCode);
 	if (u8OpCode == M2M_WIFI_RESP_CON_STATE_CHANGED)
 	{
 		tstrM2mWifiStateChanged* pstrState = (tstrM2mWifiStateChanged*)pu8Buffer;
