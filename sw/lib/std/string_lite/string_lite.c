@@ -260,3 +260,27 @@ void memcpy_lite(void *dest, const void *src, uint32_t size){
         *d++ = *s++;
     }
 }
+
+void memmove_lite(void *dest, const void *src, uint32_t size) {
+    uint8_t *d = (uint8_t *)dest;
+    const uint8_t *s = (const uint8_t *)src;
+
+    if (d == s || size == 0) {
+        // Nothing to do
+        return;
+    }
+
+    if (d < s) {
+        // No overlap or safe to copy forward
+        while (size--) {
+            *d++ = *s++;
+        }
+    } else {
+        // Overlapping and dest > src, copy backwards
+        d += size;
+        s += size;
+        while (size--) {
+            *--d = *--s;
+        }
+    }
+}

@@ -23,6 +23,7 @@
 #define atol     atol_lite
 #define memset   memset_lite
 #define memcpy   memcpy_lite
+#define memmove  memmove_lite
 /* ================================================== */
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
@@ -48,6 +49,8 @@ char *strtok_lite(char *str, const char *delim);
 void memcpy_lite(void *dest, const void *src, uint32_t size);
 
 void memset_lite(void *ptr, uint8_t value, uint32_t size);
+
+void memmove_lite(void *dest, const void *src, uint32_t size);
 
 char* strstr_lite(const char* haystack, const char* needle);
 
