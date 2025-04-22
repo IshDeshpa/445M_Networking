@@ -2,7 +2,6 @@
 /*                      INCLUDES                      */
 /* ================================================== */
 #include "Networking.h"
-#include "Networking_Globs.h"
 #include <stdint.h>
 #include "../lib/std/stdio_lite/stdio_lite.h"
 
@@ -26,17 +25,22 @@ tstrWifiInitParam wifi_init_param;
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
 
+#define LOG(...) printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
+
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
 
 sema4_t data_captured;
 sema4_t data_captured2;
+tenuM2mStaCmd irqReceiveType;
+void *msg = NULL;
 void wifi_callback(uint8 u8MsgType, void *pvMsg) {
     LOG("Wi-Fi callback triggered! Message type: %d", u8MsgType);
     
-    tenuM2mStaCmd val = u8MsgType;
-    switch (val) {
+    irqReceiveType = u8MsgType;
+    msg = pvMsg;
+    switch (irqReceiveType) {
         case M2M_WIFI_REQ_CONNECT:
             LOG("Wi-Fi request to connect received.");
             break;
@@ -59,14 +63,12 @@ void wifi_callback(uint8 u8MsgType, void *pvMsg) {
             LOG("Wi-Fi scan request received.");
             break;
         case M2M_WIFI_RESP_SCAN_DONE:
-            OS_Signal(&data_captured);
             LOG("Wi-Fi scan done response received.");
             break;
         case M2M_WIFI_REQ_SCAN_RESULT:
             LOG("Wi-Fi scan result request received.");
             break;
         case M2M_WIFI_RESP_SCAN_RESULT:
-            OS_Signal(&data_captured2);
             LOG("Wi-Fi scan result response received.");
             break;
         case M2M_WIFI_REQ_START_WPS:
@@ -136,26 +138,30 @@ void wifi_callback(uint8 u8MsgType, void *pvMsg) {
             LOG("Unknown Wi-Fi message type received.");
             break;
     }
+
+    if(u8MsgType != 7) OS_Signal(&data_captured);
 }
 
 void eth_callback(uint8 u8MsgType, void *pvMsg, void *pvCtrlBuf) {
     LOG("Ethernet callback triggered! Message type: %d", u8MsgType);
-    
     switch (u8MsgType) {
         case M2M_WIFI_RESP_ETHERNET_RX_PACKET:
             LOG("Ethernet RX packet response received.");
             uint8 au8RemoteIpAddr[4];
             uint8 *au8packet = (uint8*)pvMsg;
             tstrM2MDataBufCtrl *PstrM2mIpCtrlBuf =( tstrM2MDataBufCtrl *)pvCtrlBuf;
-            LOG("Ethernet Frame Received buffer, Size = %d , Remaining = %d, Data offset = %d, Ifc ID =%d",
+            
+            LOG("Ethernet Frame Received buffer, Size = %d, Remaining = %d, Data offset = %d, Ifc ID = %d",
                 PstrM2mIpCtrlBuf->u16DataSize,
                 PstrM2mIpCtrlBuf->u16RemainigDataSize,
                 PstrM2mIpCtrlBuf->u8DataOffset,
                 PstrM2mIpCtrlBuf->u8IfcId);
             
-            for(int i=0; i<PstrM2mIpCtrlBuf->u16DataSize; i++){
-                printf("0x%02X ", i, au8packet[i]);
+            for (int i = 0; i < PstrM2mIpCtrlBuf->u16DataSize; i++) {
+                if(i%0x10 == 0){printf("\n\r%04x ", i);}
+                printf("%02x ", au8packet[i]);
             }
+            printf("\n\r");
             break;
         default:
             LOG("Unknown Ethernet message type received.");
@@ -243,19 +249,24 @@ void Network_Scan(void){
     memset(cmd.data, 0, sizeof(cmd.data));
 
     OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
-    
-    // parse data
-    tstrM2mScanDone *data1 = (tstrM2mScanDone*)irq_rcv_buf;
-    LOG("Num channels: %d", data1->u8NumofCh);
+    OS_Wait(&data_captured);
+    LOG("Received: %d", irqReceiveType);
 
-    for(int i=0; i<data1->u8NumofCh; i++){
+    // parse data
+    tstrM2mScanDone data1; 
+    memcpy(&data1, (tstrM2mScanDone*)msg, sizeof(tstrM2mScanDone));
+
+    LOG("Num channels: %d", data1.u8NumofCh);
+
+    for(int i=0; i<data1.u8NumofCh; i++){
         cmd.command = NW_GET_SCAN_DATA;
         cmd.data[0] = i;
         OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
-        OS_Wait(&data_captured2);
-        OS_Sleep(1000);
+        LOG("Waiting for scan result %d", i);
         
-        tstrM2mWifiscanResult *data2 = (tstrM2mWifiscanResult*)irq_rcv_buf;
+        OS_Wait(&data_captured);
+        
+        tstrM2mWifiscanResult *data2 = (tstrM2mWifiscanResult*)msg;
         LOG("Scan Result:");
         LOG("Index: %d", data2->u8index);
         LOG("RSSI: %d", data2->s8rssi);
@@ -268,12 +279,6 @@ void Network_Scan(void){
         LOG("Device Name: %s", data2->au8DeviceName);
     }
     LOG("Scan Done");
-
-    // busy wait
-    LOG("Waiting for scan to finish");
-    OS_Wait(&data_captured);
-    OS_Sleep(1000);
-    //LOG()
 }
 
 void Network_Connect(char *ssid, char *password){
@@ -285,6 +290,14 @@ void Network_Connect(char *ssid, char *password){
     strncpy((char*)cmd.data + 32, password, 40);
 
     OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
+    OS_Wait(&data_captured);
+
+    tstrM2mWifiStateChanged *data = (tstrM2mWifiStateChanged*)msg;
+    if(data->u8CurrState == M2M_WIFI_CONNECTED){
+        LOG("Connected to AP: %s %s", ssid, password);
+    }else if(data->u8CurrState == M2M_WIFI_DISCONNECTED){
+        LOG("Connection failed: %s %s", ssid, password);
+    }
 }
 
 void Network_Disconnect(void){
@@ -359,8 +372,6 @@ void Task_NetworkThread(void){
             case NW_CONNECT:
                 LOG("Connect command received");
                 // Call the connect function here
-                
-                // Arg parsing
                 char ssid[32];
                 tuniM2MWifiAuth auth_param = {0};
                 
@@ -434,9 +445,9 @@ void Task_NetworkingInit(){
 
     m2m_wifi_set_scan_options(4, 240);
 
-    OS_AddThread(Task_ReceiveIRQ, 1024, 2);
-    OS_AddThread(Task_NetworkThread, 1024, 3);
-    OS_AddThread(Task_TestNetworking, 1024, 4);
+    OS_AddThread(Task_ReceiveIRQ, 1024, 1);
+    OS_AddThread(Task_NetworkThread, 1024, 2);
+    OS_AddThread(Task_TestNetworking, 1024, 3);
 
     OS_Kill();
 }

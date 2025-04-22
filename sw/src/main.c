@@ -90,7 +90,7 @@ void Task_TestNetworking(void){
     OS_Sleep(1000);
     Network_Scan();
     OS_Sleep(1000);
-    Network_Connect("iPhone (3)", "abcdefgh");
+    Network_Connect("utexas-iot", "91066905343452506107");
 
     while(1){
       //printf("TestThread Sleeping\n\r");
