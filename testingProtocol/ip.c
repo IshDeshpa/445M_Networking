@@ -257,35 +257,10 @@ void headerToBigEndian(ipHeader_t* header) {
     header->totalPacketLength     = packet_htons(header->totalPacketLength);
     header->identification        = packet_htons(header->identification);
     header->flags_fragmentOffset  = packet_htons(header->flags_fragmentOffset);
-    header->headerChecksum        = packet_htons(header->headerChecksum);
+    //header->headerChecksum        = packet_htons(header->headerChecksum);
     header->sourceIP              = packet_htonl(header->sourceIP);
     header->destinationIP         = packet_htonl(header->destinationIP);
 }
-
-uint16_t packet_ntohs(uint16_t network_short) {
-    return ((network_short & 0x00FF) << 8) |
-           ((network_short & 0xFF00) >> 8);
-}
-
-uint32_t packet_ntohl(uint32_t network_long) {
-    return ((network_long & 0x000000FF) << 24) |
-           ((network_long & 0x0000FF00) << 8)  |
-           ((network_long & 0x00FF0000) >> 8)  |
-           ((network_long & 0xFF000000) >> 24);
-}
-
-uint16_t packet_htons(uint16_t host_short) {
-    return ((host_short & 0x00FF) << 8) |
-           ((host_short & 0xFF00) >> 8);
-}
-
-uint32_t packet_htonl(uint32_t host_long) {
-    return ((host_long & 0x000000FF) << 24) |
-           ((host_long & 0x0000FF00) << 8)  |
-           ((host_long & 0x00FF0000) >> 8)  |
-           ((host_long & 0xFF000000) >> 24);
-}
-
 
 //uint16_t packet_ntohs(uint16_t network_short){
 //    __builtin_bswap16(network_short);

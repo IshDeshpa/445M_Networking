@@ -12,7 +12,9 @@
 typedef enum{
     MAC_SUCCESS,
     MAC_RX_FAIL,
-    MAC_TX_FAIL
+    MAC_RX_FAIL_INCORRECT_DEST_MAC,
+    MAC_TX_FAIL,
+
 }errMAC_t;
 /* ================================================== */
 /*                 FUNCTION PROTOTYPES                */
