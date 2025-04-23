@@ -19,6 +19,8 @@ typedef enum {
     IP_SUCCESS,
     IP_TX_FAIL,
     IP_RX_FAIL,
+    IP_RX_PCKT_DROPPED,
+    IP_RX_UNSUPPORTED_PROTOCOL,
 }errIP_t;
 
 /* ================================================== */
