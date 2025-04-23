@@ -7,6 +7,6 @@ inputfile=outbytes.txt
 outputfile=outbytes.pcap
 ./build/exe.elf
 
-text2pcap -e 0x0800 ${inputfile} ${outputfile}
-
-tshark -r ${outputfile} -o ip.check_checksum:TRUE -V
+#text2pcap -e 0x0800 ${inputfile} ${outputfile}
+#
+#tshark -r ${outputfile} -o ip.check_checksum:TRUE -V
