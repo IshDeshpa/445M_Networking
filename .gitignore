@@ -43,3 +43,5 @@ sw/.cache/
 
 sw/dump.txt
 compile_commands.json
+
+.cache

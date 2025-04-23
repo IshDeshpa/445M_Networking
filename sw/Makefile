@@ -195,7 +195,7 @@ clean:
 # Flash the binary
 .PHONY: flash
 flash: $(TARGET).bin
-	lm4flash $(TARGET).bin
+	lm4flash build/hw/exe.bin
 
 .PHONY: dump
 dump: all

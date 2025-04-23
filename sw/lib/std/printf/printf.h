@@ -115,7 +115,7 @@ int fctprintf(void (*out)(char character, void* arg), void* arg, const char* for
 }
 #endif
 
-#else
+#elif (SIM_MODE == 1)
 #include <stdio.h>
 #endif  // SIM_MODE
 
