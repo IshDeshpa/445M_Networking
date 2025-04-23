@@ -3,7 +3,7 @@
 /* ================================================== */
 #include "ip.h"
 #include <stdint.h>
-#include <string.h>
+#include "string_lite.h"
 #include "Networking_Globs.h"
 #include "mac.h"
 #include "Networking.h"

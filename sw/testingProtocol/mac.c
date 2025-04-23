@@ -5,7 +5,7 @@
 #include "stubs.h"
 #include "Networking_Globs.h"
 #include <stdint.h>
-#include <string.h>
+#include "string_lite.h"
 
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
