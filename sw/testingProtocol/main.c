@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
     LOG("Starting up testing\n\r");
     memcpy(networkBuf, payload, PAYLOAD_SIZE);
     //ethernetTX(payload, PAYLOAD_SIZE);
-    int ret = udp_tx(PAYLOAD_SIZE, networkBuf, DESTINATION_IP, 4567);
+    int ret = udp_tx(PAYLOAD_SIZE, networkBuf, DESTINATION_IP, 0x4567);
     if(ret == IP_SUCCESS){
         printf("Ip sent succesfully\n");
     }else{

@@ -44,7 +44,7 @@ errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data);
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
-errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_t destinationIP) {
+errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, uint32_t destinationIP) {
     ipHeader_t* header = (ipHeader_t*)payload;
 
     // Step 4: Move payload to make room for header
@@ -57,7 +57,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     header->identification = identification++;
     header->flags_fragmentOffset = FRAG_DEFAULT;
     header->TTL = TTL_DEFAULT;
-    header->protocol = protocol;
+    header->protocol = (uint8_t) protocol;
     header->headerChecksum = 0; // must be 0 before computing
     header->sourceIP = *(uint32_t*)host_ip_address;
     header->destinationIP = destinationIP;
@@ -74,7 +74,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     return ret == MAC_SUCCESS ? IP_SUCCESS : IP_TX_FAIL ; // or whatever your success enum is
 }
 
-errIP_t ip4_rx(uint8_t* payload, uint16_t payloadsize){
+errIP_t ip4_rx(uint8_t* payload){
     ipHeader_t* header = (ipHeader_t*)payload;
     headerTolittleEndian(header);
 

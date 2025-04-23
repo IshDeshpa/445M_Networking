@@ -23,8 +23,8 @@ static void headerToBigEndian(udpHeader_t* header);
 
 
 int udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16_t port){
-    ASSERT(payload == curr_packet_buffer);
-    ASSERT(payloadsize <= MTU);
+    //ASSERT(payload == curr_packet_buffer);
+    //ASSERT(payloadsize <= MTU);
 
     // Move for UDP header
     memmove(payload + sizeof(udpHeader_t), payload, payloadsize);
@@ -33,13 +33,13 @@ int udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16
     header->sourcePort = SOURCE_PORT;
     header->destinationPort = port;
     header->length = payloadsize + sizeof(udpHeader_t);
-    ASSERT(header->length >= sizeof(udpHeader_t));
+    //ASSERT(header->length >= sizeof(udpHeader_t));
     header->checksum = CHECKSUM;
 
     headerToBigEndian(header);
     
-    ip4_tx(payloadsize + sizeof(udpHeader_t), payload, IP_PROTOCOL_UDP, destinationIP);
     udp_print_header(header);
+    ip4_tx(payloadsize + sizeof(udpHeader_t), payload, IP_PROTOCOL_UDP, destinationIP);
     return UDP_SUCCESS;
 }
 

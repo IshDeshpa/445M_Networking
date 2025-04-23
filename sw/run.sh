@@ -8,7 +8,7 @@ outputfile=outbytes.pcap
 
 case $1 in
 -t)
-    bear -- make clean
+    make clean
     bear -- make flash -j$NUM_CORES MODE=sw -s
     mv compile_commands.json build/
     #make dump
@@ -16,13 +16,13 @@ case $1 in
     echo -e "Running Sim\n\n"
     build/sw/exe.elf
 
-    #text2pcap -e 0x0800 ${inputfile} ${outputfile}
-    #
-    #tshark -r ${outputfile} -o ip.check_checksum:TRUE -V
+    text2pcap -e 0x0800 ${inputfile} ${outputfile}
+
+    tshark -r ${outputfile} -o ip.check_checksum:TRUE -V
     ;;
 
 *)
-    bear -- make clean
+    make clean
     bear -- make flash -j$NUM_CORES MODE=hw -s
     mv compile_commands.json build/
     #make dump
