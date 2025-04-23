@@ -40,10 +40,6 @@ uint16_t identification = 0x1234;
 uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize);
 
 
-uint16_t packet_ntohs(uint16_t network_short);
-uint32_t packet_ntohl(uint32_t network_long);
-uint16_t packet_htons(uint16_t host_short);
-uint32_t packet_htonl(uint32_t host_long);
 
 void headerToBigEndian(ipHeader_t* header);
 void headerTolittleEndian(ipHeader_t* header);

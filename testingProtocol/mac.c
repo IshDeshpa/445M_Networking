@@ -37,6 +37,8 @@ errMAC_t macRX(uint8_t* payload){
     if(macAddrComp(header->dest_mac, host_mac_address)){
         return MAC_RX_FAIL_INCORRECT_DEST_MAC;
     }
+
+
     return MAC_SUCCESS;
 }
 
