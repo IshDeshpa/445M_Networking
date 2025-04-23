@@ -3,6 +3,7 @@
 #include <string.h>
 #include "UDP.h"
 #include "ip.h"
+#include "mac.h"
 #include "Networking_Globs.h"
 #include "stubs.h"
 
@@ -22,15 +23,19 @@ uint8_t networkBuf[MTU+50];
 
 int main(int argc, char *argv[]){
     LOG("Starting up testing\n\r");
-    memcpy(networkBuf, payload, PAYLOAD_SIZE);
-    //ethernetTX(payload, PAYLOAD_SIZE);
-    int ret = udp_tx(PAYLOAD_SIZE, networkBuf, DESTINATION_IP, 0x4567);
-    if(ret == IP_SUCCESS){
-        printf("Ip sent succesfully\n");
-    }else{
-        printf("Ip sent not sent\n"); 
-    }
-    printf("\n");
+    // memcpy(networkBuf, payload, PAYLOAD_SIZE);
+    // //ethernetTX(payload, PAYLOAD_SIZE);
+    // int ret = udp_tx(PAYLOAD_SIZE, networkBuf, DESTINATION_IP, 0x4567);
+    // if(ret == IP_SUCCESS){
+    //     printf("Ip sent succesfully\n");
+    // }else{
+    //     printf("Ip sent not sent\n"); 
+    // }
+    // printf("\n");
+
+    LOG("Testing RX\n\r");
+    uint8_t *rx = ethernetRX();
+    macRX(rx);
 
     return 0;
 }

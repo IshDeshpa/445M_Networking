@@ -45,3 +45,6 @@ sw/dump.txt
 compile_commands.json
 
 .cache
+
+outbytes*
+*/outbytes*

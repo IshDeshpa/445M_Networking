@@ -17,10 +17,8 @@ case $1 in
     build/sw/exe.elf
 
     text2pcap -e 0x0800 ${inputfile} ${outputfile}
-
     tshark -r ${outputfile} -o ip.check_checksum:TRUE -V
     ;;
-
 *)
     make clean
     bear -- make flash -j$NUM_CORES MODE=hw -s
