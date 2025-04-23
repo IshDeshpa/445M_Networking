@@ -24,9 +24,6 @@
 
 #define HEADER_SIZE_DEFAULT (20) //shoud be 20 bytes
 
-
-
-
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
@@ -39,10 +36,8 @@ uint16_t identification = 0x1234;
 
 uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize);
 
-
-
-void headerToBigEndian(ipHeader_t* header);
-void headerTolittleEndian(ipHeader_t* header);
+static void headerToBigEndian(ipHeader_t* header);
+static void headerTolittleEndian(ipHeader_t* header);
 
 int dropPkt(ipHeader_t* header);
 errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data);
@@ -74,7 +69,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     headerToBigEndian(header);
     
     //send to mac layer
-    ip4_print_header(header);
+    //ip4_print_header(header);
     int ret = macTX(payload, packet_ntohs(header->totalPacketLength));
     return ret == MAC_SUCCESS ? IP_SUCCESS : IP_TX_FAIL ; // or whatever your success enum is
 }
@@ -241,7 +236,7 @@ void ip4_print_header(ipHeader_t* header) {
     printf("===============================================\n");
 }
 
-void headerTolittleEndian(ipHeader_t* header){
+static void headerTolittleEndian(ipHeader_t* header){
     header->totalPacketLength = packet_ntohs(header->totalPacketLength);
     header->identification = packet_ntohs(header->identification);
     header->flags_fragmentOffset = packet_ntohs(header->flags_fragmentOffset);
@@ -249,7 +244,7 @@ void headerTolittleEndian(ipHeader_t* header){
     header->destinationIP = packet_ntohl(header->destinationIP); 
 }
 
-void headerToBigEndian(ipHeader_t* header) {
+static void headerToBigEndian(ipHeader_t* header) {
     header->totalPacketLength     = packet_htons(header->totalPacketLength);
     header->identification        = packet_htons(header->identification);
     header->flags_fragmentOffset  = packet_htons(header->flags_fragmentOffset);

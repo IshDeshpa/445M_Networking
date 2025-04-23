@@ -9,6 +9,7 @@ ip.c \
 stubs.c \
 Networking_Globs.c \
 mac.c \
+UDP.c \
 
 OBJ_FILES = $(patsubst %.c,build/%.o,$(filter %.c,$(SRC_FILES)))
 
