@@ -1,7 +1,7 @@
 #ifndef STDIO_LITE_H
 #define STDIO_LITE_H
 
-#ifndef SIM_MODE
+#if (SIM_MODE == 0)
 /* ================================================== */
 /*                      INCLUDES                      */
 /* ================================================== */

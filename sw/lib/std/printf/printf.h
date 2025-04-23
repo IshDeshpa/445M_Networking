@@ -32,7 +32,7 @@
 #ifndef _PRINTF_H_
 #define _PRINTF_H_
 
-#ifndef SIM_MODE
+#if (SIM_MODE == 0)
 
 #include <stdarg.h>
 #include <stddef.h>

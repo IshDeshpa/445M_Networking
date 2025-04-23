@@ -1,11 +1,11 @@
 # See: https://makefiletutorial.com/
 # Cross-compiler and flags
-CC = arm-none-eabi-gcc
-OBJCOPY = arm-none-eabi-objcopy
-
 MODE=sw
 
 ifeq ($(MODE), hw)
+	CC = arm-none-eabi-gcc
+	OBJCOPY = arm-none-eabi-objcopy
+
 	# Simulator mode
 	CPU_FLAGS = \
     -mcpu=cortex-m4
@@ -17,7 +17,8 @@ ifeq ($(MODE), hw)
 	DEFINES = \
 		-DPART_TM4C123GH6PM \
 		-DTARGET_IS_BLIZZARD_RA1 \
-		-Dgcc
+		-Dgcc \
+		-DSIM_MODE=0
 
 	CFLAGS = \
 		$(FPU_FLAGS) \
@@ -44,6 +45,8 @@ ifeq ($(MODE), hw)
 		$(CPU_FLAGS) \
 		-Wl,--gc-sections \
 		-T gcc-files/tm4c123gh6pm.ld.exception
+
+	INCLUDES = 
 
 	# Source files
 	SRC_FILES = \
@@ -97,35 +100,49 @@ ifeq ($(MODE), hw)
 		wilc/driver/source/nmspi.c \
 		wilc/driver/source/nmuart.c \
 		wilc/driver/source/spi_flash.c \
-		src/main.c
+		src/main.c \
+		lib/std/string_lite/string_lite.c \
+		lib/std/printf/printf.c
 else
+	CC = gcc
+	OBJCOPY = objcopy
+
 	# Hardware mode
 	CPU_FLAGS =
 
-	CFLAGS = \
-	-Wall \
-	-g
-
 	FPU_FLAGS = 
 
-	DEFINES = -DSIM_MODE
+	DEFINES = -DSIM_MODE=1
+
+	CFLAGS = \
+		$(FPU_FLAGS) \
+		$(DEFINES) \
+		$(CPU_FLAGS) \
+		-std=c99 \
+		-Wall \
+		-pedantic \
+		-O0 \
+		-g3 \
+		-Wno-unused-but-set-variable \
+		-w
 
 	LDFLAGS = 
+
+	INCLUDES = -Ilib/std/string_lite \
+			-Ilib/std/printf
 
 	SRC_FILES = testingProtocol/stubs.c \
 			testingProtocol/main.c
 endif
 
 SRC_FILES += \
-		testingProtocol/ip.c \
-		testingProtocol/mac.c \
-		testingProtocol/Networking_Globs.c \
-		testingProtocol/UDP.c \
-		lib/std/string_lite/string_lite.c \
-		lib/std/printf/printf.c \
+		src/ip.c \
+		src/mac.c \
+		src/Networking_Globs.c \
+		src/UDP.c
 
 # Include paths
-INCLUDES = $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
+INCLUDES += $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
 
 ifeq ($(MODE), hw)
 	INCLUDES += -Iwilc/bsp/include
