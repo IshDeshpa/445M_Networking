@@ -99,12 +99,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     header->sourceIP = *(uint32_t*)host_ip_address;
     header->destinationIP = destinationIP;
 
-    // Step 2: Generate checksum in little-endian
-    header->headerChecksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT);
-
-    // Step 3: Convert all 16/32-bit fields to big-endian
-    headerToBigEndian(&header);
-    return NETWORKING_SUCCESS; // or whatever your success enum is
+    return IP_SUCCESS; // or whatever your success enum is
 }
 
 errIP_t ip4_rx(uint8_t* payload, uint16_t payloadsize){
@@ -125,63 +120,7 @@ errIP_t ip4_rx(uint8_t* payload, uint16_t payloadsize){
         return IP_RX_PCKT_DROPPED;
     }
 
-    SendPktToTransport(&header, payload + ((header->version_ihl & 0xF0) >> 4));
-}
-
-//expects data to have the trasnport header, not ip header
-errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data) {
-    switch (header->protocol) {
-        case IP_PROTOCOL_ICMP:
-            //TODO:add icmp support
-            //return icmp_rx(header, data);
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_IGMP:
-            LOG("Received IGMP packet — not handled");
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_TCP:
-            //TODO: add tcp support
-            //return tcp_rx(header, data);
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_UDP:
-            //TODO:add udp support
-            //return udp_rx(header, data);
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_IPV6:
-            LOG("IPv6 over IPv4 encapsulation not supported");
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_GRE:
-            LOG("GRE packet received — not supported");
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_ESP:
-            LOG("IPSec ESP received — not supported");
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_AH:
-            LOG("IPSec AH received — not supported");
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_ICMPV6:
-            LOG("ICMPv6 received — not supported on IPv4");
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_OSPF:
-            LOG("OSPF packet received — not supported");
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        case IP_PROTOCOL_SCTP:
-            LOG("SCTP packet received — not supported");
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-
-        default:
-            LOG("Unknown protocol (%u) — dropped", header->protocol);
-            return IP_RX_UNSUPPORTED_PROTOCOL;
-    }
+    // TODO: send to correct port
 }
 
 int dropPkt(ipHeader_t* header){
@@ -273,28 +212,10 @@ void headerTolittleEndian(ipHeader_t* header){
     header->destinationIP = packet_ntohl(header->destinationIP); 
 }
 
-void headerToBigEndian(ipHeader_t* header) {
-    header->totalPacketLength     = packet_htons(header->totalPacketLength);
-    header->identification        = packet_htons(header->identification);
-    header->flags_fragmentOffset  = packet_htons(header->flags_fragmentOffset);
-    header->headerChecksum        = packet_htons(header->headerChecksum);
-    header->sourceIP              = packet_htonl(header->sourceIP);
-    header->destinationIP         = packet_htonl(header->destinationIP);
-}
-
-uint16_t packet_ntohs(uint16_t network_short){
-    __builtin_bswap16(network_short);
-}
-
-uint32_t packet_ntohl(uint32_t network_long){
-    __builtin_bswap32(network_long);
-}
-
-uint16_t packet_htons(uint16_t host_short){
-    __builtin_bswap16(host_short);
-
-}
-
-uint32_t packet_htonl(uint32_t host_long){
-    __builtin_bswap32(host_long);
+void headerToBigEndian(ipHeader_t* header){
+    packet_htons(&(header->totalPacketLength));
+    packet_htons(&(header->identification));
+    packet_htons(&(header->flags_fragmentOffset));
+    packet_htonl(&(header->sourceIP)); 
+    packet_htonl(&(header->destinationIP));
 }
