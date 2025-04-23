@@ -38,7 +38,7 @@ int udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16
 
     headerToBigEndian(header);
     
-    ip4_tx(packet_ntohs(payloadsize + sizeof(udpHeader_t)), payload, IP_PROTOCOL_UDP, destinationIP);
+    ip4_tx(payloadsize + sizeof(udpHeader_t), payload, IP_PROTOCOL_UDP, destinationIP);
     udp_print_header(header);
     return UDP_SUCCESS;
 }

@@ -1,12 +1,11 @@
 #!/bin/bash
 
-bear -- make
+bear -- make -j MODE=sw
 mv compile_commands.json build/
 
 inputfile=outbytes.txt
 outputfile=outbytes.pcap
-./build/exe.elf
+./build/sw/exe.elf
 
-#text2pcap -e 0x0800 ${inputfile} ${outputfile}
-#
-#tshark -r ${outputfile} -o ip.check_checksum:TRUE -V
+text2pcap -e 0x0800 ${inputfile} ${outputfile}
+tshark -r ${outputfile} -o ip.check_checksum:TRUE -V
