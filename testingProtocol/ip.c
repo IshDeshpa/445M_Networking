@@ -3,11 +3,10 @@
 /* ================================================== */
 #include "ip.h"
 #include <stdint.h>
-#include "string_lite.h"
-#include "Networking.h"
-#include "string_lite.h"
+#include <string.h>
 #include "Networking_Globs.h"
-
+#include "mac.h"
+#include "Networking.h"
 /* ================================================== */
 /*            DEFAULTS                                */           
 /* ================================================== */
@@ -25,41 +24,14 @@
 
 #define HEADER_SIZE_DEFAULT (20) //shoud be 20 bytes
 
-#define MTU_DEFAULT (1500)
 
-#define IP_PROTOCOL_ICMP     1    // Internet Control Message Protocol
-#define IP_PROTOCOL_IGMP     2    // Internet Group Management Protocol
-#define IP_PROTOCOL_TCP      6    // Transmission Control Protocol
-#define IP_PROTOCOL_UDP      17   // User Datagram Protocol
-#define IP_PROTOCOL_IPV6     41   // IPv6 encapsulation
-#define IP_PROTOCOL_GRE      47   // Generic Routing Encapsulation
-#define IP_PROTOCOL_ESP      50   // Encrypted Security Payload (IPsec)
-#define IP_PROTOCOL_AH       51   // Authentication Header (IPsec)
-#define IP_PROTOCOL_ICMPV6   58   // ICMP for IPv6
-#define IP_PROTOCOL_OSPF     89   // Open Shortest Path First
-#define IP_PROTOCOL_SCTP     132  // Stream Control Transmission Protocol
+
 
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
 
 uint16_t identification = 0x1234;
-
-typedef struct __attribute__((packed)) {
-    uint8_t version_ihl;             // version:bits [0:3], ihl: [4:7]
-    uint8_t DSCP_ECN;                // Differentiated Services Code Point [0:5], ECN [6:7]
-    uint16_t totalPacketLength;      // Total Length
-
-    uint16_t identification;         // Identification
-    uint16_t flags_fragmentOffset;   // Flags (3 bits) + Fragment Offset (13 bits)
-
-    uint8_t TTL;            
-    uint8_t protocol;
-    uint16_t headerChecksum;         // Header Checksum
-
-    uint32_t sourceIP;               // Source IP Address
-    uint32_t destinationIP;          // Destination IP Address
-} ipHeader_t;
 
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
@@ -103,29 +75,33 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     header->headerChecksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT);
 
     // Step 3: Convert all 16/32-bit fields to big-endian
-    headerToBigEndian(&header);
-    return NETWORKING_SUCCESS; // or whatever your success enum is
+    headerToBigEndian(header);
+    
+    //send to mac layer
+    ip4_print_header(header);
+    int ret = macTX(payload, header->totalPacketLength);
+    return ret == MAC_SUCCESS ? IP_SUCCESS : IP_TX_FAIL ; // or whatever your success enum is
 }
 
 errIP_t ip4_rx(uint8_t* payload, uint16_t payloadsize){
     ipHeader_t* header = (ipHeader_t*)payload;
-    headerTolittleEndian(&header);
+    headerTolittleEndian(header);
 
     //checksum;
     uint16_t savedCksm = header->headerChecksum;
     header->headerChecksum = 0;
-    uint16_t computed_checksum = generate_ip4_checksum(&header, HEADER_SIZE_DEFAULT);
+    uint16_t computed_checksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT);
     if(savedCksm != computed_checksum){
         LOG("Packet Dropped: Checksum Invalid");
         return IP_RX_FAIL;
     }
 
-    if(dropPkt(&header)){
+    if(dropPkt(header)){
         LOG("Packet Dropped");
         return IP_RX_PCKT_DROPPED;
     }
 
-    SendPktToTransport(&header, payload + ((header->version_ihl & 0xF0) >> 4));
+    SendPktToTransport(header, payload + ((header->version_ihl & 0xF0) >> 4));
 }
 
 //expects data to have the trasnport header, not ip header
@@ -297,4 +273,8 @@ uint16_t packet_htons(uint16_t host_short){
 
 uint32_t packet_htonl(uint32_t host_long){
     __builtin_bswap32(host_long);
+}
+
+void setHostIP(uint8_t ip_address[4]){
+    memcpy(host_ip_address, ip_address, 4);
 }
