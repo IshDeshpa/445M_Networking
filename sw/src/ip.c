@@ -69,7 +69,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     headerToBigEndian(header);
     
     //send to mac layer
-    //ip4_print_header(header);
+    ip4_print_header(header);
     int ret = macTX(payload, packet_ntohs(header->totalPacketLength));
     return ret == MAC_SUCCESS ? IP_SUCCESS : IP_TX_FAIL ; // or whatever your success enum is
 }
