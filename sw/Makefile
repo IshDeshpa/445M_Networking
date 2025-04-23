@@ -1,119 +1,171 @@
 # See: https://makefiletutorial.com/
 # Cross-compiler and flags
-CC = arm-none-eabi-gcc
-OBJCOPY = arm-none-eabi-objcopy
+MODE=sw
 
-CPU_FLAGS = \
+ifeq ($(MODE), hw)
+	BUILD_DIR = build/hw
+
+	CC = arm-none-eabi-gcc
+	OBJCOPY = arm-none-eabi-objcopy
+
+	# Simulator mode
+	CPU_FLAGS = \
     -mcpu=cortex-m4
 
-FPU_FLAGS = \
-    -mfpu=fpv4-sp-d16 \
-    -mfloat-abi=hard
+	FPU_FLAGS = \
+		-mfpu=fpv4-sp-d16 \
+		-mfloat-abi=hard
 
-DEFINES = \
-    -DPART_TM4C123GH6PM \
-    -DTARGET_IS_BLIZZARD_RA1 \
-    -Dgcc
+	DEFINES = \
+		-DPART_TM4C123GH6PM \
+		-DTARGET_IS_BLIZZARD_RA1 \
+		-Dgcc \
+		-DSIM_MODE=0
 
-CFLAGS = \
-    $(FPU_FLAGS) \
-    $(DEFINES) \
-    -mthumb \
-    $(CPU_FLAGS) \
-    -ffunction-sections \
-    -fdata-sections \
-    -MD \
-    -std=c99 \
-    -Wall \
-    -pedantic \
-    -O0 \
-    -g3 \
-    -Wno-unused-but-set-variable \
-	-include stdint.h \
-	-w
+	CFLAGS = \
+		$(FPU_FLAGS) \
+		$(DEFINES) \
+		-mthumb \
+		$(CPU_FLAGS) \
+		-ffunction-sections \
+		-fdata-sections \
+		-MD \
+		-std=c99 \
+		-Wall \
+		-pedantic \
+		-O0 \
+		-g3 \
+		-Wno-unused-but-set-variable \
+		-include stdint.h \
+		-w
 
-LDFLAGS = \
-    $(FPU_FLAGS) \
-    $(DEFINES) \
-    -fno-builtin-printf \
-    -mthumb \
-    $(CPU_FLAGS) \
-    -Wl,--gc-sections \
-    -T gcc-files/tm4c123gh6pm.ld.exception
+	LDFLAGS = \
+		$(FPU_FLAGS) \
+		$(DEFINES) \
+		-fno-builtin-printf \
+		-mthumb \
+		$(CPU_FLAGS) \
+		-Wl,--gc-sections \
+		-T gcc-files/tm4c123gh6pm.ld.exception
 
-# Source files
-SRC_FILES = \
-	gcc-files/startup_gcc.c \
-	FreakyRTOS/OS.c \
-	FreakyRTOS/osasm_gcc.s \
-	FreakyRTOS/OS_Lists.c \
-	FreakyRTOS/OS_LaunchPad.c \
-	FreakyRTOS/OS_Fifo.c \
-	FreakyRTOS/OS_MailBox.c \
-	FreakyRTOS/OS_Sema4.c \
-	FreakyRTOS/ADC.c \
-	FreakyRTOS/ST7735.c \
-	FreakyRTOS/UART0int.c \
-	FreakyRTOS/Interpreter.c \
-	FreakyRTOS/FIFOsimple.c \
-	FreakyRTOS/eDisk.c \
-	FreakyRTOS/OS_CLI_Commands/cat.c \
-	FreakyRTOS/OS_CLI_Commands/CLI_Commands.c \
-	FreakyRTOS/OS_CLI_Commands/write.c \
-	FreakyRTOS/OS_CLI_Commands/ls.c \
-	FreakyRTOS/OS_CLI_Commands/touch.c \
-	FreakyRTOS/OS_CLI_Commands/rm.c \
-	FreakyRTOS/OS_CLI_Commands/pwd.c \
-	FreakyRTOS/OS_CLI_Commands/cd.c \
-	FreakyRTOS/OS_CLI_Commands/mount.c \
-	FreakyRTOS/OS_CLI_Commands/umount.c \
-	FreakyRTOS/OS_CLI_Commands/mkfs.c \
-	FreakyRTOS/OS_CLI_Commands/mkdir.c \
-	inc/Timer0A.c \
-	inc/Timer1A.c \
-	inc/Timer2A.c \
-	inc/Timer3A.c \
-	inc/Timer4A.c \
-	inc/Timer5A.c \
-	inc/PLL.c \
-	inc/LaunchPad.c \
-	lib/std/string_lite/string_lite.c \
-	lib/std/printf/printf.c \
-	wilc/bsp/source/nm_bsp_tm4c.c \
-    wilc/bus_wrapper/source/nm_bus_wrapper_tm4c.c \
-    wilc/common/source/nm_common.c \
-    wilc/driver/source/m2m_wifi.c \
-    wilc/driver/source/m2m_hif.c \
-    wilc/driver/source/m2m_periph.c \
-    wilc/driver/source/m2m_coex.c \
-    wilc/driver/source/nmdrv.c \
-    wilc/driver/source/nmdrv_crt.c \
-    wilc/driver/source/nmasic.c \
-    wilc/driver/source/nmbus.c \
-    wilc/driver/source/nmi2c.c \
-    wilc/driver/source/nmsdio.c \
-    wilc/driver/source/nmspi.c \
-    wilc/driver/source/nmuart.c \
-    wilc/driver/source/spi_flash.c \
-	src/main.c \
-	src/Networking.c \
-	# src/SensorIn.c
+	INCLUDES = 
+
+	# Source files
+	SRC_FILES = \
+		gcc-files/startup_gcc.c \
+		FreakyRTOS/OS.c \
+		FreakyRTOS/osasm_gcc.s \
+		FreakyRTOS/OS_Lists.c \
+		FreakyRTOS/OS_LaunchPad.c \
+		FreakyRTOS/OS_Fifo.c \
+		FreakyRTOS/OS_MailBox.c \
+		FreakyRTOS/OS_Sema4.c \
+		FreakyRTOS/ADC.c \
+		FreakyRTOS/ST7735.c \
+		FreakyRTOS/UART0int.c \
+		FreakyRTOS/Interpreter.c \
+		FreakyRTOS/FIFOsimple.c \
+		FreakyRTOS/eDisk.c \
+		FreakyRTOS/OS_CLI_Commands/cat.c \
+		FreakyRTOS/OS_CLI_Commands/CLI_Commands.c \
+		FreakyRTOS/OS_CLI_Commands/write.c \
+		FreakyRTOS/OS_CLI_Commands/ls.c \
+		FreakyRTOS/OS_CLI_Commands/touch.c \
+		FreakyRTOS/OS_CLI_Commands/rm.c \
+		FreakyRTOS/OS_CLI_Commands/pwd.c \
+		FreakyRTOS/OS_CLI_Commands/cd.c \
+		FreakyRTOS/OS_CLI_Commands/mount.c \
+		FreakyRTOS/OS_CLI_Commands/umount.c \
+		FreakyRTOS/OS_CLI_Commands/mkfs.c \
+		FreakyRTOS/OS_CLI_Commands/mkdir.c \
+		inc/Timer0A.c \
+		inc/Timer1A.c \
+		inc/Timer2A.c \
+		inc/Timer3A.c \
+		inc/Timer4A.c \
+		inc/Timer5A.c \
+		inc/PLL.c \
+		inc/LaunchPad.c \
+		wilc/bsp/source/nm_bsp_tm4c.c \
+		wilc/bus_wrapper/source/nm_bus_wrapper_tm4c.c \
+		wilc/common/source/nm_common.c \
+		wilc/driver/source/m2m_wifi.c \
+		wilc/driver/source/m2m_hif.c \
+		wilc/driver/source/m2m_periph.c \
+		wilc/driver/source/m2m_coex.c \
+		wilc/driver/source/nmdrv.c \
+		wilc/driver/source/nmdrv_crt.c \
+		wilc/driver/source/nmasic.c \
+		wilc/driver/source/nmbus.c \
+		wilc/driver/source/nmi2c.c \
+		wilc/driver/source/nmsdio.c \
+		wilc/driver/source/nmspi.c \
+		wilc/driver/source/nmuart.c \
+		wilc/driver/source/spi_flash.c \
+		src/main.c \
+		lib/std/string_lite/string_lite.c \
+		lib/std/printf/printf.c \
+		src/Networking.c \
+		testingProtocol/stubs.c
+else
+	BUILD_DIR = build/sw
+
+	CC = gcc
+	OBJCOPY = objcopy
+
+	# Hardware mode
+	CPU_FLAGS =
+
+	FPU_FLAGS = 
+
+	DEFINES = -DSIM_MODE=1
+
+	CFLAGS = \
+		$(FPU_FLAGS) \
+		$(DEFINES) \
+		$(CPU_FLAGS) \
+		-std=c99 \
+		-Wall \
+		-pedantic \
+		-O0 \
+		-g3 \
+		-Wno-unused-but-set-variable \
+		-w
+
+	LDFLAGS = 
+
+	INCLUDES = -Ilib/std/string_lite \
+			-Ilib/std/printf \
+			-Ilib/std/stdio_lite \
+
+	SRC_FILES = testingProtocol/stubs.c \
+			testingProtocol/main.c
+endif
+
+SRC_FILES += \
+		src/ip.c \
+		src/mac.c \
+		src/Networking_Globs.c \
+		src/UDP.c
 
 # Include paths
-INCLUDES = $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
-INCLUDES += -Iwilc/bsp/include
-INCLUDES += -Iwilc/bus_wrapper/include
-INCLUDES += -Iwilc/common/include
-INCLUDES += -Iwilc/driver/include
-INCLUDES += -Iwilc/wilc1000_module_config/tm4c
-INCLUDES += -Iwilc
+INCLUDES += $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
+
+ifeq ($(MODE), hw)
+	INCLUDES += -Iwilc/bsp/include
+	INCLUDES += -Iwilc/bus_wrapper/include
+	INCLUDES += -Iwilc/common/include
+	INCLUDES += -Iwilc/driver/include
+	INCLUDES += -Iwilc/wilc1000_module_config/tm4c
+	INCLUDES += -Iwilc
+endif
 
 # Object files
-OBJ_FILES = $(patsubst %.c,build/%.o,$(filter %.c,$(SRC_FILES))) \
-			$(patsubst %.s,build/%.o,$(filter %.s,$(SRC_FILES)))
+OBJ_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(filter %.c,$(SRC_FILES))) \
+			$(patsubst %.s,$(BUILD_DIR)/%.o,$(filter %.s,$(SRC_FILES)))
 
 # Target executable
-TARGET = build/exe
+TARGET = $(BUILD_DIR)/exe
 
 # Default target
 all: $(TARGET).elf $(TARGET).bin
@@ -123,12 +175,12 @@ $(TARGET).elf: $(OBJ_FILES)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LDFLAGS)
 
 # Compile C source files
-build/%.o: %.c | build
+$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 # Compile assembly source files
-build/%.o: %.s | build
+$(BUILD_DIR)/%.o: %.s | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
@@ -159,8 +211,8 @@ dump: all
 -include $(OBJ_FILES:.o=.d)
 
 # Create build directory
-build:
-	mkdir -p build
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
 help:
 	@echo "Makefile for TM4C123GH6PM project"

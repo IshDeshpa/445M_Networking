@@ -1,6 +1,7 @@
 #ifndef STRING_LITE_H
 #define STRING_LITE_H
 
+#if (SIM_MODE == 0)
 /* ================================================== */
 /*                      INCLUDES                      */
 /* ================================================== */
@@ -55,6 +56,9 @@ void memmove_lite(void *dest, const void *src, uint32_t size);
 char* strstr_lite(const char* haystack, const char* needle);
 
 long atol_lite(const char* str);
+#else
+#include <string.h>
+#endif
 
 #endif 
 

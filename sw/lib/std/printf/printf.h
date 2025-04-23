@@ -32,6 +32,8 @@
 #ifndef _PRINTF_H_
 #define _PRINTF_H_
 
+#if (SIM_MODE == 0)
+
 #include <stdarg.h>
 #include <stddef.h>
 
@@ -113,5 +115,8 @@ int fctprintf(void (*out)(char character, void* arg), void* arg, const char* for
 }
 #endif
 
+#else
+#include <stdio.h>
+#endif  // SIM_MODE
 
 #endif  // _PRINTF_H_
