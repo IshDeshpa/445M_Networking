@@ -20,7 +20,7 @@ typedef enum{
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
 
-errMAC_t macRX(uint8_t* payload, uint16_t payloadsize);
+errMAC_t macRX(uint8_t* payload);
 errMAC_t macTX(uint8_t* payload, uint16_t payloadsize);
 void setHostMac(uint8_t mac[6]);
 #endif 

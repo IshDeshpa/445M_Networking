@@ -27,17 +27,16 @@ typedef struct __attribute__((packed)) {
 /* ================================================== */
 int macAddrComp(uint8_t* mac1, uint8_t* mac2){
     for(int i = 0; i < 6; i++){
-        if(dest_mac[i] != host_mac_address[i]) return 1;
+        if(mac1[i] != mac2[i]) return 1;
     }
     return 0;
 }
 
 errMAC_t macRX(uint8_t* payload){
-    macHeader_t* header = (macHeader_t*)payload;
-    if(macAddrComp(header->dest_mac, host_mac_address)){
-        return MAC_RX_FAIL_INCORRECT_DEST_MAC;
-    }
-
+    //macHeader_t* header = (macHeader_t*)payload;
+    //if(macAddrComp(header->dest_mac, host_mac_address)){
+    //    return MAC_RX_FAIL_INCORRECT_DEST_MAC;
+    //}
 
     return MAC_SUCCESS;
 }
