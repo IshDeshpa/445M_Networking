@@ -1,10 +1,11 @@
 #include "UDP.h"
 #include "ip.h"
 #include "Networking_Globs.h"
-#include "string_lite.h"
+#include <string.h>
 
 #define SOURCE_PORT (0xBEEF)
 #define CHECKSUM    (0x0000)
+#define HEADER_SIZE (8)
 
 typedef struct __attribute__((packed)) {
     uint16_t sourcePort;        // Source Port
@@ -12,6 +13,14 @@ typedef struct __attribute__((packed)) {
     uint16_t length;            // Length of UDP header + data
     uint16_t checksum;          // Checksum
 } udpHeader_t;
+
+
+void udp_print_header(const udpHeader_t* header);
+
+static void headerTolittleEndian(udpHeader_t* header);
+static void headerToBigEndian(udpHeader_t* header);
+
+
 
 int udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16_t port){
     ASSERT(payload == curr_packet_buffer);
@@ -27,18 +36,11 @@ int udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16
     ASSERT(header->length >= sizeof(udpHeader_t));
     header->checksum = CHECKSUM;
 
-    headerToBigEndian(&header);
-
-    ip4_tx(payloadsize + sizeof(udpHeader_t), payload, IP_PROTOCOL_UDP, destinationIP);
-
+    headerToBigEndian(header);
+    
+    ip4_tx(packet_ntohs(payloadsize + sizeof(udpHeader_t)), payload, IP_PROTOCOL_UDP, destinationIP);
+    udp_print_header(header);
     return UDP_SUCCESS;
-}
-
-void headerTolittleEndian(udpHeader_t* header){
-    header->sourcePort = packet_ntohs(&header->sourcePort);
-    header->destinationPort = packet_ntohs(&header->destinationPort);
-    header->length = packet_ntohs(&header->length);
-    header->checksum = packet_ntohs(&header->checksum);
 }
 
 errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
@@ -57,5 +59,30 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
         return UDP_RX_FAIL;
     }
 
-    // Add to fifo here
+
+}
+
+void udp_print_header(const udpHeader_t* header) {
+    printf("========== UDP HEADER ==========\n");
+
+    printf("Source Port        : 0x%04X (%u)\n", header->sourcePort, header->sourcePort);
+    printf("Destination Port   : 0x%04X (%u)\n", header->destinationPort, header->destinationPort);
+    printf("Length             : 0x%04X (%u)\n", header->length, header->length);
+    printf("Checksum           : 0x%04X (%u)\n", header->checksum, header->checksum);
+
+    printf("================================\n");
+}
+
+static void headerTolittleEndian(udpHeader_t* header){
+    header->sourcePort = packet_ntohs(header->sourcePort);
+    header->destinationPort = packet_ntohs(header->destinationPort);
+    header->length = packet_ntohs(header->length);
+    header->checksum = packet_ntohs(header->checksum);
+}
+
+static void headerToBigEndian(udpHeader_t* header) {
+    header->sourcePort      = packet_htons(header->sourcePort);
+    header->destinationPort = packet_htons(header->destinationPort);
+    header->length          = packet_htons(header->length);
+    header->checksum        = packet_htons(header->checksum);
 }

@@ -4,10 +4,9 @@
 #include "ip.h"
 #include <stdint.h>
 #include "string_lite.h"
-#include "Networking.h"
-#include "string_lite.h"
 #include "Networking_Globs.h"
-
+#include "mac.h"
+#include "Networking.h"
 /* ================================================== */
 /*            DEFAULTS                                */           
 /* ================================================== */
@@ -25,41 +24,11 @@
 
 #define HEADER_SIZE_DEFAULT (20) //shoud be 20 bytes
 
-#define MTU_DEFAULT (1500)
-
-#define IP_PROTOCOL_ICMP     1    // Internet Control Message Protocol
-#define IP_PROTOCOL_IGMP     2    // Internet Group Management Protocol
-#define IP_PROTOCOL_TCP      6    // Transmission Control Protocol
-#define IP_PROTOCOL_UDP      17   // User Datagram Protocol
-#define IP_PROTOCOL_IPV6     41   // IPv6 encapsulation
-#define IP_PROTOCOL_GRE      47   // Generic Routing Encapsulation
-#define IP_PROTOCOL_ESP      50   // Encrypted Security Payload (IPsec)
-#define IP_PROTOCOL_AH       51   // Authentication Header (IPsec)
-#define IP_PROTOCOL_ICMPV6   58   // ICMP for IPv6
-#define IP_PROTOCOL_OSPF     89   // Open Shortest Path First
-#define IP_PROTOCOL_SCTP     132  // Stream Control Transmission Protocol
-
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
 
 uint16_t identification = 0x1234;
-
-typedef struct __attribute__((packed)) {
-    uint8_t version_ihl;             // version:bits [0:3], ihl: [4:7]
-    uint8_t DSCP_ECN;                // Differentiated Services Code Point [0:5], ECN [6:7]
-    uint16_t totalPacketLength;      // Total Length
-
-    uint16_t identification;         // Identification
-    uint16_t flags_fragmentOffset;   // Flags (3 bits) + Fragment Offset (13 bits)
-
-    uint8_t TTL;            
-    uint8_t protocol;
-    uint16_t headerChecksum;         // Header Checksum
-
-    uint32_t sourceIP;               // Source IP Address
-    uint32_t destinationIP;          // Destination IP Address
-} ipHeader_t;
 
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
@@ -67,14 +36,8 @@ typedef struct __attribute__((packed)) {
 
 uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize);
 
-
-uint16_t packet_ntohs(uint16_t network_short);
-uint32_t packet_ntohl(uint32_t network_long);
-uint16_t packet_htons(uint16_t host_short);
-uint32_t packet_htonl(uint32_t host_long);
-
-void headerToBigEndian(ipHeader_t* header);
-void headerTolittleEndian(ipHeader_t* header);
+static void headerToBigEndian(ipHeader_t* header);
+static void headerTolittleEndian(ipHeader_t* header);
 
 int dropPkt(ipHeader_t* header);
 errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data);
@@ -88,7 +51,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     memmove(payload + HEADER_SIZE_DEFAULT, payload, payloadsize);
 
     // Step 1: Populate fields in little-endian (host order)
-    header->version_ihl = ((IHL_DEFAULT << 4) & 0xF0) | (VERSION_DEFAULT & 0x0F);
+    header->version_ihl = ((VERSION_DEFAULT << 4) & 0xF0) | (IHL_DEFAULT & 0x0F);
     header->DSCP_ECN = ((ECN_DEFAULT << 6) & 0xC0) | (DSCP_DEFAULT & 0x3F);
     header->totalPacketLength = payloadsize + HEADER_SIZE_DEFAULT;
     header->identification = identification++;
@@ -99,28 +62,94 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     header->sourceIP = *(uint32_t*)host_ip_address;
     header->destinationIP = destinationIP;
 
-    return IP_SUCCESS; // or whatever your success enum is
+    // Step 2: Generate checksum in little-endian
+    header->headerChecksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT);
+
+    // Step 3: Convert all 16/32-bit fields to big-endian
+    headerToBigEndian(header);
+    
+    //send to mac layer
+    //ip4_print_header(header);
+    int ret = macTX(payload, packet_ntohs(header->totalPacketLength));
+    return ret == MAC_SUCCESS ? IP_SUCCESS : IP_TX_FAIL ; // or whatever your success enum is
 }
 
 errIP_t ip4_rx(uint8_t* payload, uint16_t payloadsize){
     ipHeader_t* header = (ipHeader_t*)payload;
-    headerTolittleEndian(&header);
+    headerTolittleEndian(header);
 
     //checksum;
     uint16_t savedCksm = header->headerChecksum;
     header->headerChecksum = 0;
-    uint16_t computed_checksum = generate_ip4_checksum(&header, HEADER_SIZE_DEFAULT);
+    uint16_t computed_checksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT);
     if(savedCksm != computed_checksum){
         LOG("Packet Dropped: Checksum Invalid");
         return IP_RX_FAIL;
     }
 
-    if(dropPkt(&header)){
+    if(dropPkt(header)){
         LOG("Packet Dropped");
         return IP_RX_PCKT_DROPPED;
     }
 
-    // TODO: send to correct port
+    SendPktToTransport(header, payload + ((header->version_ihl & 0xF0) >> 4));
+    return IP_SUCCESS;
+}
+
+//expects data to have the trasnport header, not ip header
+errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data) {
+    switch (header->protocol) {
+        case IP_PROTOCOL_ICMP:
+            //TODO:add icmp support
+            //return icmp_rx(header, data);
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_IGMP:
+            LOG("Received IGMP packet — not handled");
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_TCP:
+            //TODO: add tcp support
+            //return tcp_rx(header, data);
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_UDP:
+            //TODO:add udp support
+            //return udp_rx(header, data);
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_IPV6:
+            LOG("IPv6 over IPv4 encapsulation not supported");
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_GRE:
+            LOG("GRE packet received — not supported");
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_ESP:
+            LOG("IPSec ESP received — not supported");
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_AH:
+            LOG("IPSec AH received — not supported");
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_ICMPV6:
+            LOG("ICMPv6 received — not supported on IPv4");
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_OSPF:
+            LOG("OSPF packet received — not supported");
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        case IP_PROTOCOL_SCTP:
+            LOG("SCTP packet received — not supported");
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+
+        default:
+            LOG("Unknown protocol (%u) — dropped", header->protocol);
+            return IP_RX_UNSUPPORTED_PROTOCOL;
+    }
 }
 
 int dropPkt(ipHeader_t* header){
@@ -167,44 +196,47 @@ uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize) {
 }
 
 void ip4_print_header(ipHeader_t* header) {
-    printf("========== IP HEADER ==========\n");
+    printf("========== IP HEADER (HEX + DECIMAL) ==========\n");
 
     uint8_t version = header->version_ihl & 0x0F;
     uint8_t ihl     = (header->version_ihl & 0xF0) >> 4;
 
-    printf("Version           : %u\n", version);
-    printf("IHL               : %u (%u bytes)\n", ihl, ihl * 4);
+    printf("Version           : 0x%01X (%u)\n", version, version);           
+    printf("IHL               : 0x%01X (%u bytes)\n", ihl, ihl * 4);
 
     uint8_t dscp = (header->DSCP_ECN & 0xFC) >> 2;
     uint8_t ecn  = (header->DSCP_ECN & 0x03);
-    printf("DSCP              : %u\n", dscp);
-    printf("ECN               : %u\n", ecn);
+    printf("DSCP              : 0x%02X (%u)\n", dscp, dscp);
+    printf("ECN               : 0x%01X (%u)\n", ecn, ecn);
 
-    printf("Total Length      : %u\n", header->totalPacketLength);
-    printf("Identification    : 0x%04X\n", header->identification);
+    printf("Total Length      : 0x%04X (%u)\n", header->totalPacketLength, header->totalPacketLength);
+    printf("Identification    : 0x%04X (%u)\n", header->identification, header->identification);
 
     uint16_t frag = header->flags_fragmentOffset;
     uint8_t flags = (frag >> 13) & 0x07;
     uint16_t offset = frag & 0x1FFF;
 
-    printf("Flags             : 0x%X (DF=%u, MF=%u)\n", flags,
+    printf("Flags             : 0x%01X (DF=%u, MF=%u)\n", flags,
            (flags >> 1) & 1, flags & 1);
-    printf("Fragment Offset   : %u\n", offset);
+    printf("Fragment Offset   : 0x%04X (%u)\n", offset, offset);
 
-    printf("TTL               : %u\n", header->TTL);
-    printf("Protocol          : %u\n", header->protocol);
-    printf("Header Checksum   : 0x%04X\n", header->headerChecksum);
+    printf("TTL               : 0x%02X (%u)\n", header->TTL, header->TTL);
+    printf("Protocol          : 0x%02X (%u)\n", header->protocol, header->protocol);
+    printf("Header Checksum   : 0x%04X (%u)\n", header->headerChecksum, header->headerChecksum);
 
     uint8_t* src = (uint8_t*)&header->sourceIP;
     uint8_t* dst = (uint8_t*)&header->destinationIP;
 
-    printf("Source IP         : %u.%u.%u.%u\n", src[0], src[1], src[2], src[3]);
-    printf("Destination IP    : %u.%u.%u.%u\n", dst[0], dst[1], dst[2], dst[3]);
+    printf("Source IP         : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n", 
+           src[0], src[1], src[2], src[3], src[0], src[1], src[2], src[3]);
 
-    printf("================================\n");
+    printf("Destination IP    : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n", 
+           dst[0], dst[1], dst[2], dst[3], dst[0], dst[1], dst[2], dst[3]);
+
+    printf("===============================================\n");
 }
 
-void headerTolittleEndian(ipHeader_t* header){
+static void headerTolittleEndian(ipHeader_t* header){
     header->totalPacketLength = packet_ntohs(header->totalPacketLength);
     header->identification = packet_ntohs(header->identification);
     header->flags_fragmentOffset = packet_ntohs(header->flags_fragmentOffset);
@@ -212,10 +244,33 @@ void headerTolittleEndian(ipHeader_t* header){
     header->destinationIP = packet_ntohl(header->destinationIP); 
 }
 
-void headerToBigEndian(ipHeader_t* header){
-    packet_htons(&(header->totalPacketLength));
-    packet_htons(&(header->identification));
-    packet_htons(&(header->flags_fragmentOffset));
-    packet_htonl(&(header->sourceIP)); 
-    packet_htonl(&(header->destinationIP));
+static void headerToBigEndian(ipHeader_t* header) {
+    header->totalPacketLength     = packet_htons(header->totalPacketLength);
+    header->identification        = packet_htons(header->identification);
+    header->flags_fragmentOffset  = packet_htons(header->flags_fragmentOffset);
+    //header->headerChecksum        = packet_htons(header->headerChecksum);
+    header->sourceIP              = packet_htonl(header->sourceIP);
+    header->destinationIP         = packet_htonl(header->destinationIP);
 }
+
+//uint16_t packet_ntohs(uint16_t network_short){
+//    __builtin_bswap16(network_short);
+//}
+//
+//uint32_t packet_ntohl(uint32_t network_long){
+//    __builtin_bswap32(network_long);
+//}
+//
+//uint16_t packet_htons(uint16_t host_short){
+//    __builtin_bswap16(host_short);
+//
+//}
+//
+//uint32_t packet_htonl(uint32_t host_long){
+//    __builtin_bswap32(host_long);
+//}
+//
+//void setHostIP(uint8_t ip_address[4]){
+//    memcpy(host_ip_address, ip_address, 4);
+//}
+//
