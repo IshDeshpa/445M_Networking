@@ -5,9 +5,9 @@ def random_mac():
     return ":".join(f"{random.randint(0, 255):02x}" for _ in range(6))
 
 def generate_random_frame():
-    src_mac = random_mac()
-    dst_mac = random_mac()
-    ether_type = 0x0800  # IPv4
+    # src_mac = random_mac()
+    # dst_mac = random_mac()
+    # ether_type = 0x0800  # IPv4
 
     # Create 46–1500 bytes of random payload
     payload_size = random.randint(46, 1500)
@@ -22,9 +22,9 @@ def generate_random_frame():
     udp_layer = UDP(sport=src_port, dport=dst_port)
     ip_layer = IP(src=src_ip, dst=dst_ip)
 
-    # Create Ethernet frame with IP/UDP and payload
-    frame = Ether(src=src_mac, dst=dst_mac, type=ether_type) / ip_layer / udp_layer / Raw(payload)
-    return frame
+    # Create IP/UDP packet with payload
+    packet = ip_layer / udp_layer / Raw(payload)
+    return packet
 
 # Generate one frame and write to PCAP
 frame = generate_random_frame()

@@ -33,7 +33,8 @@ ifeq ($(MODE), hw)
 		-std=c99 \
 		-Wall \
 		-pedantic \
-		-O0 \
+		-Os \
+		-finline-functions \
 		-g3 \
 		-Wno-unused-but-set-variable \
 		-include stdint.h \

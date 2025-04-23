@@ -26,7 +26,7 @@ uint8_t *ethernetRX(){
     FILE *fptr = fopen("outbytes_raw.txt", "r");
     if (fptr == NULL) {
         printf("Error opening file\n");
-        return;
+        return NULL;
     }
 
     // Seek to end
@@ -39,12 +39,12 @@ uint8_t *ethernetRX(){
     fseek(fptr, 0L, SEEK_SET);
 
     for (int i = 0; i < sz; i++) {
-        if (i % 16 == 0) printf("%04x  ", i);
+        // if (i % 16 == 0) printf("%04x  ", i);
         uint8_t byte;
         fread(&byte, sizeof(uint8_t), 1, fptr);
         rx_buffer[i] = byte;
-        printf("%02x ", byte);
-        if ((i + 1) % 16 == 0 || i + 1 == sz) printf("\n\r");
+        // printf("%02x ", byte);
+        // if ((i + 1) % 16 == 0 || i + 1 == sz) printf("\n\r");
     }
     fclose(fptr);
 
