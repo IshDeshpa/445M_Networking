@@ -3,6 +3,8 @@
 MODE=sw
 
 ifeq ($(MODE), hw)
+	BUILD_DIR = build/hw
+
 	CC = arm-none-eabi-gcc
 	OBJCOPY = arm-none-eabi-objcopy
 
@@ -102,8 +104,12 @@ ifeq ($(MODE), hw)
 		wilc/driver/source/spi_flash.c \
 		src/main.c \
 		lib/std/string_lite/string_lite.c \
-		lib/std/printf/printf.c
+		lib/std/printf/printf.c \
+		src/Networking.c \
+		testingProtocol/stubs.c
 else
+	BUILD_DIR = build/sw
+
 	CC = gcc
 	OBJCOPY = objcopy
 
@@ -129,7 +135,8 @@ else
 	LDFLAGS = 
 
 	INCLUDES = -Ilib/std/string_lite \
-			-Ilib/std/printf
+			-Ilib/std/printf \
+			-Ilib/std/stdio_lite \
 
 	SRC_FILES = testingProtocol/stubs.c \
 			testingProtocol/main.c
@@ -154,11 +161,11 @@ ifeq ($(MODE), hw)
 endif
 
 # Object files
-OBJ_FILES = $(patsubst %.c,build/%.o,$(filter %.c,$(SRC_FILES))) \
-			$(patsubst %.s,build/%.o,$(filter %.s,$(SRC_FILES)))
+OBJ_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(filter %.c,$(SRC_FILES))) \
+			$(patsubst %.s,$(BUILD_DIR)/%.o,$(filter %.s,$(SRC_FILES)))
 
 # Target executable
-TARGET = build/exe
+TARGET = $(BUILD_DIR)/exe
 
 # Default target
 all: $(TARGET).elf $(TARGET).bin
@@ -168,12 +175,12 @@ $(TARGET).elf: $(OBJ_FILES)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^ $(LDFLAGS)
 
 # Compile C source files
-build/%.o: %.c | build
+$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 # Compile assembly source files
-build/%.o: %.s | build
+$(BUILD_DIR)/%.o: %.s | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
@@ -204,8 +211,8 @@ dump: all
 -include $(OBJ_FILES:.o=.d)
 
 # Create build directory
-build:
-	mkdir -p build
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
 help:
 	@echo "Makefile for TM4C123GH6PM project"

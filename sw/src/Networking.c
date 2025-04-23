@@ -3,7 +3,6 @@
 /* ================================================== */
 #include "Networking.h"
 #include <stdint.h>
-#include "../lib/std/stdio_lite/stdio_lite.h"
 
 #include "bsp/include/nm_bsp.h"
 #include "bus_wrapper/include/nm_bus_wrapper.h"

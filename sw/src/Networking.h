@@ -1,6 +1,8 @@
 #ifndef NETWORKING_H 
 #define NETWORKING_H
 
+#include <stdint.h>
+
 typedef enum {
     NW_SCAN,
     NW_GET_SCAN_DATA,
