@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include "UDP.h"
 #include "ip.h"
 #include "Networking_Globs.h"
 #include "stubs.h"
@@ -23,7 +24,7 @@ int main(int argc, char *argv[]){
     LOG("Starting up testing\n\r");
     memcpy(networkBuf, payload, PAYLOAD_SIZE);
     //ethernetTX(payload, PAYLOAD_SIZE);
-    int ret = ip4_tx(PAYLOAD_SIZE, networkBuf, IP_PROTOCOL_UDP, DESTINATION_IP);
+    int ret = udp_tx(PAYLOAD_SIZE, networkBuf, DESTINATION_IP, 4567);
     if(ret == IP_SUCCESS){
         printf("Ip sent succesfully\n");
     }else{
