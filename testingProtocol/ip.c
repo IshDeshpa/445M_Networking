@@ -60,7 +60,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     memmove(payload + HEADER_SIZE_DEFAULT, payload, payloadsize);
 
     // Step 1: Populate fields in little-endian (host order)
-    header->version_ihl = ((IHL_DEFAULT << 4) & 0xF0) | (VERSION_DEFAULT & 0x0F);
+    header->version_ihl = ((VERSION_DEFAULT << 4) & 0xF0) | (IHL_DEFAULT & 0x0F);
     header->DSCP_ECN = ((ECN_DEFAULT << 6) & 0xC0) | (DSCP_DEFAULT & 0x3F);
     header->totalPacketLength = payloadsize + HEADER_SIZE_DEFAULT;
     header->identification = identification++;
@@ -79,7 +79,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, uint8_t protocol, uint32_
     
     //send to mac layer
     ip4_print_header(header);
-    int ret = macTX(payload, header->totalPacketLength);
+    int ret = macTX(payload, packet_ntohs(header->totalPacketLength));
     return ret == MAC_SUCCESS ? IP_SUCCESS : IP_TX_FAIL ; // or whatever your success enum is
 }
 
@@ -102,6 +102,7 @@ errIP_t ip4_rx(uint8_t* payload, uint16_t payloadsize){
     }
 
     SendPktToTransport(header, payload + ((header->version_ihl & 0xF0) >> 4));
+    return IP_SUCCESS;
 }
 
 //expects data to have the trasnport header, not ip header
@@ -204,41 +205,44 @@ uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize) {
 }
 
 void ip4_print_header(ipHeader_t* header) {
-    printf("========== IP HEADER ==========\n");
+    printf("========== IP HEADER (HEX + DECIMAL) ==========\n");
 
     uint8_t version = header->version_ihl & 0x0F;
     uint8_t ihl     = (header->version_ihl & 0xF0) >> 4;
 
-    printf("Version           : %u\n", version);
-    printf("IHL               : %u (%u bytes)\n", ihl, ihl * 4);
+    printf("Version           : 0x%01X (%u)\n", version, version);           
+    printf("IHL               : 0x%01X (%u bytes)\n", ihl, ihl * 4);
 
     uint8_t dscp = (header->DSCP_ECN & 0xFC) >> 2;
     uint8_t ecn  = (header->DSCP_ECN & 0x03);
-    printf("DSCP              : %u\n", dscp);
-    printf("ECN               : %u\n", ecn);
+    printf("DSCP              : 0x%02X (%u)\n", dscp, dscp);
+    printf("ECN               : 0x%01X (%u)\n", ecn, ecn);
 
-    printf("Total Length      : %u\n", header->totalPacketLength);
-    printf("Identification    : 0x%04X\n", header->identification);
+    printf("Total Length      : 0x%04X (%u)\n", header->totalPacketLength, header->totalPacketLength);
+    printf("Identification    : 0x%04X (%u)\n", header->identification, header->identification);
 
     uint16_t frag = header->flags_fragmentOffset;
     uint8_t flags = (frag >> 13) & 0x07;
     uint16_t offset = frag & 0x1FFF;
 
-    printf("Flags             : 0x%X (DF=%u, MF=%u)\n", flags,
+    printf("Flags             : 0x%01X (DF=%u, MF=%u)\n", flags,
            (flags >> 1) & 1, flags & 1);
-    printf("Fragment Offset   : %u\n", offset);
+    printf("Fragment Offset   : 0x%04X (%u)\n", offset, offset);
 
-    printf("TTL               : %u\n", header->TTL);
-    printf("Protocol          : %u\n", header->protocol);
-    printf("Header Checksum   : 0x%04X\n", header->headerChecksum);
+    printf("TTL               : 0x%02X (%u)\n", header->TTL, header->TTL);
+    printf("Protocol          : 0x%02X (%u)\n", header->protocol, header->protocol);
+    printf("Header Checksum   : 0x%04X (%u)\n", header->headerChecksum, header->headerChecksum);
 
     uint8_t* src = (uint8_t*)&header->sourceIP;
     uint8_t* dst = (uint8_t*)&header->destinationIP;
 
-    printf("Source IP         : %u.%u.%u.%u\n", src[0], src[1], src[2], src[3]);
-    printf("Destination IP    : %u.%u.%u.%u\n", dst[0], dst[1], dst[2], dst[3]);
+    printf("Source IP         : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n", 
+           src[0], src[1], src[2], src[3], src[0], src[1], src[2], src[3]);
 
-    printf("================================\n");
+    printf("Destination IP    : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n", 
+           dst[0], dst[1], dst[2], dst[3], dst[0], dst[1], dst[2], dst[3]);
+
+    printf("===============================================\n");
 }
 
 void headerTolittleEndian(ipHeader_t* header){
@@ -258,23 +262,49 @@ void headerToBigEndian(ipHeader_t* header) {
     header->destinationIP         = packet_htonl(header->destinationIP);
 }
 
-uint16_t packet_ntohs(uint16_t network_short){
-    __builtin_bswap16(network_short);
+uint16_t packet_ntohs(uint16_t network_short) {
+    return ((network_short & 0x00FF) << 8) |
+           ((network_short & 0xFF00) >> 8);
 }
 
-uint32_t packet_ntohl(uint32_t network_long){
-    __builtin_bswap32(network_long);
+uint32_t packet_ntohl(uint32_t network_long) {
+    return ((network_long & 0x000000FF) << 24) |
+           ((network_long & 0x0000FF00) << 8)  |
+           ((network_long & 0x00FF0000) >> 8)  |
+           ((network_long & 0xFF000000) >> 24);
 }
 
-uint16_t packet_htons(uint16_t host_short){
-    __builtin_bswap16(host_short);
-
+uint16_t packet_htons(uint16_t host_short) {
+    return ((host_short & 0x00FF) << 8) |
+           ((host_short & 0xFF00) >> 8);
 }
 
-uint32_t packet_htonl(uint32_t host_long){
-    __builtin_bswap32(host_long);
+uint32_t packet_htonl(uint32_t host_long) {
+    return ((host_long & 0x000000FF) << 24) |
+           ((host_long & 0x0000FF00) << 8)  |
+           ((host_long & 0x00FF0000) >> 8)  |
+           ((host_long & 0xFF000000) >> 24);
 }
 
-void setHostIP(uint8_t ip_address[4]){
-    memcpy(host_ip_address, ip_address, 4);
-}
+
+//uint16_t packet_ntohs(uint16_t network_short){
+//    __builtin_bswap16(network_short);
+//}
+//
+//uint32_t packet_ntohl(uint32_t network_long){
+//    __builtin_bswap32(network_long);
+//}
+//
+//uint16_t packet_htons(uint16_t host_short){
+//    __builtin_bswap16(host_short);
+//
+//}
+//
+//uint32_t packet_htonl(uint32_t host_long){
+//    __builtin_bswap32(host_long);
+//}
+//
+//void setHostIP(uint8_t ip_address[4]){
+//    memcpy(host_ip_address, ip_address, 4);
+//}
+//
