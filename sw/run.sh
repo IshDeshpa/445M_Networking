@@ -19,13 +19,13 @@ case $1 in
     #make dump
     echo -e "Used $NUM_CORES for buidling\n"
     echo -e "Running Sim\n\n"
+    
+    python3 testingProtocol/dummy.py
     build/sw/exe.elf
 
     text2pcap -e 0x0800 ${inputfile} ${outputfile}
-
     tshark -r ${outputfile} -o ip.check_checksum:TRUE -V
     ;;
-
 *)
     make clean
 
