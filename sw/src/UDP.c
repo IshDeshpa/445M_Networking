@@ -2,6 +2,7 @@
 #include "ip.h"
 #include "Networking_Globs.h"
 #include <string.h>
+#include "stubs.h"
 
 #define SOURCE_PORT (0xBEEF)
 #define CHECKSUM    (0x0000)
@@ -47,6 +48,7 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
     udpHeader_t* header = (udpHeader_t*)payload;
 
     headerTolittleEndian(header);
+    udp_print_header(header);
 
     uint16_t *curr_word = (uint16_t*)header;
     uint16_t checksum = 0;
@@ -59,8 +61,8 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
         return UDP_RX_FAIL;
     }
 
-    // Add to fifo here
-        
+    userRXData(payload + HEADER_SIZE, (header->length)-HEADER_SIZE); 
+    return UDP_SUCCESS;
 }
 
 void udp_print_header(const udpHeader_t* header) {

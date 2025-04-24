@@ -15,7 +15,8 @@ def generate_random_frame():
 
     # Create UDP and IP layers
     src_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
-    dst_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
+    #dst_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
+    dst_ip = f"192.168.0.100"
     src_port = random.randint(1024, 65535)
     dst_port = random.randint(1024, 65535)
 
@@ -28,17 +29,17 @@ def generate_random_frame():
 
 # Generate one frame and write to PCAP
 frame = generate_random_frame()
-wrpcap("outbytes.pcap", [frame])
+wrpcap("temp/inbytes.pcap", [frame])
 
 # Write frame details to a text file
 with open("outbytes_raw.txt", "wb") as txt_file:
     txt_file.write(bytes(frame))
 
-print("Wrote random Ethernet frame to 'outbytes.pcap' and 'outbytes.txt'")
+print("Wrote random Ethernet frame to 'temp/inbytes.pcap' and 'temp/inbytes.txt'")
 
 # Write the frame in raw hex format to a third file
 hex_data = bytes(frame).hex()
-with open("outbytes.txt", "w") as readable_file:
+with open("temp/inbytes.txt", "w") as readable_file:
     for i in range(0, len(hex_data), 32):
         line = hex_data[i:i+32]
         readable_file.write(f"{int(i//2):04x} ")

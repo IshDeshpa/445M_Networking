@@ -3,6 +3,7 @@
 /* ================================================== */
 #include "ip.h"
 #include <stdint.h>
+#include <string.h>
 #include "string_lite.h"
 #include "Networking_Globs.h"
 #include "mac.h"
@@ -52,6 +53,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, ui
 
     // Step 1: Populate fields in little-endian (host order)
     header->version_ihl = ((VERSION_DEFAULT << 4) & 0xF0) | (IHL_DEFAULT & 0x0F);
+    //header->version_ihl = ((VERSION_DEFAULT << 4) & 0xF0) | (IHL_DEFAULT & 0x0F);
     header->DSCP_ECN = ((ECN_DEFAULT << 6) & 0xC0) | (DSCP_DEFAULT & 0x3F);
     header->totalPacketLength = payloadsize + HEADER_SIZE_DEFAULT;
     header->identification = identification++;
@@ -63,12 +65,11 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, ui
     header->destinationIP = destinationIP;
 
     // Step 2: Generate checksum in little-endian
-    header->headerChecksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT);
 
     // Step 3: Convert all 16/32-bit fields to big-endian
     ip4_print_header(header);
     headerToBigEndian(header);
-    
+    header->headerChecksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT); 
     //send to mac layer
     int ret = macTX(payload, packet_ntohs(header->totalPacketLength), ETHERTYPE_IPV4);
     return ret == MAC_SUCCESS ? IP_SUCCESS : IP_TX_FAIL ; // or whatever your success enum is
@@ -77,7 +78,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, ui
 errIP_t ip4_rx(uint8_t* payload){
     ipHeader_t* header = (ipHeader_t*)payload;
     headerTolittleEndian(header);
-
+    ip4_print_header(header);
     //checksum;
     uint16_t savedCksm = header->headerChecksum;
     header->headerChecksum = 0;
@@ -253,24 +254,6 @@ static void headerToBigEndian(ipHeader_t* header) {
     header->destinationIP         = packet_htonl(header->destinationIP);
 }
 
-//uint16_t packet_ntohs(uint16_t network_short){
-//    __builtin_bswap16(network_short);
-//}
-//
-//uint32_t packet_ntohl(uint32_t network_long){
-//    __builtin_bswap32(network_long);
-//}
-//
-//uint16_t packet_htons(uint16_t host_short){
-//    __builtin_bswap16(host_short);
-//
-//}
-//
-//uint32_t packet_htonl(uint32_t host_long){
-//    __builtin_bswap32(host_long);
-//}
-//
-//void setHostIP(uint8_t ip_address[4]){
-//    memcpy(host_ip_address, ip_address, 4);
-//}
-//
+void setHostIP(uint8_t ip_address[4]){
+    memcpy(host_ip_address, host_ip_address, 4);
+}

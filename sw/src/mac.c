@@ -47,6 +47,7 @@ errMAC_t macRX(uint8_t* payload, uint16_t size){
 
     macHeader_t* macheader = (macHeader_t*)payload;
     headerTolittleEndian(macheader);
+    mac_print_header(macheader);
     if(macAddrComp(macheader->dest_mac, host_mac_address)){
         LOG("Dropped ethenet pkt bc destionation mac didnt match ours");
     }

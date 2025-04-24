@@ -24,6 +24,7 @@ uint8_t sleepingThreadCount;
 TCB_t TCB_List[NUMTHREADS];
 
 uint32_t Stacks[NUMTHREADS][STACKSIZE];
+PCB_t PCBPool[NUMPROCESSES];
 extern TCB_t* RunPt;
 extern TCB_t* nextPtCS;
 /* ================================================== */
