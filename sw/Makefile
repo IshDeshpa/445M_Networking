@@ -33,8 +33,8 @@ ifeq ($(MODE), hw)
 		-std=c99 \
 		-Wall \
 		-pedantic \
-		-Os \
-		-finline-functions \
+		-Oz \
+		-O3 \
 		-g3 \
 		-Wno-unused-but-set-variable \
 		-include stdint.h \
@@ -105,7 +105,7 @@ ifeq ($(MODE), hw)
 		wilc/driver/source/spi_flash.c \
 		src/main.c \
 		lib/std/string_lite/string_lite.c \
-		lib/std/printf/printf.c \
+		
 		src/Networking.c \
 		testingProtocol/stubs.c
 else
