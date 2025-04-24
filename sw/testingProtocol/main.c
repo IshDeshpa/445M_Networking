@@ -9,6 +9,7 @@
 
 #define PAYLOAD_SIZE 33
 #define DESTINATION_IP 0xC0A80001 //192.0.1.168
+uint8_t testhostmac[6] = { 0x02, 0xAB, 0xCD, 0x34, 0x56, 0x78 };
 
 uint8_t payload[PAYLOAD_SIZE] = {
     0x3A, 0xB7, 0x1F, 0x92, 0x6C, 0xD0, 0x8E, 0x15,
@@ -22,20 +23,23 @@ uint8_t payload[PAYLOAD_SIZE] = {
 uint8_t networkBuf[MTU+50];
 
 int main(int argc, char *argv[]){
-    LOG("Starting up testing\n\r");
-    // memcpy(networkBuf, payload, PAYLOAD_SIZE);
-    // //ethernetTX(payload, PAYLOAD_SIZE);
-    // int ret = udp_tx(PAYLOAD_SIZE, networkBuf, DESTINATION_IP, 0x4567);
-    // if(ret == IP_SUCCESS){
-    //     printf("Ip sent succesfully\n");
-    // }else{
-    //     printf("Ip sent not sent\n"); 
-    // }
-    // printf("\n");
 
-    LOG("Testing RX\n\r");
-    uint8_t *rx = ethernetRX();
-    macRX(rx, 1000);
+    LOG("Starting up testing\n\r");
+
+    setHostMac(testhostmac);
+    memcpy(networkBuf, payload, PAYLOAD_SIZE);
+    //ethernetTX(payload, PAYLOAD_SIZE);
+    int ret = udp_tx(PAYLOAD_SIZE, networkBuf, DESTINATION_IP, 0x4567);
+    if(ret == IP_SUCCESS){
+        printf("message sent succesfully\n");
+    }else{
+        printf("message sent not sent\n"); 
+    }
+    printf("\n");
+
+    //LOG("Testing RX\n\r");
+    //uint8_t *rx = ethernetRX();
+    //macRX(rx, 1000);
 
     return 0;
 }

@@ -36,9 +36,9 @@ int udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16
     //ASSERT(header->length >= sizeof(udpHeader_t));
     header->checksum = CHECKSUM;
 
+    udp_print_header(header);
     headerToBigEndian(header);
     
-    udp_print_header(header);
     ip4_tx(payloadsize + sizeof(udpHeader_t), payload, IP_PROTOCOL_UDP, destinationIP);
     return UDP_SUCCESS;
 }

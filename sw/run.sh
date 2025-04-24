@@ -3,8 +3,9 @@
 builddir="build/"
 NUM_CORES=$(nproc) # On Linux
 
-inputfile=outbytes.txt
-outputfile=outbytes.pcap
+tshark_testfile=outbytes.txt
+tshark_outputfile=outbytes.pcap
+log_file=log.txt
 
 case $1 in
 -t)
@@ -19,12 +20,13 @@ case $1 in
     #make dump
     echo -e "Used $NUM_CORES for buidling\n"
     echo -e "Running Sim\n\n"
-    
-    python3 testingProtocol/dummy.py
+
+    #python3 testingProtocol/dummy.py
     build/sw/exe.elf
 
-    text2pcap -e 0x0800 ${inputfile} ${outputfile}
-    tshark -r ${outputfile} -o ip.check_checksum:TRUE -V
+    #text2pcap -e 0x0800 ${inputfile} ${outputfile}
+    text2pcap ${tshark_testfile} ${tshark_outputfile}
+    tshark -r ${tshark_outputfile} -o ip.check_checksum:TRUE -V
     ;;
 *)
     make clean

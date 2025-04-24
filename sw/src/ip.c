@@ -66,10 +66,10 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, ui
     header->headerChecksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT);
 
     // Step 3: Convert all 16/32-bit fields to big-endian
+    ip4_print_header(header);
     headerToBigEndian(header);
     
     //send to mac layer
-    ip4_print_header(header);
     int ret = macTX(payload, packet_ntohs(header->totalPacketLength), ETHERTYPE_IPV4);
     return ret == MAC_SUCCESS ? IP_SUCCESS : IP_TX_FAIL ; // or whatever your success enum is
 }
@@ -198,8 +198,8 @@ uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize) {
 void ip4_print_header(ipHeader_t* header) {
     printf("========== IP HEADER (HEX + DECIMAL) ==========\n");
 
-    uint8_t version = header->version_ihl & 0x0F;
-    uint8_t ihl     = (header->version_ihl & 0xF0) >> 4;
+    uint8_t ihl = header->version_ihl & 0x0F;
+    uint8_t version = (header->version_ihl & 0xF0) >> 4;
 
     printf("Version           : 0x%01X (%u)\n", version, version);           
     printf("IHL               : 0x%01X (%u bytes)\n", ihl, ihl * 4);

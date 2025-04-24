@@ -1,0 +1,79 @@
+Frame 1: 61 bytes on wire (488 bits), 61 bytes captured (488 bits) on interface Fake IF, text2pcap, id 0
+    Section number: 1
+    Interface id: 0 (Fake IF, text2pcap)
+        Interface name: Fake IF, text2pcap
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Apr 23, 2025 19:30:20.000001000 CDT
+    UTC Arrival Time: Apr 24, 2025 00:30:20.000001000 UTC
+    Epoch Arrival Time: 1745454620.000001000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 0.000000000 seconds]
+    [Time delta from previous displayed frame: 0.000000000 seconds]
+    [Time since reference or first frame: 0.000000000 seconds]
+    Frame Number: 1
+    Frame Length: 61 bytes (488 bits)
+    Capture Length: 61 bytes (488 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:udp:data]
+Ethernet II, Src: 78:56:34:cd:ab:02 (78:56:34:cd:ab:02), Dst: 55:44:33:22:11:00 (55:44:33:22:11:00)
+    Destination: 55:44:33:22:11:00 (55:44:33:22:11:00)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...1 .... .... .... .... = IG bit: Group address (multicast/broadcast)
+    Source: 78:56:34:cd:ab:02 (78:56:34:cd:ab:02)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 0]
+Internet Protocol Version 4, Src: 0.0.0.0, Dst: 192.168.0.1
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 61
+        [Expert Info (Error/Protocol): IPv4 total length exceeds packet length (47 bytes)]
+            [IPv4 total length exceeds packet length (47 bytes)]
+            [Severity level: Error]
+            [Group: Protocol]
+    Identification: 0x1234 (4660)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: UDP (17)
+    Header Checksum: 0x5fdb incorrect, should be 0x67d3(may be caused by "IP checksum offload"?)
+        [Expert Info (Error/Checksum): Bad checksum [should be 0x67d3]]
+            [Bad checksum [should be 0x67d3]]
+            [Severity level: Error]
+            [Group: Checksum]
+    [Header checksum status: Bad]
+    [Calculated Checksum: 0x67d3]
+    Source Address: 0.0.0.0
+    Destination Address: 192.168.0.1
+    [Stream index: 0]
+User Datagram Protocol, Src Port: 48879, Dst Port: 17767
+    Source Port: 48879
+    Destination Port: 17767
+    Length: 41 (bogus, payload length 27)
+        [Expert Info (Error/Malformed): Bad length value 41 > IP payload length]
+            [Bad length value 41 > IP payload length]
+            [Severity level: Error]
+            [Group: Malformed]
+    Checksum: 0x0000 [zero-value ignored]
+        [Checksum Status: Not present]
+    [Stream index: 0]
+    [Stream Packet Number: 1]
+    [Timestamps]
+        [Time since first frame: 0.000000000 seconds]
+        [Time since previous frame: 0.000000000 seconds]
+    UDP payload (19 bytes)
+Data (19 bytes)
+
+0000  3a b7 1f 92 6c d0 8e 15 f4 2d 7a e1 9b 43 c6 5e   :...l....-z..C.^
+0010  01 ad 7f                                          ...
+    Data: 3ab71f926cd08e15f42d7ae19b43c65e01ad7f
+    [Length: 19]
+

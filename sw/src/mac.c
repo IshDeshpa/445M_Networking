@@ -32,6 +32,7 @@ uint8_t* LookUpMac(uint8_t ip);
 
 static void headerToBigEndian(macHeader_t* header);
 static void headerTolittleEndian(macHeader_t* header);
+void mac_print_header(const macHeader_t* header);
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
@@ -76,6 +77,7 @@ errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype
             uint8_t* destinationMAC = LookUpMac(packet_ntohl(ipheader->destinationIP));
             memcpy(macheader->dest_mac, destinationMAC, MAC_ADDR_SIZE);
             memcpy(macheader->src_mac, host_mac_address, MAC_ADDR_SIZE);
+            mac_print_header(macheader);
             headerToBigEndian(macheader);
             ethernetTX(payload, payloadsize + HEADER_SIZE);
             break;
@@ -92,8 +94,6 @@ errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype
             printf("Unsupported EtherType Attempted to be transmitted: 0x%04X\n", ethertype_protocal);
             break;
     }
-
-    ethernetTX(payload, payloadsize);
     return MAC_SUCCESS;
 }
 
@@ -133,4 +133,34 @@ static void headerToBigEndian(macHeader_t* header) {
     hton_macaddr(header->src_mac);    
 }
 
+void mac_print_header(const macHeader_t* header) {
+    printf("========== MAC HEADER ==========\n");
 
+    printf("Destination MAC     : %02X:%02X:%02X:%02X:%02X:%02X\n",
+           header->dest_mac[0], header->dest_mac[1], header->dest_mac[2],
+           header->dest_mac[3], header->dest_mac[4], header->dest_mac[5]);
+
+    printf("Source MAC          : %02X:%02X:%02X:%02X:%02X:%02X\n",
+           header->src_mac[0], header->src_mac[1], header->src_mac[2],
+           header->src_mac[3], header->src_mac[4], header->src_mac[5]);
+
+    printf("EtherType           : 0x%04X", header->ethertype);
+
+    // Optional: print a description if known
+    switch (header->ethertype) {
+        case 0x0800:
+            printf(" (IPv4)\n");
+            break;
+        case 0x0806:
+            printf(" (ARP)\n");
+            break;
+        case 0x86DD:
+            printf(" (IPv6)\n");
+            break;
+        default:
+            printf(" (Unknown)\n");
+            break;
+    }
+
+    printf("================================\n");
+}
