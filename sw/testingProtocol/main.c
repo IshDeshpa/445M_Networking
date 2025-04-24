@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include <stdio.h>
+#include "printf.h"
 #include <string.h>
 #include "UDP.h"
 #include "ip.h"

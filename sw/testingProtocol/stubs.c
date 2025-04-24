@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include <stdio.h>
+#include "printf.h"
 #include "stubs.h"
 #include "Networking_Globs.h"
 

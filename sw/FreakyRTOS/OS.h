@@ -465,4 +465,8 @@ extern void EndCritical(long sr);    // restore I bit to previous value
 // Outputs: none
 extern void WaitForInterrupt(void);  
 
+void _putchar(char character);
+
+void *npfputc(char c, void *ctx);
+
 #endif

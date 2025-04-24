@@ -7,7 +7,7 @@
 
 #include "unity_internals.h"
 #include "unity.h"
-#include "../lib/std/stdio_lite/stdio_lite.h"
+#include "printf.h"
 #ifndef UNITY_PROGMEM
 #define UNITY_PROGMEM
 #endif

@@ -11,12 +11,12 @@
 #define NANOPRINTF_IMPLEMENTATION
 #include "nanoprintf.h"
 
-int _snprintf(char *buffer, size_t bufsz, char const *fmt, ...) {
-    va_list val;
-    va_start(val, fmt);
-    int const rv = npf_vsnprintf(buffer, bufsz, fmt, val);
-    va_end(val);
-    return rv;
-}
+// int _snprintf(char *buffer, size_t bufsz, char const *fmt, ...) {
+//     va_list val;
+//     va_start(val, fmt);
+//     int const rv = npf_vsnprintf(buffer, bufsz, fmt, val);
+//     va_end(val);
+//     return rv;
+// }
 
-void _snprintf(char *buffer, size_t bufsz, char const *fmt, ...)
+// void _snprintf(char *buffer, size_t bufsz, char const *fmt, ...)

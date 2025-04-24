@@ -6,7 +6,7 @@
 #include "stubs.h"
 #include "Networking_Globs.h"
 #include <stdint.h>
-#include <stdio.h>
+#include "printf.h"
 #include <string.h>
 #include "string_lite.h"
 

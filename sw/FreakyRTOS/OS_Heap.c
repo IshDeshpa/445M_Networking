@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include "tlsf.h"
 
-#include "../lib/std/stdio_lite/stdio_lite.h"
+#include "printf.h"
 /* ================================================== */
 /*                 CONSTANTS/MACROS                   */
 /* ================================================== */

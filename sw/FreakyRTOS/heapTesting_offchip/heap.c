@@ -6,7 +6,7 @@
 #include <stddef.h> // For size_t
 #include <stdint.h>
 
-#include "../lib/std/stdio_lite/stdio_lite.h"
+#include "printf.h"
 
 /* ================================================== */
 /*                 CONSTANTS/MACROS                   */

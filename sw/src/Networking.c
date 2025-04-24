@@ -13,6 +13,8 @@
 
 #include "string_lite.h"
 
+#include "printf.h"
+
 #include "main.h"
 
 /* ================================================== */

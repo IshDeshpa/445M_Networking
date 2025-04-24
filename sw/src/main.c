@@ -15,8 +15,7 @@
 #include "driver/include/m2m_wifi.h"
 
 #include "Networking.h"
-//#include "../lib/std/stdio_lite/stdio_lite.h"
-#include "../lib/std/printf/printf.h"
+#include "printf.h"
 #include <stdint.h>
 #include "OS.h"
 

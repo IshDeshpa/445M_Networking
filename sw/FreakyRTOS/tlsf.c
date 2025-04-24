@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include "../lib/std/stdio_lite/stdio_lite.h"
+#include "printf.h"
 #include "../lib/std/string_lite/string_lite.h"
 #include "tlsf.h"
 #include <limits.h> 
