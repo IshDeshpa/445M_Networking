@@ -9,7 +9,12 @@ outputfile=outbytes.pcap
 case $1 in
 -t)
     make clean
-    bear -- make flash -j$NUM_CORES MODE=sw -s
+
+    ret=$(bear -- make flash -j$NUM_CORES MODE=sw -s)
+    if [[ $? -ne 0 ]]; then
+        exit
+    fi
+
     mv compile_commands.json build/
     #make dump
     echo -e "Used $NUM_CORES for buidling\n"
@@ -23,7 +28,12 @@ case $1 in
 
 *)
     make clean
-    bear -- make flash -j$NUM_CORES MODE=hw -s
+
+    ret=$(bear -- make flash -j$NUM_CORES MODE=hw -s)
+    if [[ $? -ne 0 ]]; then
+        exit
+    fi
+
     mv compile_commands.json build/
     #make dump
     echo -e "Used $NUM_CORES for buidling\n"
