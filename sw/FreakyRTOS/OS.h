@@ -30,7 +30,7 @@
 
 #define NUMTHREADS 5// maximum number of threads
 #define NUMPROCESSES 5
-#define STACKSIZE 512 // number of 32-bit words in stack
+#define STACKSIZE 1024 // number of 32-bit words in stack
 
 #define PRIORITY_RANGE 8
 
@@ -464,5 +464,9 @@ extern void EndCritical(long sr);    // restore I bit to previous value
 // Inputs: none
 // Outputs: none
 extern void WaitForInterrupt(void);  
+
+void _putchar(char character);
+
+void *npfputc(char c, void *ctx);
 
 #endif

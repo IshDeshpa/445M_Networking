@@ -33,8 +33,7 @@ ifeq ($(MODE), hw)
 		-std=c99 \
 		-Wall \
 		-pedantic \
-		-Os \
-		-finline-functions \
+		-O0 \
 		-g3 \
 		-Wno-unused-but-set-variable \
 		-include stdint.h \
@@ -49,7 +48,7 @@ ifeq ($(MODE), hw)
 		-Wl,--gc-sections \
 		-T gcc-files/tm4c123gh6pm.ld.exception
 
-	INCLUDES = 
+	INCLUDES = -Ilib/std/nanoprintf
 
 	# Source files
 	SRC_FILES = \
@@ -105,9 +104,8 @@ ifeq ($(MODE), hw)
 		wilc/driver/source/spi_flash.c \
 		src/main.c \
 		lib/std/string_lite/string_lite.c \
-		lib/std/printf/printf.c \
-		src/Networking.c \
-		testingProtocol/stubs.c
+		lib/std/nanoprintf/wrapper_nanoprintf.c \
+		src/Networking.c
 else
 	BUILD_DIR = build/sw
 
@@ -135,8 +133,8 @@ else
 	LDFLAGS = 
 
 	INCLUDES = -Ilib/std/string_lite \
-			-Ilib/std/printf \
 			-Ilib/std/stdio_lite \
+			-Ilib/std/nanoprintf \
 
 	SRC_FILES = testingProtocol/stubs.c \
 			testingProtocol/main.c
@@ -158,6 +156,7 @@ ifeq ($(MODE), hw)
 	INCLUDES += -Iwilc/driver/include
 	INCLUDES += -Iwilc/wilc1000_module_config/tm4c
 	INCLUDES += -Iwilc
+	INCLUDES += -ItestingProtocol
 endif
 
 # Object files

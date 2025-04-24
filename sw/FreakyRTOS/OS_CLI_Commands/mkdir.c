@@ -3,7 +3,7 @@
 /* ================================================== */
 #include "CLI_Commands.h"
 #include "../OS_FatFS/ff.h"
-#include "../../lib/std/stdio_lite/stdio_lite.h"
+#include "printf.h"
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */

@@ -17,7 +17,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-//#include "../lib/std/stdio_lite/stdio_lite.h"
+//#include "printf.h"
 #include "printf.h"
 #include "../inc/tm4c123gh6pm.h"
 #include "../inc/CortexM.h"
@@ -630,6 +630,11 @@ int OS_RedirectToST7735(void){
 
 void _putchar(char character){
     SerialOutPtr(character);
+}
+
+void *npfputc(char c, void *ctx){
+    _putchar(c);
+    return 0;
 }
 
 void StartupDelay(void){

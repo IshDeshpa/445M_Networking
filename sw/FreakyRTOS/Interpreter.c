@@ -11,7 +11,7 @@
 
 #include "../inc/tm4c123gh6pm.h"
 #include "../lib/std/string_lite/string_lite.h"
-#include "../lib/std/stdio_lite/stdio_lite.h"
+#include "printf.h"
 
 #include "OS.h"
 #include "ST7735.h"

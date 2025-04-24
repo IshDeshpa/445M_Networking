@@ -2,7 +2,7 @@
 #define NETWORKING_GLOBS_H
 
 #include <stdint.h>
-#include <stdio.h>
+#include "printf.h"
 
 #define MTU (1500)
 

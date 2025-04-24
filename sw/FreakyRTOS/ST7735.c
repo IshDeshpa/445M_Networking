@@ -112,8 +112,7 @@
 // GND    (pin 1)  connected to ground
 
 #include <stdint.h>
-//#include "../lib/std/printf/printf.h"
-#include "../lib/std/stdio_lite/stdio_lite.h"
+#include "printf.h"
 #include "../inc/tm4c123gh6pm.h"
 #include "../FreakyRTOS/ST7735.h"
 #include "../FreakyRTOS/OS.h"
@@ -1422,7 +1421,7 @@ void ST7735_Message(uint32_t  d, uint32_t  l, char *pt, int32_t value){
   }
   
   char outBuf[21];
-  snprintf_lite(outBuf, sizeof(outBuf), "%s%d", pt, value);
+  snprintf(outBuf, sizeof(outBuf), "%s%d", pt, value);
   //sprintf(outBuf, "%s%d", pt, value);
     //sprintf(outBuf, "Bye\n");
   //UART_OutString(outBuf);
