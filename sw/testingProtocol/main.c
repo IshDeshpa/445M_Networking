@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
 
     LOG("Testing RX\n\r");
     uint8_t *rx = ethernetRX();
-    macRX(rx);
+    macRX(rx, 1000);
 
     return 0;
 }

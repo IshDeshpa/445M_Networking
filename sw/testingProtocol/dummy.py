@@ -10,7 +10,7 @@ def generate_random_frame():
     # ether_type = 0x0800  # IPv4
 
     # Create 46–1500 bytes of random payload
-    payload_size = random.randint(46, 1500)
+    payload_size = 1000
     payload = bytes(random.getrandbits(8) for _ in range(payload_size))
 
     # Create UDP and IP layers
