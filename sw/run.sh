@@ -27,7 +27,7 @@ case $1 in
     echo "========================================"
     build/sw/exe.elf
 
-    mkdir temp/
+    mkdir -t temp/
 
     echo "========================================"
     echo "📦 2. Converting raw text hex dump to PCAP using text2pcap"
