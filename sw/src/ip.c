@@ -2,6 +2,7 @@
 /*                      INCLUDES                      */
 /* ================================================== */
 #include "ip.h"
+#include "internet_checksum.h"
 #include <stdint.h>
 #include <string.h>
 #include "string_lite.h"
@@ -35,8 +36,6 @@ uint16_t identification = 0x1234;
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
 
-uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize);
-
 static void headerToBigEndian(ipHeader_t* header);
 static void headerTolittleEndian(ipHeader_t* header);
 
@@ -65,12 +64,12 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, ui
     header->sourceIP = *(uint32_t*)host_ip_address;
     header->destinationIP = destinationIP;
 
-    // Step 2: Generate checksum in little-endian
-
-    // Step 3: Convert all 16/32-bit fields to big-endian
+    // Step 2: Convert all 16/32-bit fields to big-endian
     ip4_print_header(header);
     headerToBigEndian(header);
-    header->headerChecksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT); 
+    
+    // Step 3: Generate checksum in little-endian
+    header->headerChecksum = generate_checksum(header, HEADER_SIZE_DEFAULT); 
     //send to mac layer
     int ret = macTX(payload, packet_ntohs(header->totalPacketLength), ETHERTYPE_IPV4);
     return ret == MAC_SUCCESS ? IP_SUCCESS : IP_TX_FAIL ; // or whatever your success enum is
@@ -82,7 +81,7 @@ errIP_t ip4_rx(uint8_t* payload){
     //checksum;
     uint16_t savedCksm = header->headerChecksum;
     header->headerChecksum = 0;
-    uint16_t computed_checksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT);
+    uint16_t computed_checksum = generate_checksum(header, HEADER_SIZE_DEFAULT);
 
     // loop through and print the bytes of both header and data
     printf("\n");
@@ -187,18 +186,6 @@ int dropPkt(ipHeader_t* header){
         return 1;
     }
     return 0;
-}
-
-uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize) {
-    uint32_t sum = 0;
-    uint16_t* data = (uint16_t*)header;
-    for (uint16_t i = 0; i < headersize/2; i++) {
-        sum += data[i]; // Convert each 16-bit word from network to host byte order
-        if (sum > 0xFFFF) {
-            sum = (sum & 0xFFFF) + 1; // Wrap around carry
-        }
-    }
-    return ~((uint16_t)sum); // Final ones' complement
 }
 
 void ip4_print_header(ipHeader_t* header) {
