@@ -52,7 +52,8 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, ui
     memmove(payload + HEADER_SIZE_DEFAULT, payload, payloadsize);
 
     // Step 1: Populate fields in little-endian (host order)
-    header->version_ihl = ((VERSION_DEFAULT << 4) & 0xF0) | (IHL_DEFAULT & 0x0F);
+    header->version = VERSION_DEFAULT;
+    header->ihl = IHL_DEFAULT;
     //header->version_ihl = ((VERSION_DEFAULT << 4) & 0xF0) | (IHL_DEFAULT & 0x0F);
     header->DSCP_ECN = ((ECN_DEFAULT << 6) & 0xC0) | (DSCP_DEFAULT & 0x3F);
     header->totalPacketLength = payloadsize + HEADER_SIZE_DEFAULT;
@@ -77,23 +78,29 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, ui
 
 errIP_t ip4_rx(uint8_t* payload){
     ipHeader_t* header = (ipHeader_t*)payload;
-    headerTolittleEndian(header);
     ip4_print_header(header);
     //checksum;
     uint16_t savedCksm = header->headerChecksum;
     header->headerChecksum = 0;
     uint16_t computed_checksum = generate_ip4_checksum(header, HEADER_SIZE_DEFAULT);
+
+    // loop through and print the bytes of both header and data
+    printf("\n");
+
     if(savedCksm != computed_checksum){
-        LOG("Packet Dropped: Checksum Invalid");
+        LOG("Packet Dropped: Checksum Invalid: %x, %x", savedCksm, computed_checksum);
         return IP_RX_FAIL;
     }
+    
+    // Convert to little endian after checksum
+    headerTolittleEndian(header);
 
     if(dropPkt(header)){
         LOG("Packet Dropped");
         return IP_RX_PCKT_DROPPED;
     }
 
-    SendPktToTransport(header, payload + ((header->version_ihl & 0xF0) >> 4));
+    SendPktToTransport(header, payload + (header->ihl >> 4));
     return IP_SUCCESS;
 }
 
@@ -154,15 +161,13 @@ errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data) {
 }
 
 int dropPkt(ipHeader_t* header){
-    uint8_t version = header->version_ihl & 0x0F;
-    if (version != VERSION_DEFAULT) {
-        LOG("Dropped packet: Invalid IP version (%u)", version);
+    if (header->version != VERSION_DEFAULT) {
+        LOG("Dropped packet: Invalid IP version (%u)", header->version);
         return 1;
     }
 
-    uint8_t ihl = (header->version_ihl & 0xF0) >> 4;
-    if (ihl != (HEADER_SIZE_DEFAULT / 4)) {
-        LOG("Dropped packet: Invalid IHL (%u)", ihl);
+    if (header->ihl != (HEADER_SIZE_DEFAULT / 4)) {
+        LOG("Dropped packet: Invalid IHL (%u)", header->ihl);
         return 1;
     }
 
@@ -178,7 +183,7 @@ int dropPkt(ipHeader_t* header){
     }
 
     if (header->destinationIP != *(uint32_t *)host_ip_address) {
-        LOG("Dropped packet: IP %08X not meant for us", header->destinationIP);
+        LOG("Dropped packet: IP 0x%08X not meant for us (0x%08X)", header->destinationIP, host_ip_address);
         return 1;
     }
     return 0;
@@ -187,7 +192,7 @@ int dropPkt(ipHeader_t* header){
 uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize) {
     uint32_t sum = 0;
     uint16_t* data = (uint16_t*)header;
-    for (uint16_t i = 0; i < headersize / 2; i++) {
+    for (uint16_t i = 0; i < headersize/2; i++) {
         sum += data[i]; // Convert each 16-bit word from network to host byte order
         if (sum > 0xFFFF) {
             sum = (sum & 0xFFFF) + 1; // Wrap around carry
@@ -199,11 +204,8 @@ uint16_t generate_ip4_checksum(ipHeader_t* header, uint16_t headersize) {
 void ip4_print_header(ipHeader_t* header) {
     printf("========== IP HEADER (HEX + DECIMAL) ==========\n");
 
-    uint8_t ihl = header->version_ihl & 0x0F;
-    uint8_t version = (header->version_ihl & 0xF0) >> 4;
-
-    printf("Version           : 0x%01X (%u)\n", version, version);           
-    printf("IHL               : 0x%01X (%u bytes)\n", ihl, ihl * 4);
+    printf("Version           : 0x%01X (%u)\n", header->version, header->version);           
+    printf("IHL               : 0x%01X (%u bytes)\n", header->ihl, header->ihl * 4);
 
     uint8_t dscp = (header->DSCP_ECN & 0xFC) >> 2;
     uint8_t ecn  = (header->DSCP_ECN & 0x03);
@@ -212,10 +214,11 @@ void ip4_print_header(ipHeader_t* header) {
 
     printf("Total Length      : 0x%04X (%u)\n", header->totalPacketLength, header->totalPacketLength);
     printf("Identification    : 0x%04X (%u)\n", header->identification, header->identification);
-
+  
+    // This shifting takes place while flags_fragmentOffset is in big endian
     uint16_t frag = header->flags_fragmentOffset;
-    uint8_t flags = (frag >> 13) & 0x07;
-    uint16_t offset = frag & 0x1FFF;
+    uint8_t flags = (frag & 0xE0) >> 5;
+    uint16_t offset = ((frag & 0xFF00) >> 8) | ((frag & 0x001F) << 8);
 
     printf("Flags             : 0x%01X (DF=%u, MF=%u)\n", flags,
            (flags >> 1) & 1, flags & 1);
@@ -255,5 +258,5 @@ static void headerToBigEndian(ipHeader_t* header) {
 }
 
 void setHostIP(uint8_t ip_address[4]){
-    memcpy(host_ip_address, host_ip_address, 4);
+    memcpy(host_ip_address, ip_address, 4);
 }

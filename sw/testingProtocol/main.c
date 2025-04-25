@@ -31,12 +31,9 @@ uint8_t message[] = "hi, shitter";
 //bc MTU is ip layer, so adding some for mac header
 uint8_t networkBuf[MTU+50];
 
-int main(int argc, char *argv[]){
-
+inline static void testTX(void){
     MSG("Starting up testing");
 
-    setHostMac(testhostmac);
-    setHostIP((uint8_t*)&HOST_IP);
     memcpy(networkBuf, message, MESSAGE_SIZE);
     //ethernetTX(payload, PAYLOAD_SIZE);
     int ret = udp_tx(MESSAGE_SIZE, networkBuf, DESTINATION_IP, 0x4567);
@@ -46,12 +43,18 @@ int main(int argc, char *argv[]){
         MSG("message sent not sent"); 
     }
 
-    MSG("oopsie poopsie packet recived");
-    ethernetRX(); 
+    MSG("oopsie poopsie packet recived");  
+}
 
-    //LOG("Testing RX\n\r");
-    //uint8_t *rx = ethernetRX();
-    //macRX(rx, 1000);
+inline static void testRX(void){
+    ethernetRX();
+}
+
+int main(int argc, char *argv[]){
+    setHostMac(testhostmac);
+    setHostIP((uint8_t*)&HOST_IP);
+
+    testRX();    
 
     return 0;
 }

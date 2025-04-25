@@ -29,8 +29,9 @@ typedef enum {
     IP_RX_UNSUPPORTED_PROTOCOL,
 }errIP_t;
 
-typedef struct __attribute__((packed)) {
-    uint8_t version_ihl;             // version:bits [0:3], ihl: [4:7]
+typedef struct __attribute__((packed)) { 
+    uint8_t ihl : 4;                // Internet Header Length (IHL) [4:7]
+    uint8_t version : 4;             // version:bits [0:3]
     uint8_t DSCP_ECN;                // Differentiated Services Code Point [0:5], ECN [6:7]
     uint16_t totalPacketLength;      // Total Length
 

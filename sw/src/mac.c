@@ -38,7 +38,7 @@ void mac_print_header(const macHeader_t* header);
 /* ================================================== */
 int macAddrComp(uint8_t* mac1, uint8_t* mac2){
     for(int i = 0; i < 6; i++){
-        if(mac1[i] != mac2[i]) return 1;
+      if(mac1[i] != mac2[i]) return 1;
     }
     return 0;
 }
@@ -57,9 +57,11 @@ errMAC_t macRX(uint8_t* payload, uint16_t size){
             if(ret){
                 LOG("Failed with ip rx");
             }
+            break;
         case ETHERTYPE_ARP:
             LOG("Got a ARP pakcet, droping it");
             //TODO: send up to arp headnler
+            break;
         default:
             printf("Unsupported EtherType Received: 0x%04X\n", macheader->ethertype);
     }
@@ -124,8 +126,8 @@ static void hton_macaddr(uint8_t* addr) {
 
 static void headerTolittleEndian(macHeader_t* header){
     header->ethertype = packet_ntohs(header->ethertype);
-    ntoh_macaddr(header->dest_mac);    
-    ntoh_macaddr(header->src_mac);    
+    //ntoh_macaddr(header->dest_mac);    
+    //ntoh_macaddr(header->src_mac);    
 }
 
 static void headerToBigEndian(macHeader_t* header) {

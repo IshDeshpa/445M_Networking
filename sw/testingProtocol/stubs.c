@@ -25,7 +25,7 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 uint8_t rx_buffer[MTU+50];
 void ethernetRX (void){
     //call mac api layer
-    FILE *fptr = fopen("outbytes_raw.txt", "r");
+    FILE *fptr = fopen("temp/inbytes_raw.txt", "r");
     if (fptr == NULL) {
         printf("Error opening file\n");
     }
@@ -40,12 +40,9 @@ void ethernetRX (void){
     fseek(fptr, 0L, SEEK_SET);
 
     for (int i = 0; i < sz; i++) {
-        // if (i % 16 == 0) printf("%04x  ", i);
         uint8_t byte;
         fread(&byte, sizeof(uint8_t), 1, fptr);
         rx_buffer[i] = byte;
-        // printf("%02x ", byte);
-        // if ((i + 1) % 16 == 0 || i + 1 == sz) printf("\n\r");
     }
     fclose(fptr);
     macRX(rx_buffer, 0);

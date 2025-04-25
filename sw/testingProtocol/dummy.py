@@ -5,9 +5,9 @@ def random_mac():
     return ":".join(f"{random.randint(0, 255):02x}" for _ in range(6))
 
 def generate_random_frame():
-    # src_mac = random_mac()
-    # dst_mac = random_mac()
-    # ether_type = 0x0800  # IPv4
+    src_mac = random_mac()
+    dst_mac = "02:AB:CD:34:56:78"
+    ether_type = 0x0800  # IPv4
 
     # Create 46–1500 bytes of random payload
     payload_size = 1000
@@ -21,10 +21,10 @@ def generate_random_frame():
     dst_port = random.randint(1024, 65535)
 
     udp_layer = UDP(sport=src_port, dport=dst_port)
-    ip_layer = IP(src=src_ip, dst=dst_ip)
+    ip_layer = IP(src=src_ip, dst=dst_ip, flags="DF", frag=0)
 
     # Create IP/UDP packet with payload
-    packet = ip_layer / udp_layer / Raw(payload)
+    packet = Ether(src=src_mac, dst=dst_mac, type=ether_type) / ip_layer / udp_layer / Raw(payload)
     return packet
 
 # Generate one frame and write to PCAP
@@ -32,7 +32,7 @@ frame = generate_random_frame()
 wrpcap("temp/inbytes.pcap", [frame])
 
 # Write frame details to a text file
-with open("outbytes_raw.txt", "wb") as txt_file:
+with open("temp/inbytes_raw.txt", "wb") as txt_file:
     txt_file.write(bytes(frame))
 
 print("Wrote random Ethernet frame to 'temp/inbytes.pcap' and 'temp/inbytes.txt'")
