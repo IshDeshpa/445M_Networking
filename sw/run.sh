@@ -77,12 +77,14 @@ case $1 in
 *)
     make clean
 
-    ret=$(bear -- make flash -j$NUM_CORES MODE=hw -s)
+    ret=$(bear -- make -j$NUM_CORES MODE=hw -s)
     if [[ $? -ne 0 ]]; then
         exit
     fi
 
     mv compile_commands.json build/
+
+    make flash MODE=hw -s
     #make dump
     echo -e "Used $NUM_CORES for buidling\n"
     echo -e "Flashing to Target..."

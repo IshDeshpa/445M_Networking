@@ -2,25 +2,7 @@
 #include "ip.h"
 #include "internet_checksum.h"
 #include "Networking_Globs.h"
-
-typedef enum {
-    ICMP_ECHO_REPLY = 0,
-    ICMP_DEST_UNREACH = 3,
-    ICMP_SOURCE_QUENCH = 4,
-    ICMP_REDIRECT = 5,
-    ICMP_ECHO_REQUEST = 8,
-    ICMP_TIME_EXCEEDED = 11,
-    ICMP_PARAMETER_PROBLEM = 12,
-    ICMP_TIMESTAMP_REQUEST = 13,
-    ICMP_TIMESTAMP_REPLY = 14
-} icmpType_t;
-
-typedef struct __attribute__((packed)) {
-    icmpType_t type;
-    uint8_t code;
-    uint16_t checksum;
-    uint32_t rest;
-} icmpHeader_t;
+#include "string.h"
 
 static inline void headerTolittleEndian(icmpHeader_t* header){
     header->checksum = packet_ntohs(header->checksum);
@@ -41,9 +23,15 @@ static inline void icmp_print_header(const icmpHeader_t* header) {
     printf("===============================================\n");
 }
 
-errICMP_t icmp_tx(uint8_t *payload, uint16_t payloadsize, uint32_t destinationIP){
+errICMP_t icmp_tx(uint8_t *payload, uint16_t payloadsize, uint32_t destinationIP, icmpType_t type, uint8_t code, uint32_t rest){
     icmpHeader_t *header = (icmpHeader_t *)payload;
-    
+   
+    memmove(payload + sizeof(icmpHeader_t), payload, payloadsize);
+
+    header->type = type;
+    header->code = code;
+    header->rest = rest;
+
     // Step 1: Convert header to big-endian
     headerToBigEndian(header);
     

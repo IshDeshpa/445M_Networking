@@ -146,7 +146,7 @@ SRC_FILES += \
 		src/Networking_Globs.c \
 		src/UDP.c \
 		src/internet_checksum.c \
-		src/ICMP.c
+		src/ICMP.c 
 
 # Include paths
 INCLUDES += $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
