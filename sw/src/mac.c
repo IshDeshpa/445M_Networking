@@ -14,12 +14,6 @@
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
 
-typedef struct __attribute__((packed)) {
-    uint8_t dest_mac[6];
-    uint8_t src_mac[6];
-    uint16_t ethertype; 
-} macHeader_t;
-
 #define HEADER_SIZE (14) 
 const uint8_t mac_broadcast_addr[MAC_ADDR_SIZE] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 uint8_t test_MAC_ADDR[MAC_ADDR_SIZE] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
@@ -94,7 +88,7 @@ errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype
             break;
 
         default:
-            printf("Unsupported EtherType Attempted to be transmitted: 0x%04X\n", ethertype_protocal);
+            printf("Unsupported EtherType Attempted to be transmitted: 0x%04X\n", ethertype_protocol);
             break;
     }
     return MAC_SUCCESS;

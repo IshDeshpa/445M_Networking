@@ -36,7 +36,7 @@ inline static void testTX(void){
 
     memcpy(networkBuf, message, MESSAGE_SIZE);
     //ethernetTX(payload, PAYLOAD_SIZE);
-    int ret = udp_tx(MESSAGE_SIZE, networkBuf, DESTINATION_IP, 0x4567);
+    int ret = udp_tx(MESSAGE_SIZE, networkBuf, DESTINATION_IP, 0, 0x4567);
     if(ret == IP_SUCCESS){
         MSG("message sent succesfully");
     }else{
