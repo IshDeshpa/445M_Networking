@@ -68,12 +68,12 @@ errMAC_t macRX(uint8_t* payload, uint16_t size){
     return MAC_SUCCESS;
 }
 
-errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype_protocal){
+errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype_protocol){
     //omve the paylaod
     memmove(payload + HEADER_SIZE, payload, payloadsize);
     macHeader_t* macheader = (macHeader_t*)payload;
     
-    switch (ethertype_protocal) {
+    switch (ethertype_protocol) {
         case ETHERTYPE_IPV4:
             macheader->ethertype = ETHERTYPE_IPV4;
             ipHeader_t* ipheader = (ipHeader_t*)(payload + HEADER_SIZE);
@@ -102,6 +102,10 @@ errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype
 
 void setHostMac(uint8_t mac[6]){
     memcpy(host_mac_address, mac, 6);
+}
+
+uint8_t *getHostMac(){
+    return host_mac_address;
 }
 
 uint8_t* LookUpMac(uint8_t ip){

@@ -30,8 +30,13 @@ typedef enum{
     MAC_RX_FAIL,
     MAC_RX_FAIL_INCORRECT_DEST_MAC,
     MAC_TX_FAIL,
-
 }errMAC_t;
+
+typedef struct __attribute__((packed)) {
+    uint8_t dest_mac[6];
+    uint8_t src_mac[6];
+    uint16_t ethertype; 
+} macHeader_t;
 
 #define MAC_ADDR_SIZE (6)
 /* ================================================== */
@@ -39,7 +44,8 @@ typedef enum{
 /* ================================================== */
 
 errMAC_t macRX(uint8_t* payload, uint16_t size);
-errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype_protocal);
+errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype_protocol);
 void setHostMac(uint8_t mac[6]);
+uint8_t *getHostMac();
 #endif 
 

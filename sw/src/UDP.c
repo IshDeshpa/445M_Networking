@@ -4,17 +4,8 @@
 #include <string.h>
 #include "stubs.h"
 
-#define SOURCE_PORT (0xBEEF)
 #define CHECKSUM    (0x0000)
 #define HEADER_SIZE (8)
-
-typedef struct __attribute__((packed)) {
-    uint16_t sourcePort;        // Source Port
-    uint16_t destinationPort;   // Destination Port
-    uint16_t length;            // Length of UDP header + data
-    uint16_t checksum;          // Checksum
-} udpHeader_t;
-
 
 void udp_print_header(const udpHeader_t* header);
 
@@ -23,7 +14,7 @@ static void headerToBigEndian(udpHeader_t* header);
 
 
 
-errUDP_t udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16_t port){
+errUDP_t udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16_t sourcePort, uint16_t destPort){
     //ASSERT(payload == curr_packet_buffer);
     //ASSERT(payloadsize <= MTU);
 
@@ -31,8 +22,8 @@ errUDP_t udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, u
     memmove(payload + sizeof(udpHeader_t), payload, payloadsize);
 
     udpHeader_t* header = (udpHeader_t*)payload;
-    header->sourcePort = SOURCE_PORT;
-    header->destinationPort = port;
+    header->sourcePort = sourcePort;
+    header->destinationPort = destPort;
     header->length = payloadsize + sizeof(udpHeader_t);
     //ASSERT(header->length >= sizeof(udpHeader_t));
     header->checksum = CHECKSUM;
