@@ -32,5 +32,10 @@ typedef struct __attribute((packed)) {
 /*                 FUNCTION PROTOTYPES                */
 /* ================================================== */
 
+int dhcp_send_discover(void);
+int dhcp_receive_offer(dhcp_packet_t *packet, uint16_t packet_size);
+int dhcp_receive_ack(dhcp_packet_t *packet, uint16_t packet_size);
+int dhcp_send_request(void);
+
 #endif 
 
