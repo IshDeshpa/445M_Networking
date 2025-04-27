@@ -1,13 +1,14 @@
 #!/bin/bash
 
 builddir="build/"
+dumpdir="temp"
 NUM_CORES=$(nproc) # On Linux
 
-tshark_testfile=temp/outbytes.txt
-tshark_outputfile=temp/outbytes.pcap
-log_file=temp/log.txt
+tshark_testfile=outbytes.txt
+tshark_outputfile=outbytes.pcap
+log_file=log.txt
 
-tshark_inputfile=temp/inbytes.pcap
+tshark_inputfile=inbytes.pcap
 case $1 in
 -t)
     make clean
@@ -21,25 +22,25 @@ case $1 in
     #make dump
     echo -e "Used $NUM_CORES for buidling\n"
     echo -e "Running Sim\n\n"
-    
+
     echo "========================================"
     echo "⚙️ 1. Running test executable which sends dummy data"
     echo "========================================"
     build/sw/exe.elf
 
-    mkdir -t temp/
+    mkdir ${dumpdir}/
 
     echo "========================================"
     echo "📦 2. Converting raw text hex dump to PCAP using text2pcap"
     echo "========================================"
     # Uncomment the line below if raw file needs Ethernet header
     # text2pcap -e 0x0800 ${inputfile} ${outputfile}
-    text2pcap ${tshark_testfile} ${tshark_outputfile}
+    text2pcap ${dumpdir}/${tshark_testfile} ${dumpdir}/${tshark_outputfile}
 
     echo "========================================"
     echo "🔎 3. Inspecting converted PCAP with tshark"
     echo "========================================"
-    tshark -r ${tshark_outputfile} -o ip.check_checksum:TRUE -V
+    tshark -r ${dumpdir}/${tshark_outputfile} -o ip.check_checksum:TRUE -V
 
     echo "✅ Done."
 
@@ -51,7 +52,7 @@ case $1 in
     if [[ $? -ne 0 ]]; then
         exit
     fi
-    
+
     mv compile_commands.json build/
 
     echo "========================================"
@@ -72,7 +73,7 @@ case $1 in
     build/sw/exe.elf
 
     echo -e "\n\n\n"
-    
+
     ;;
 *)
     make clean

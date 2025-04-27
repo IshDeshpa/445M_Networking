@@ -15,14 +15,13 @@
 /* ================================================== */
 
 #define HEADER_SIZE (14) 
-const uint8_t mac_broadcast_addr[MAC_ADDR_SIZE] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+uint8_t mac_broadcast_addr[MAC_ADDR_SIZE] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 uint8_t test_MAC_ADDR[MAC_ADDR_SIZE] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
-
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
 
-uint8_t* LookUpMac(uint8_t ip);
+uint8_t* LookUpMac(uint32_t ip);
 
 static void headerToBigEndian(macHeader_t* header);
 static void headerTolittleEndian(macHeader_t* header);
@@ -102,7 +101,10 @@ uint8_t *getHostMac(){
     return host_mac_address;
 }
 
-uint8_t* LookUpMac(uint8_t ip){
+uint8_t* LookUpMac(uint32_t ip){
+    if(ip == 0xFFFFFFFF){
+        return mac_broadcast_addr;
+    }
     return test_MAC_ADDR;
 }
 

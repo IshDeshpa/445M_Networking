@@ -53,7 +53,7 @@ inline static void testRX(void){
 int main(int argc, char *argv[]){
     setHostMac(testhostmac);
     setHostIP((uint8_t*)&HOST_IP);
-
+    //testTX();
     testRX();    
 
     return 0;
