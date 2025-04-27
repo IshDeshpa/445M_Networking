@@ -5,6 +5,9 @@
 #include "stubs.h"
 #include "Networking_Globs.h"
 
+char *tx_outfile = "temp/outbytes.txt";
+char *rx_outfile = "temp/inbytes_raw.txt";
+
 void ethernetTX(uint8_t* payload, uint16_t size){
     for (int i = 0; i < size; i++) {
         if (i % 16 == 0) printf("%04x  ", i);
@@ -13,7 +16,7 @@ void ethernetTX(uint8_t* payload, uint16_t size){
     }
     printf("\n\n");
 
-    FILE* fptr = fopen("temp/outbytes.txt", "w");
+    FILE* fptr = fopen(tx_outfile, "w");
     for (int i = 0; i < size; i++) {
         if (i % 16 == 0) fprintf(fptr, "%06x  ", i);
         fprintf(fptr, "%02x ", payload[i]);
@@ -25,7 +28,7 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 uint8_t rx_buffer[MTU+50];
 void ethernetRX (){
     //call mac api layer
-    FILE *fptr = fopen("temp/inbytes_raw.txt", "r");
+    FILE *fptr = fopen(rx_outfile, "r");
     if (fptr == NULL) {
         printf("Error opening file\n");
     }
