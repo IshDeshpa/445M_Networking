@@ -3,6 +3,7 @@
 #include "internet_checksum.h"
 #include "Networking_Globs.h"
 #include "string.h"
+#include <stdint.h>
 
 static inline void headerTolittleEndian(icmpHeader_t* header){
     header->checksum = packet_ntohs(header->checksum);
@@ -22,6 +23,9 @@ static inline void icmp_print_header(const icmpHeader_t* header) {
     printf("Rest              : 0x%08X (%u)\n", header->rest, header->rest);
     printf("===============================================\n");
 }
+
+
+char echoresp[]= "ping echo response";
 
 errICMP_t icmp_tx(uint8_t *payload, uint16_t payloadsize, uint32_t destinationIP, icmpType_t type, uint8_t code, uint32_t rest){
     icmpHeader_t *header = (icmpHeader_t *)payload;
@@ -52,14 +56,33 @@ errICMP_t icmp_rx(uint8_t *payload, uint16_t payloadsize){
     header->checksum = 0;
     uint16_t computed_checksum = generate_checksum(header, payloadsize);
 
-    if (savedCksm != computed_checksum){
-      LOG("Packet Dropped: Checksum Invalid: %x, %x", savedCksm, computed_checksum);
-      return ICMP_RX_FAIL;
-    }
-
     headerTolittleEndian(header);
 
-    // TODO: Put in fifo here
+    if (savedCksm != computed_checksum){
+        LOG("Packet Dropped: Checksum Invalid: %x, %x", savedCksm, computed_checksum);
+        return ICMP_RX_FAIL;
+    }
+
+    if(header->code != 0){
+        LOG("Packet Dropped: code is not servable: %u", header->code);
+        return ICMP_PKT_DROPPED;
+    }
+
+    switch (header->type) {
+        case ICMP_ECHO_REQUEST:
+            LOG("revieced a echo req, seni g out a resp now ");
+            ipHeader_t* iphdr = (ipHeader_t*)(header + IP_HEADER_SIZE);
+            icmp_tx(echoresp, sizeof(echoresp), iphdr->destinationIP, ICMP_ECHO_REPLY, 0, 0);
+            break;
+        default:
+            LOG("Packet Dropped: type is not servable: %u", header->type);
+            return ICMP_PKT_DROPPED;            
+            break;
+    }
+
+
+    // TODO: Put in fifo here for ping taks when
+    // we intergate witht the os
 }
 
 

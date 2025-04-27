@@ -24,7 +24,6 @@
 
 #define TTL_DEFAULT (64)
 
-#define HEADER_SIZE_DEFAULT (20) //shoud be 20 bytes
 
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */

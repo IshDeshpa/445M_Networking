@@ -1,13 +1,16 @@
 #!/bin/bash
 
+NUM_CORES=$(nproc) # On Linux
+
 builddir="build/"
 dumpdir="temp"
-NUM_CORES=$(nproc) # On Linux
 
 tshark_testfile=outbytes.txt
 tshark_outputfile=outbytes.pcap
 log_file=log.txt
 
+echoreq_outfile=echoreq.txt
+echoreq_pcap=echoreq.pcap
 tshark_inputfile=inbytes.pcap
 case $1 in
 -t)
@@ -20,7 +23,6 @@ case $1 in
 
     mv compile_commands.json build/
     #make dump
-    echo -e "Used $NUM_CORES for buidling\n"
     echo -e "Running Sim\n\n"
 
     echo "========================================"
@@ -65,7 +67,6 @@ case $1 in
     echo "========================================"
     echo "🔍 2. Running tshark on original PCAP to inspect IP checksum"
     echo "========================================"
-    tshark -r ${tshark_inputfile} -o ip.check_checksum:TRUE -V
 
     echo "========================================"
     echo "⚙️ 3. Running test executable to observe parse"
@@ -73,6 +74,30 @@ case $1 in
     build/sw/exe.elf
 
     echo -e "\n\n\n"
+
+    ;;
+
+-p)
+    echo "========================================"
+    echo "🐍 1. Running Python script to gen echo req"
+    echo "========================================"
+    source .venv/bin/activate
+    python3 testingProtocol/echoreq.py
+    deactivate
+
+    text2pcap ${dumpdir}/${echoreq_outfile} ${dumpdir}/${echoreq_pcap}
+    #tshark -r ${dumpdir}/${echoreq_pcap} -o ip.check_checksum:TRUE -V
+
+    make clean
+
+    ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
+    if [[ $? -ne 0 ]]; then
+        exit
+    fi
+
+    mv compile_commands.json build/
+    #make dump
+    echo -e "Running Sim\n\n"
 
     ;;
 *)

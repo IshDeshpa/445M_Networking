@@ -23,7 +23,7 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 }
 
 uint8_t rx_buffer[MTU+50];
-void ethernetRX (void){
+void ethernetRX (){
     //call mac api layer
     FILE *fptr = fopen("temp/inbytes_raw.txt", "r");
     if (fptr == NULL) {

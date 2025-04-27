@@ -25,7 +25,8 @@ typedef struct __attribute__((packed)) {
 typedef enum{
     ICMP_SUCCESS,
     ICMP_TX_FAIL,
-    ICMP_RX_FAIL
+    ICMP_RX_FAIL,
+    ICMP_PKT_DROPPED,
 } errICMP_t;
 
 errICMP_t icmp_tx(uint8_t *payload, uint16_t payloadsize, uint32_t destinationIP, icmpType_t type, uint8_t code, uint32_t rest);

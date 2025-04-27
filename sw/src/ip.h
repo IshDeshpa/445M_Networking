@@ -7,6 +7,9 @@
 /* ================================================== */
 /*            GLOBAL VARIABLE DECLARATIONS            */
 /* ================================================== */
+#define IP_HEADER_SIZE HEADER_SIZE_DEFAULT
+#define HEADER_SIZE_DEFAULT (20) //shoud be 20 bytes
+
 typedef enum {
     IP_PROTOCOL_ICMP     = 1,    // Internet Control Message Protocol
     IP_PROTOCOL_IGMP     = 2,    // Internet Group Management Protocol
@@ -45,6 +48,7 @@ typedef struct __attribute__((packed)) {
     uint32_t sourceIP;               // Source IP Address
     uint32_t destinationIP;          // Destination IP Address
 } ipHeader_t;
+
 
 /* ================================================== */
 /*                 FUNCTION PROTOTYPES                */
