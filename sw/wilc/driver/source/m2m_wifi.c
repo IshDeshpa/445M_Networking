@@ -40,6 +40,8 @@
 #include "drv_hash/crypto.h" 
 #endif
 
+#include "Networking.h"
+
 static volatile uint8 gu8ChNum;
 static volatile uint8 gu8scanInProgress = 0;
 tpfAppWifiCb gpfAppWifiCb = NULL;
@@ -71,6 +73,11 @@ static tpfAppMonCb  gpfAppMonCb  = NULL;
 static void m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint8* pu8Buffer)
 {
 	printf("m2m_wifi_cb: %d\n", u8OpCode);
+
+	printf("\n\n\n");
+	prettyprint_payload(pu8Buffer, u16DataSize);
+	printf("\n\n\n");
+
 	if (u8OpCode == M2M_WIFI_RESP_CON_STATE_CHANGED)
 	{
 		tstrM2mWifiStateChanged* pstrState = (tstrM2mWifiStateChanged*)pu8Buffer;

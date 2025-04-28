@@ -23,18 +23,15 @@ void Task_DHCPClient(void){
     register_dhcp_callback(signal_dhcp_offer);
 
     while(1){
+        // Send DHCP discover
+        dhcp_send_discover();
+
         // Wait for a DHCP offer
-        while(dhcp_offer_sema4.Value == 0){ // busy wait
-            // Send DHCP discover
-            dhcp_send_discover();
-            OS_Sleep(1000);
-        }
-        // OS_Wait(&dhcp_offer_sema4);
+        OS_Wait(&dhcp_offer_sema4);
         
         // Send DHCP request
         dhcp_send_request();
         
-        // OS_Kill();
-        
+        OS_Kill();
     }
 }

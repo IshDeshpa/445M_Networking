@@ -42,6 +42,23 @@ uint16_t curr_send_size;
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
 
+void prettyprint_payload(uint8_t* payload, uint16_t size) {
+    printf("Full payload (pcap format):");
+    for (int i = 0; i < size; i++) {
+        if(i%0x10 == 0){printf("\n\r%04x ", i);}
+        printf("%02x ", payload[i]);
+    }
+    printf("\n\r");
+
+    printf("Payload (not pcap):\n\r");
+    for (int i = 0; i < size; i++) {
+        printf("%02x ", payload[i]);
+    }
+
+    printf("\n\r");
+    printf("Payload size: %d", size);
+}
+
 sema4_t data_captured;
 sema4_t data_captured2;
 tenuM2mStaCmd irqReceiveType;
@@ -161,13 +178,15 @@ void eth_callback(uint8 u8MsgType, void *pvMsg, void *pvCtrlBuf) {
         case M2M_WIFI_RESP_ETHERNET_RX_PACKET:
             LOG("Ethernet RX packet response received.");
             uint8 au8RemoteIpAddr[4];
-            
+
             uint8 *au8packet = (uint8*)pvMsg;
             memcpy(eth_rcv_buf, au8packet, MTU+200);
 
             tstrM2MDataBufCtrl *PstrM2mIpCtrlBuf =( tstrM2MDataBufCtrl *)pvCtrlBuf;
             eth_rcv_size = PstrM2mIpCtrlBuf->u16DataSize;
             
+            prettyprint_payload(pvMsg, PstrM2mIpCtrlBuf->u16DataSize);
+
             LOG("Ethernet Frame Received buffer, Size = %d, Remaining = %d, Data offset = %d, Ifc ID = %d",
                 PstrM2mIpCtrlBuf->u16DataSize,
                 PstrM2mIpCtrlBuf->u16RemainigDataSize,
@@ -415,7 +434,7 @@ void Task_NetworkThread(void){
             case NW_SEND_RAW:
                 LOG("Send raw command received");
                 // Call the send raw function here
-                m2m_wifi_send_ethernet_pkt(curr_send_buf, curr_send_size, AP_INTERFACE);
+                m2m_wifi_send_ethernet_pkt(curr_send_buf, curr_send_size, STATION_INTERFACE);
                 break;            
             default:
                 LOG("Unknown command received");
@@ -464,42 +483,23 @@ void Task_NetworkingInit(){
 
 void ethernetTX(uint8_t* payload, uint16_t size){
     LOG("ethernetTx reached");
-    LOG("Full payload (pcap format):");
-    for (int i = 0; i < size; i++) {
-        if(i%0x10 == 0){printf("\n\r%04x ", i);}
-        printf("%02x ", payload[i]);
-    }
-    printf("\n\r");
+    
+    prettyprint_payload(payload, size);
 
-    LOG("Payload (not pcap):\n\r");
-    for (int i = 0; i < size; i++) {
-        printf("%02x ", payload[i]);
-    }
-
-    printf("\n\r");
-    LOG("Payload size: %d", size);
     curr_send_buf = payload;
     curr_send_size = size;
+
+    memmove(payload + M2M_ETHERNET_HDR_OFFSET + M2M_ETH_PAD_SIZE, payload, size);    
+
     Network_Send_Raw();
+
     return;
 }
 
 void ethernetRX(void){
     LOG("ethernetRX reached");
-    LOG("Full payload (pcap format):");
-    for (int i = 0; i < eth_rcv_size; i++) {
-        if(i%0x10 == 0){printf("\n\r%04x ", i);}
-        printf("%02x ", eth_rcv_buf[i]);
-    }
-    printf("\n\r");
 
-    LOG("Payload (not pcap):\n\r");
-    for (int i = 0; i < eth_rcv_size; i++) {
-        printf("%02x ", eth_rcv_buf[i]);
-    }
-
-    printf("\n\r");
-    LOG("Payload size: %d", eth_rcv_size);
+    prettyprint_payload(eth_rcv_buf, eth_rcv_size);
 
     macRX(eth_rcv_buf, eth_rcv_size);
     return;

@@ -19,6 +19,8 @@ typedef struct {
     uint8_t data[96]; // Example data buffer, adjust size as needed
 } network_command_t;
 
+void prettyprint_payload(uint8_t* payload, uint16_t size);
+
 /* ================================================== */
 /*                      INCLUDES                      */
 /* ================================================== */
