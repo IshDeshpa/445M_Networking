@@ -23,6 +23,7 @@
 
 #define FRAG_DEFAULT (0x4000)//reserved:0, DF(dont frag):1, MF(more fragement): 0, frag offeset:0
 #define DF_MASK (0x4000)
+#define MF_MASK (0x2000)
 
 #define TTL_DEFAULT (64)
 
@@ -173,10 +174,14 @@ int dropPkt(ipHeader_t* header){
         return 1;
     }
 
-    if ((header->flags_fragmentOffset & DF_MASK) == 0 ||
-        (header->flags_fragmentOffset & 0x1FFF) != 0) {
-        LOG("Dropped packet: Fragmented packet not supported");
-        return 1;
+    //if ((header->flags_fragmentOffset & DF_MASK) == 0 ||
+    //    (header->flags_fragmentOffset & 0x1FFF) != 0) {
+    //    LOG("Dropped packet: Fragmented packet not supported");
+    //    return 1;
+    //}
+    if((header->flags_fragmentOffset & MF_MASK) || (header->flags_fragmentOffset & 0x1FFF) != 0){
+        LOG("Dropped packet: Fragmented packet not supported: bits= %u", header->flags_fragmentOffset);
+        return 1;    
     }
 
     if ((header->destinationIP != host_ip_address && host_ip_address != 0)) {
