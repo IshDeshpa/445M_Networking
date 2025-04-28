@@ -44,6 +44,7 @@ static void prepare_dhcp_packet(dhcp_packet_t *pkt) {
     memcpy(pkt, &dhcp_template, sizeof(dhcp_packet_t));
     
     memcpy(pkt->mac_address, host_mac_address, 6);
+    reverse_mac((uint8_t *)&pkt->mac_address);
 
     LOG("DHCP packet prepared with MAC address: %02X:%02X:%02X:%02X:%02X:%02X",
         host_mac_address[0], host_mac_address[1], host_mac_address[2],

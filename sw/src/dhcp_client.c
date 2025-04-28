@@ -34,7 +34,7 @@ void Task_DHCPClient(void){
         // Send DHCP request
         dhcp_send_request();
         
-        // OS_Kill();
+        OS_Kill();
         
     }
 }
