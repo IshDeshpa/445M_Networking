@@ -140,12 +140,12 @@ void mac_print_header(const macHeader_t* header) {
     printf("========== MAC HEADER ==========\n");
 
     printf("Destination MAC     : %02X:%02X:%02X:%02X:%02X:%02X\n",
-           header->dest_mac[0], header->dest_mac[1], header->dest_mac[2],
-           header->dest_mac[3], header->dest_mac[4], header->dest_mac[5]);
+           header->dest_mac[5], header->dest_mac[4], header->dest_mac[3],
+           header->dest_mac[2], header->dest_mac[1], header->dest_mac[0]);
 
     printf("Source MAC          : %02X:%02X:%02X:%02X:%02X:%02X\n",
-           header->src_mac[0], header->src_mac[1], header->src_mac[2],
-           header->src_mac[3], header->src_mac[4], header->src_mac[5]);
+           header->src_mac[5], header->src_mac[4], header->src_mac[3],
+           header->src_mac[2], header->src_mac[1], header->src_mac[0]);
 
     printf("EtherType           : 0x%04X", header->ethertype);
 

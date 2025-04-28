@@ -92,7 +92,7 @@ case $1 in
     deactivate
 
     text2pcap ${dumpdir}/${echoreq_outfile} ${dumpdir}/${echoreq_pcap}
-    #tshark -r ${dumpdir}/${echoreq_pcap} -o ip.check_checksum:TRUE -V
+    tshark -r ${dumpdir}/${echoreq_pcap} -o ip.check_checksum:TRUE -V
 
     make clean
 

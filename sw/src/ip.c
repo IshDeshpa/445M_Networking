@@ -78,7 +78,6 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, ui
 
 errIP_t ip4_rx(uint8_t* payload){
     ipHeader_t* header = (ipHeader_t*)payload;
-    ip4_print_header(header);
     //checksum;
     uint16_t savedCksm = header->headerChecksum;
     header->headerChecksum = 0;
@@ -94,6 +93,7 @@ errIP_t ip4_rx(uint8_t* payload){
 
     // Convert to little endian after checksum
     headerTolittleEndian(header);
+    ip4_print_header(header);
 
     if(dropPkt(header)){
         LOG("Packet Dropped");
@@ -219,10 +219,10 @@ void ip4_print_header(ipHeader_t* header) {
     uint8_t* dst = (uint8_t*)&header->destinationIP;
 
     printf("Source IP         : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n", 
-           src[0], src[1], src[2], src[3], src[0], src[1], src[2], src[3]);
+            src[3], src[2], src[1], src[0], src[3], src[2], src[1], src[0]);
 
     printf("Destination IP    : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n", 
-           dst[0], dst[1], dst[2], dst[3], dst[0], dst[1], dst[2], dst[3]);
+            dst[3], dst[2], dst[1], dst[0], dst[3], dst[2], dst[1], dst[0]);
 
     printf("===============================================\n");
 }

@@ -11,7 +11,7 @@
 
 #define MSG(...) printf("\n\r"); printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 
-char* tx_outfile = "temp/echo_resp.txt";
+char* tx_outfile = "temp/echoresp.txt";
 char* rx_infile = "temp/echoreq.txt";
 
 #define PAYLOAD_SIZE 33

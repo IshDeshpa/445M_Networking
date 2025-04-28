@@ -11,7 +11,6 @@ static inline void headerTolittleEndian(icmpHeader_t* header){
 }
 
 static inline void headerToBigEndian(icmpHeader_t* header){
-    header->checksum = packet_htons(header->checksum);
     header->rest = packet_htonl(header->rest);
 }
 
@@ -35,28 +34,31 @@ errICMP_t icmp_tx(uint8_t *payload, uint16_t payloadsize, uint32_t destinationIP
     header->type = type;
     header->code = code;
     header->rest = rest;
+    header->checksum = 0;
 
     // Step 1: Convert header to big-endian
+    icmp_print_header(header);
     headerToBigEndian(header);
     
     // Step 2: Generate checksum in big-endian
-    header->checksum = generate_checksum(header, payloadsize);
+    header->checksum = generate_checksum(payload, sizeof(icmpHeader_t) + payloadsize);
     
     // Step 3: Send to IP layer
     int ret = ip4_tx(payloadsize + sizeof(icmpHeader_t), payload, IP_PROTOCOL_ICMP, destinationIP);
     return ret == IP_SUCCESS ? ICMP_SUCCESS : ICMP_TX_FAIL;
 }
 
+uint8_t icmp_tx_networkBuf[MTU+50];
 errICMP_t icmp_rx(uint8_t *payload, uint16_t payloadsize){
     icmpHeader_t *header = (icmpHeader_t *)payload;
     
-    icmp_print_header(header);
 
     uint16_t savedCksm = header->checksum;
     header->checksum = 0;
     uint16_t computed_checksum = generate_checksum(header, payloadsize);
 
     headerTolittleEndian(header);
+    icmp_print_header(header);
 
     if (savedCksm != computed_checksum){
         LOG("Packet Dropped: Checksum Invalid: %x, %x", savedCksm, computed_checksum);
@@ -70,9 +72,10 @@ errICMP_t icmp_rx(uint8_t *payload, uint16_t payloadsize){
 
     switch (header->type) {
         case ICMP_ECHO_REQUEST:
-            LOG("revieced a echo req, seni g out a resp now ");
-            ipHeader_t* iphdr = (ipHeader_t*)(header + IP_HEADER_SIZE);
-            icmp_tx(echoresp, sizeof(echoresp), iphdr->destinationIP, ICMP_ECHO_REPLY, 0, 0);
+            LOG("revieced a echo req, sending out a resp now \n\n");
+            ipHeader_t* iphdr = (ipHeader_t*)((((uint8_t*)(header)) - IP_HEADER_SIZE));
+            memcpy(icmp_tx_networkBuf, echoresp, sizeof(echoresp));
+            icmp_tx(icmp_tx_networkBuf, sizeof(echoresp), iphdr->sourceIP, ICMP_ECHO_REPLY, 0, 0);
             break;
         default:
             LOG("Packet Dropped: type is not servable: %u", header->type);
