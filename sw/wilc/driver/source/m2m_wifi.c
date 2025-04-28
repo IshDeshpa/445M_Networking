@@ -74,9 +74,9 @@ static void m2m_wifi_cb(uint8 u8OpCode, uint16 u16DataSize, uint8* pu8Buffer)
 {
 	printf("m2m_wifi_cb: %d\n", u8OpCode);
 
-	printf("\n\n\n===M2M_WIFI_CB===\n\r");
+	printf("===M2M_WIFI_CB===\n\r");
 	prettyprint_payload(pu8Buffer, u16DataSize);
-	printf("\n===M2M_WIFI_CB===\n\r");
+	printf("===M2M_WIFI_CB===\n\r");
 
 	if (u8OpCode == M2M_WIFI_RESP_CON_STATE_CHANGED)
 	{

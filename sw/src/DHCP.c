@@ -84,7 +84,7 @@ void dhcp_send_discover(void) {
     append_dhcp_discover_options(pkt->options);
 
     size_t packet_len = DHCP_FIXED_SIZE + 4; // 4 bytes of options
-    udp_tx(packet_len, dhcp_tx_buf, DHCP_BROADCAST_IP, DHCP_SERVER_PORT, DHCP_CLIENT_PORT);
+    udp_tx(packet_len, dhcp_tx_buf, DHCP_BROADCAST_IP, DHCP_CLIENT_PORT, DHCP_SERVER_PORT);
     LOG("DHCPDISCOVER sent, packet length: %zu", packet_len);
 }
 
@@ -96,7 +96,7 @@ void dhcp_send_request(void) {
     append_dhcp_request_options(pkt->options, dhcp_server_ip, dhcp_offered_ip);
 
     size_t packet_len = DHCP_FIXED_SIZE + 16; // 16 bytes of options
-    udp_tx(packet_len, dhcp_tx_buf, DHCP_BROADCAST_IP, DHCP_SERVER_PORT, DHCP_CLIENT_PORT);
+    udp_tx(packet_len, dhcp_tx_buf, DHCP_BROADCAST_IP, DHCP_CLIENT_PORT, DHCP_SERVER_PORT);
     LOG("DHCPREQUEST sent, packet length: %zu", packet_len);
 }
 
