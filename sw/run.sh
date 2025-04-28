@@ -156,7 +156,7 @@ case $1 in
     echo "✅ Done."
 
     ;;
-*)
+-b)
     make clean
 
     ret=$(bear -- make -j$NUM_CORES MODE=hw -s)
@@ -170,5 +170,8 @@ case $1 in
     #make dump
     echo -e "Used $NUM_CORES for buidling\n"
     echo -e "Flashing to Target..."
+    ;;
+*)
+    echo -e "try again shitter\n"
     ;;
 esac

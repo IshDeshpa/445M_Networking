@@ -452,3 +452,12 @@ void Task_NetworkingInit(){
 
     OS_Kill();
 }
+
+void ethernetTX(uint8_t* payload, uint16_t size){
+    LOG("ethernetTx reached");
+    return;
+}
+void ethernetRX(void){
+    LOG("ethernetRX reached");
+    return;
+}

@@ -26,6 +26,8 @@ uint8_t* LookUpMac(uint32_t ip);
 static void headerToBigEndian(macHeader_t* header);
 static void headerTolittleEndian(macHeader_t* header);
 void mac_print_header(const macHeader_t* header);
+extern void ethernetTX(uint8_t* payload, uint16_t size);
+extern void ethernetRX(void);
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
