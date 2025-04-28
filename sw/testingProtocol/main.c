@@ -52,6 +52,7 @@ inline static void testRX(void){
 }
 
 inline static void testDHCP_DISC(void){
+    tx_outfile = "temp/dhcp_disc.txt";
     dhcp_send_discover();
 }
 

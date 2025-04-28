@@ -84,7 +84,7 @@ int dhcp_receive_offer(dhcp_packet_t *packet, uint16_t packet_size){
     ASSERT(packet->server_ip != 0);
 
     // Get the actual destination ip
-    ipHeader_t *ip_h = (udpHeader_t *)(curr_packet_buffer + sizeof(macHeader_t));
+    ipHeader_t *ip_h = (ipHeader_t *)(curr_packet_buffer + sizeof(macHeader_t));
     macHeader_t *mac_h = (macHeader_t *)(curr_packet_buffer);
     ASSERT(mac_h->dest_mac == host_mac_address);
 

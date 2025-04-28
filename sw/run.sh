@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 NUM_CORES=$(nproc) # On Linux
 
@@ -114,24 +114,24 @@ case $1 in
     echo -e "Used $NUM_CORES for buidling\n"
     echo -e "Running Sim\n\n"
     
+    mkdir ${dumpdir}
+
     echo "========================================"
     echo "⚙️ 1. Running test executable which sends dummy data"
     echo "========================================"
     build/sw/exe.elf
-
-    mkdir -t temp/
 
     echo "========================================"
     echo "📦 2. Converting raw text hex dump to PCAP using text2pcap"
     echo "========================================"
     # Uncomment the line below if raw file needs Ethernet header
     # text2pcap -e 0x0800 ${inputfile} ${outputfile}
-    text2pcap dhcp_disc.txt dhcp_disc.pcap 
+    text2pcap temp/dhcp_disc.txt temp/dhcp_disc.pcap 
 
     echo "========================================"
     echo "🔎 3. Inspecting converted PCAP with tshark"
     echo "========================================"
-    tshark -r dhcp_disc.pcap -o ip.check_checksum:TRUE -V
+    tshark -r temp/dhcp_disc.pcap -o ip.check_checksum:TRUE -V
 
     
     echo "========================================"
