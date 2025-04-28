@@ -11,8 +11,9 @@
 
 #define MSG(...) printf("\n\r"); printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 
-char *rx_infile;
-char *tx_outfile;
+char tx_outfile[] = "temp/echo_resp.txt";
+char rx_infile[] = "temp/echoreq.txt";
+
 #define PAYLOAD_SIZE 33
 #define DESTINATION_IP 0xC0A80001 //192.0.1.168
 uint32_t HOST_IP  = 0xC0A80064;  // 192.168.0.100
@@ -50,8 +51,7 @@ inline static void testTX(void){
 }
 
 inline static void testPingReq(void){
-    char expRx_inpfile[] = "temp/echoreq.txt";
-    rx_infile = expRx_inpfile;
+    //rx_infile = "temp/echoreq.txt";
     ethernetRX();
 }
 
@@ -60,7 +60,7 @@ inline static void testRX(void){
 }
 
 inline static void testDHCP_DISC(void){
-    tx_outfile = "temp/dhcp_disc.txt";
+    //tx_outfile = "temp/dhcp_disc.txt";
     dhcp_send_discover();
 }
 

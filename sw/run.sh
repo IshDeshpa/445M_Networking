@@ -99,6 +99,8 @@ case $1 in
     #make dump
     echo -e "Running Sim\n\n"
 
+    build/sw/exe.elf
+
     ;;
 
 -dd)
@@ -113,7 +115,7 @@ case $1 in
     #make dump
     echo -e "Used $NUM_CORES for buidling\n"
     echo -e "Running Sim\n\n"
-    
+
     mkdir ${dumpdir}
 
     echo "========================================"
@@ -126,14 +128,13 @@ case $1 in
     echo "========================================"
     # Uncomment the line below if raw file needs Ethernet header
     # text2pcap -e 0x0800 ${inputfile} ${outputfile}
-    text2pcap temp/dhcp_disc.txt temp/dhcp_disc.pcap 
+    text2pcap temp/dhcp_disc.txt temp/dhcp_disc.pcap
 
     echo "========================================"
     echo "🔎 3. Inspecting converted PCAP with tshark"
     echo "========================================"
     tshark -r temp/dhcp_disc.pcap -o ip.check_checksum:TRUE -V
 
-    
     echo "========================================"
     echo "🔎 4. Parsing with python dhcp"
     echo "========================================"

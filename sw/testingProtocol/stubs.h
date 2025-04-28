@@ -1,8 +1,5 @@
 #include <stdint.h>
 
-extern char *tx_outfile;
-extern char *rx_infile;
-
 void ethernetTX(uint8_t* payload, uint16_t size);
 
 void ethernetRX (void);

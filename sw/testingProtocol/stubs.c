@@ -5,8 +5,8 @@
 #include "stubs.h"
 #include "Networking_Globs.h"
 
-char *tx_outfile = "temp/outbytes.txt";
-char *rx_outfile = "temp/inbytes_raw.txt";
+extern char *tx_outfile;
+extern char *rx_infile;
 
 void ethernetTX(uint8_t* payload, uint16_t size){
     for (int i = 0; i < size; i++) {

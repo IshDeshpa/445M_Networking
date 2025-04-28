@@ -90,7 +90,7 @@ errIP_t ip4_rx(uint8_t* payload){
         LOG("Packet Dropped: Checksum Invalid: %x, %x", savedCksm, computed_checksum);
         return IP_RX_FAIL;
     }
-    
+
     // Convert to little endian after checksum
     headerTolittleEndian(header);
 
@@ -121,7 +121,7 @@ errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data, uint16_t datasize)
 
         case IP_PROTOCOL_UDP:
             //TODO:add udp support
-            //return udp_rx(header, data);
+            //return (header, data);
             return IP_RX_UNSUPPORTED_PROTOCOL;
 
         case IP_PROTOCOL_IPV6:
