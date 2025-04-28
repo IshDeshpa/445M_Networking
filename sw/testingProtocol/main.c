@@ -11,8 +11,8 @@
 
 #define MSG(...) printf("\n\r"); printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 
-char tx_outfile[] = "temp/echo_resp.txt";
-char rx_infile[] = "temp/echoreq.txt";
+char* tx_outfile = "temp/echo_resp.txt";
+char* rx_infile = "temp/echoreq.txt";
 
 #define PAYLOAD_SIZE 33
 #define DESTINATION_IP 0xC0A80001 //192.0.1.168

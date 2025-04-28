@@ -126,8 +126,8 @@ static void hton_macaddr(uint8_t* addr) {
 
 static void headerTolittleEndian(macHeader_t* header){
     header->ethertype = packet_ntohs(header->ethertype);
-    //ntoh_macaddr(header->dest_mac);    
-    //ntoh_macaddr(header->src_mac);    
+    ntoh_macaddr(header->dest_mac);    
+    ntoh_macaddr(header->src_mac);    
 }
 
 static void headerToBigEndian(macHeader_t* header) {

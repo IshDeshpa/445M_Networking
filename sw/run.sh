@@ -11,6 +11,9 @@ log_file=log.txt
 
 echoreq_outfile=echoreq.txt
 echoreq_pcap=echoreq.pcap
+echoresp_outfile=echoresp.txt
+echoresp_outfile=echoresp.pcap
+
 tshark_inputfile=inbytes.pcap
 case $1 in
 -t)
@@ -30,7 +33,7 @@ case $1 in
     echo "========================================"
     build/sw/exe.elf
 
-    mkdir ${dumpdir}/
+    mkdir -p ${dumpdir}/
 
     echo "========================================"
     echo "📦 2. Converting raw text hex dump to PCAP using text2pcap"
@@ -81,27 +84,30 @@ case $1 in
     echo "========================================"
     echo "🐍 1. Running Python script to gen echo req"
     echo "========================================"
+
+    mkdir -p ${dumpdir}/
     source .venv/bin/activate
     python3 testingProtocol/echoreq.py
     deactivate
 
     text2pcap ${dumpdir}/${echoreq_outfile} ${dumpdir}/${echoreq_pcap}
-    tshark -r ${dumpdir}/${echoreq_pcap} -o ip.check_checksum:TRUE -V
+    #tshark -r ${dumpdir}/${echoreq_pcap} -o ip.check_checksum:TRUE -V
 
-    #make clean
+    make clean
 
-    #ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
-    #if [[ $? -ne 0 ]]; then
-    #    exit
-    #fi
+    ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
+    if [[ $? -ne 0 ]]; then
+        exit
+    fi
 
-    #mv compile_commands.json build/
-    ##make dump
-    #echo -e "Running Sim\n\n"
-    #build/sw/exe.elf
+    mv compile_commands.json ${builddir}
+    #make dump
+    echo -e "Running Sim\n\n"
+    build/sw/exe.elf
 
-    #text2pcap temp/dhcp_disc.txt temp/dhcp_disc.pcap
-    #tshark -r temp/dhcp_disc.pcap -o ip.check_checksum:TRUE -V
+    touch ${dumpdir}/${echoresp_outfile}
+    text2pcap ${dumpdir}/${echoresp_outfile} ${dumpdir}/${echoresp_pcap}
+    tshark -r ${dumpdir}/${echoresp_pcap} -o ip.check_checksum:TRUE -V
     ;;
 
 -dd)
