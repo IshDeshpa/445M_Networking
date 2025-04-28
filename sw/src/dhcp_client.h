@@ -23,7 +23,7 @@ typedef struct __attribute((packed)) {
     uint32_t my_ip;
     uint32_t server_ip;
     uint32_t gateway_ip;
-    uint16_t mac_address;
+    uint8_t mac_address[16];
     uint8_t misc[192];
     uint32_t cookie;
     uint8_t options[274];

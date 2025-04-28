@@ -157,7 +157,7 @@ case $1 in
     ;;
 -dd)
     make clean
-    ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
+    ret=$(bear -- make -j$NUM_CORES MODE=sw EXTRA_CFLAGS=-DDHCPTEST -s)
     if [[ $? -ne 0 ]]; then
         exit
     fi

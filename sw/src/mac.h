@@ -47,5 +47,7 @@ errMAC_t macRX(uint8_t* payload, uint16_t size);
 errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype_protocol);
 void setHostMac(uint8_t mac[6]);
 uint8_t *getHostMac();
+int macAddrComp(uint8_t* mac1, uint8_t* mac2);
+static void reverse_mac(uint8_t* addr);
 #endif 
 

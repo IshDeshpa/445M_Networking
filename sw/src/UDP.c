@@ -42,16 +42,16 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
     headerTolittleEndian(header);
     udp_print_header(header);
 
-    uint16_t *curr_word = (uint16_t*)header;
-    uint16_t checksum = 0;
-    for (uint16_t i = 0; i < payloadsize / 2; i++) {
-        checksum += curr_word[i];
-    }
+    //uint16_t *curr_word = (uint16_t*)header;
+    //uint16_t checksum = 0;
+    //for (uint16_t i = 0; i < payloadsize / 2; i++) {
+   //     checksum += curr_word[i];
+   // }
 
-    if(checksum != 0xFFFF){
-        LOG("Packet Dropped");
-        return UDP_RX_FAIL;
-    }
+    //if(checksum != 0xFFFF){
+    //    LOG("Packet Dropped");
+    //    return UDP_RX_FAIL;
+   // }
 
     if(header->destinationPort == 68){
         dhcp_receive_offer(payload + sizeof(udpHeader_t), payloadsize - sizeof(udpHeader_t));
