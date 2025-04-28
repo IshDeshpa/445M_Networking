@@ -54,7 +54,7 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
    // }
 
     if(header->destinationPort == 68){
-        dhcp_receive_offer(payload + sizeof(udpHeader_t), payloadsize - sizeof(udpHeader_t));
+        dhcpRX(payload + sizeof(udpHeader_t), payloadsize - sizeof(udpHeader_t));
     }
 
     userRXData(payload + HEADER_SIZE, (header->length)-HEADER_SIZE); 

@@ -37,6 +37,6 @@ int dhcp_send_discover(void);
 int dhcp_receive_offer(uint8_t  *packet, uint16_t packet_size);
 int dhcp_receive_ack(uint8_t *packet, uint16_t packet_size);
 int dhcp_send_request(void);
-
+int dhcpRX(uint8_t* payload, uint16_t payloadsize);
 #endif 
 
