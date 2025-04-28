@@ -1,4 +1,4 @@
-from scapy.all import Ether, IP, UDP, Raw, wrpcap
+from scapy.all import Ether, IP, UDP, Raw, wrpcap, DHCP
 import random
 
 def random_mac():
@@ -49,9 +49,12 @@ def random_frame():
 def dhcp_disc_offer():
     # Parse discover
     with open("temp/dhcp_disc.txt", "r") as f:
-        disc = f.read()
+        hex_data = f.read().strip()
 
-    disc_pkt = Ether(disc)
+    # Convert the hex string into bytes
+    packet_data = bytes.fromhex(hex_data)
+    
+    disc_pkt = Ether(packet_data)
     disc_pkt.show()
     
     # Send offer
@@ -74,7 +77,7 @@ def dhcp_disc_offer():
     offer_pkt = ether / ip / udp / empty_bootp
     offer_pkt.show()
 
-    with open("temp/dhcp_offer_raw.txt", "w") as f:
+    with open("temp/dhcp_offer_raw.txt", "wb") as f:
         f.write(bytes(offer_pkt))
 
     wrpcap("temp/dhcp_offer.pcap", [offer_pkt])

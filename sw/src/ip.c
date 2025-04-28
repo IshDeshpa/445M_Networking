@@ -10,6 +10,7 @@
 #include "Networking_Globs.h"
 #include "mac.h"
 #include "Networking.h"
+#include "UDP.h"
 /* ================================================== */
 /*            DEFAULTS                                */           
 /* ================================================== */
@@ -121,8 +122,8 @@ errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data, uint16_t datasize)
 
         case IP_PROTOCOL_UDP:
             //TODO:add udp support
-            //return (header, data);
-            return IP_RX_UNSUPPORTED_PROTOCOL;
+            return udp_rx(data, datasize);
+            //return IP_RX_UNSUPPORTED_PROTOCOL;
 
         case IP_PROTOCOL_IPV6:
             LOG("IPv6 over IPv4 encapsulation not supported");
