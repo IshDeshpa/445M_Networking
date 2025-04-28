@@ -17,7 +17,6 @@ echoresp_outfile=echoresp.pcap
 tshark_inputfile=inbytes.pcap
 
 source .venv/bin/activate
-
 case $1 in
 -t)
     make clean
@@ -66,9 +65,7 @@ case $1 in
     echo "========================================"
     echo "🐍 1. Running Python script to generate test packets"
     echo "========================================"
-    source .venv/bin/activate
     python3 testingProtocol/dummy.py random_frame
-    deactivate
 
     echo "========================================"
     echo "🔍 2. Running tshark on original PCAP to inspect IP checksum"
@@ -114,7 +111,7 @@ case $1 in
 
 -d)
     make clean
-    ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
+    ret=$(bear -- make -j$NUM_CORES MODE=sw -s EXTRA_CFLAGS=-DDHCPTEST)
     if [[ $? -ne 0 ]]; then
         exit
     fi
@@ -146,6 +143,7 @@ case $1 in
     echo "========================================"
     echo "🔎 4. Generating offer response..."
     echo "========================================"
+
     python3 testingProtocol/dummy.py dhcp_offer
 
     echo "========================================"
@@ -172,6 +170,7 @@ case $1 in
     echo "========================================"
     echo "⚙️ 1. Run python script "
     echo "========================================"
+
     python3 testingProtocol/dummy.py dhcp_offer
 
     echo "========================================"
@@ -228,5 +227,3 @@ case $1 in
     echo -e "try again shitter\n"
     ;;
 esac
-
-deactivate

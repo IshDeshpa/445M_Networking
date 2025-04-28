@@ -46,7 +46,7 @@ static inline void packetToBigEndian(dhcp_packet_t *packet){
     packet->my_ip = packet_htonl(packet->my_ip);
     packet->server_ip = packet_htonl(packet->server_ip);
     packet->gateway_ip = packet_htonl(packet->gateway_ip);
-    packet->mac_address = packet_htons(packet->mac_address);
+    reverse_mac(packet->mac_address);
     packet->cookie = packet_htonl(packet->cookie);
 }
 
@@ -58,7 +58,7 @@ static inline void packetTolittleEndian(dhcp_packet_t *packet){
     packet->my_ip = packet_ntohl(packet->my_ip);
     packet->server_ip = packet_ntohl(packet->server_ip);
     packet->gateway_ip = packet_ntohl(packet->gateway_ip);
-    packet->mac_address = packet_ntohs(packet->mac_address);
+    reverse_mac(packet->mac_address);
     packet->cookie = packet_ntohl(packet->cookie);
 }
 /* ================================================== */
@@ -103,16 +103,11 @@ static void dhcp_print_packet(const dhcp_packet_t *pkt) {
         (pkt->gateway_ip >> 8) & 0xFF,
         (pkt->gateway_ip >> 0) & 0xFF);
     
-    printf("Destination MAC     : %02X:%02X:%02X:%02X:%02X:%02X\n",
+    printf("CLient MAC     : %02X:%02X:%02X:%02X:%02X:%02X\n",
           pkt->mac_address[5], pkt->mac_address[4], pkt->mac_address[3],
            pkt->mac_address[2], pkt->mac_address[1], pkt->mac_address[0]);
 
-    printf("Source MAC          : %02X:%02X:%02X:%02X:%02X:%02X\n",
-           pkt->mac_address[5], pkt->mac_address[4], pkt->mac_address[3],
-           pkt->mac_address[2], pkt->mac_address[1], pkt->mac_address[0]);
-
-
-    printf("  MAC Address:  0x%04X\n", pkt->mac_address);
+    //printf("  MAC Address:  0x%04X\n", pkt->mac_address);
 
     printf("  Magic Cookie: 0x%08X\n", pkt->cookie);
 
@@ -132,7 +127,7 @@ int dhcp_send_discover(){
     memset(pkt->mac_address, 0, 16);
     memcpy(pkt->mac_address, host_mac_address, 6);
   
-    reverse_mac(pkt->mac_address);
+    //reverse_mac(pkt->mac_address);
 
     //memset(pkt->options, 0xFF, sizeof(pkt->options));
 
@@ -167,13 +162,13 @@ int dhcp_receive_offer(uint8_t *pkt, uint16_t packet_size){
     ASSERT(packet->server_ip != 0);
 
     // Get the actual destination ip
-    ipHeader_t *ip_h = (ipHeader_t *)(curr_packet_buffer + sizeof(macHeader_t));
     macHeader_t *mac_h = (macHeader_t *)(curr_packet_buffer);
 
     ASSERT(macAddrComp(host_mac_address, mac_h->dest_mac));
     
-    pendingIP = packet_ntohl(ip_h->destinationIP);
-    dhcp_serverIP = packet_ntohl(ip_h->sourceIP);
+    pendingIP = packet->my_ip;
+    dhcp_serverIP = packet->server_ip;
+    //LOG("\n\n\n\n\n\nserverIP set: %08X", dhcp_serverIP);
     //memcpy(dhcp_serverIP,  &ip_h->sourceIP, 4);
     
     return 0;
@@ -187,8 +182,9 @@ int dhcp_send_request(){
     
     memset(pkt->mac_address, 0, 16);
     memcpy(pkt->mac_address, host_mac_address, 6);
-    reverse_mac(pkt->mac_address);
+    //reverse_mac(pkt->mac_address);
     pkt->OP = 1;
+    pkt->server_ip = dhcp_serverIP;
    
     //memset(pkt->options, 0x350103, 3);
     //memset(&pkt->options[3], pendingIP, 4);
@@ -197,8 +193,12 @@ int dhcp_send_request(){
     uint32_t servIP_le = packet_htonl(dhcp_serverIP);
 
     memcpy(pkt->options, &dhcp_discover_magicnum2, 3);
-    memcpy(&pkt->options[3], &pendIP_le, 4);
-    memcpy(&pkt->options[7], &servIP_le, 4);
+    pkt->options[3] =50;
+    pkt->options[4]=4;
+    memcpy(&pkt->options[5], &pendIP_le, 4);
+    pkt->options[9] =54;
+    pkt->options[10]=4;
+    memcpy(&pkt->options[11], &servIP_le, 4);
     
     dhcp_print_packet(pkt);
     
@@ -206,11 +206,11 @@ int dhcp_send_request(){
     *pkt->options = pkt->options[2];
     pkt->options[2] = temp;
 
-    pkt->options[11] = 0xFF;
+    pkt->options[15] = 0xFF;
     
     packetToBigEndian(pkt);
 
-    return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFFF, 68, 67);
+    return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFF, 68, 67);
 }
 
 int dhcp_receive_ack(uint8_t *pkt, uint16_t packet_size){

@@ -110,7 +110,7 @@ uint8_t* LookUpMac(uint32_t ip){
     return test_MAC_ADDR;
 }
 
-static void reverse_mac(uint8_t* addr) {
+void reverse_mac(uint8_t* addr) {
     for (int i = 0; i < 3; ++i) {
         uint8_t tmp = addr[i];
         addr[i] = addr[5 - i];
