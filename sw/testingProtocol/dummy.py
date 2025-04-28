@@ -83,8 +83,8 @@ def dhcp_req_ack():
     offer_ip = "192.168.1.100"
     server_ip = "192.168.1.1"
 
-    ether = Ether(dst=client_mac, src=req_pkt[Ether].dst)
-    ip = IP(src=server_ip, dst="255.255.255.255", flags="DF", frag=0)
+    ether = Ether(dst=client_mac, src="AB:CD:12:34:56")
+    ip = IP(src=server_ip, dst=offer_ip, flags="DF", frag=0)
     udp = UDP(sport=67, dport=68)
     bootp = BOOTP(
         op=2,

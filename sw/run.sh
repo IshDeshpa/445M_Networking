@@ -208,6 +208,42 @@ case $1 in
     echo "✅ Done."
 
     ;;
+
+-a)
+    make clean
+    ret=$(bear -- make -j$NUM_CORES MODE=sw EXTRA_CFLAGS=-DDHCPTEST -s)
+    if [[ $? -ne 0 ]]; then
+        exit
+    fi
+
+    mv compile_commands.json build/
+    #make dump
+    echo -e "Used $NUM_CORES for buidling\n"
+    echo -e "Running Sim\n\n"
+
+    mkdir -p ${dumpdir}
+
+    echo "========================================"
+    echo "⚙️ 1. Run python script "
+    echo "========================================"
+
+    python3 testingProtocol/dummy.py dhcp_ack
+
+    echo "========================================"
+    echo "🔎 2. Inspecting offer response with tshark"
+    echo "========================================"
+    tshark -r temp/dhcp_ack.pcap -o ip.check_checksum:TRUE -V
+
+    echo "========================================"
+    echo "📦 3. Run rx"
+    echo "========================================"
+    build/sw/exe.elf
+    
+    echo "✅ Done."
+
+    ;;
+
+
 -b)
     make clean
 

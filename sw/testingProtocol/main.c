@@ -13,7 +13,7 @@
 
 #ifdef DHCPTEST
 char* tx_outfile = "temp/dhcp_req.txt";
-char* rx_infile = "temp/dhcp_offer.txt";
+char* rx_infile = "temp/dhcp_ack.txt";
 #endif /* ifdef DHCPTEST */
 
 #ifdef ECHOTEST
@@ -82,6 +82,7 @@ int main(int argc, char *argv[]){
     //testPingReq();
 
     //testRX();    
-    testDHCP_REQ();
+    // testDHCP_REQ();
+    ethernetRX();
     return 0;
 }
