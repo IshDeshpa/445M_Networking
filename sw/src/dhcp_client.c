@@ -70,15 +70,26 @@ int dhcp_send_discover(){
     memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
     
     dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
-    
-    memcpy(pkt->options, &dhcp_discover_magicnum, 3); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER 
-    
-    packetToBigEndian(pkt);
 
+    //memset(pkt->options, 0xFF, sizeof(pkt->options));
+
+    memcpy(pkt->options, &dhcp_discover_magicnum, 3); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER 
+
+    uint8_t temp = *pkt->options;
+    *pkt->options = pkt->options[2];
+    pkt->options[2] = temp;
+    
+    pkt->options[3] = 0xFF;
+
+    packetToBigEndian(pkt);
+    
+    printf("%d\n\r", sizeof(dhcp_packet_t));
     return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFF, 68, 67);
 }
  
-int dhcp_receive_offer(dhcp_packet_t *packet, uint16_t packet_size){
+int dhcp_receive_offer(uint8_t *pkt, uint16_t packet_size){
+    dhcp_packet_t *packet = (dhcp_packet_t*)pkt;
+
     packetTolittleEndian(packet);
 
     ASSERT(packet->OP == 0x02);
@@ -93,22 +104,35 @@ int dhcp_receive_offer(dhcp_packet_t *packet, uint16_t packet_size){
     macHeader_t *mac_h = (macHeader_t *)(curr_packet_buffer);
     ASSERT(mac_h->dest_mac == host_mac_address);
 
-    pendingIP = ip_h->destinationIP;
-    dhcp_serverIP = ip_h->sourceIP;
+    pendingIP = packet_ntohl(ip_h->destinationIP);
+    dhcp_serverIP = packet_ntohl(ip_h->sourceIP);
     //memcpy(dhcp_serverIP,  &ip_h->sourceIP, 4);
     
     return 0;
 }
 
+uint32_t dhcp_discover_magicnum2 = 0x00350103;
 int dhcp_send_request(){
     memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
 
     dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
    
-    memset(pkt->options, 0x350103, 3);
-    memset(&pkt->options[3], pendingIP, 4);
-    memset(&pkt->options[7], dhcp_serverIP, 4);
+    //memset(pkt->options, 0x350103, 3);
+    //memset(&pkt->options[3], pendingIP, 4);
+    //memset(&pkt->options[7], dhcp_serverIP, 4);
+    uint32_t pendIP_le = packet_htonl(pendingIP);
+    uint32_t servIP_le = packet_htonl(dhcp_serverIP);
 
+    memcpy(pkt->options, &dhcp_discover_magicnum2, 3);
+    memcpy(&pkt->options[3], &pendIP_le, 4);
+    memcpy(&pkt->options[7], &servIP_le, 4);
+    
+    uint8_t temp = *pkt->options;
+    *pkt->options = pkt->options[2];
+    pkt->options[2] = temp;
+
+    pkt->options[11] = 0xFF;
+    
     packetToBigEndian(pkt);
 
     return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFFF, 68, 67);

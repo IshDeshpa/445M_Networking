@@ -1,5 +1,6 @@
-from scapy.all import Ether, IP, UDP, Raw, wrpcap, DHCP, raw, BOOTP
+from scapy.all import Ether, IP, UDP, BOOTP, DHCP, raw, wrpcap, rdpcap, mac2str
 import random
+import os
 
 def random_mac():
     return ":".join(f"{random.randint(0, 255):02x}" for _ in range(6))
@@ -9,82 +10,108 @@ def generate_random_frame():
     dst_mac = "D8:47:8F:87:18:3F"
     ether_type = 0x0800  # IPv4
 
-    # Create 46–1500 bytes of random payload
     payload_size = 1000
     payload = bytes(random.getrandbits(8) for _ in range(payload_size))
 
-    # Create UDP and IP layers
     src_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
-    #dst_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
     dst_ip = f"192.168.0.100"
     src_port = random.randint(1024, 65535)
     dst_port = random.randint(1024, 65535)
 
     udp_layer = UDP(sport=src_port, dport=dst_port)
-    ip_layer = IP(src=src_ip, dst=dst_ip, flags="DF", frag=0)  
+    ip_layer = IP(src=src_ip, dst=dst_ip, flags="DF", frag=0)
 
-    # Create IP/UDP packet with payload
     packet = Ether(src=src_mac, dst=dst_mac, type=ether_type) / ip_layer / udp_layer / Raw(payload)
-    return packet
+    os.makedirs("temp", exist_ok=True)
+    wrpcap("temp/inbytes.pcap", [packet])
 
-def random_frame():
-    # Generate one frame and write to PCAP
-    frame = generate_random_frame()
-    wrpcap("temp/inbytes.pcap", [frame])
-
-    # Write the frame in raw hex format to a third file
-    packet_bytes = raw(frame) 
-    with open("temp/inbytes.txt", "w") as f:
-        for i in range(0, len(packet_bytes), 16):
-            chunk = packet_bytes[i:i+16]
-            hex_bytes = ' '.join(f"{b:02x}" for b in chunk)
-            f.write(f"{i:04x} {hex_bytes}\n")
-
-    print("Wrote random Ethernet frame to 'temp/inbytes.pcap' and 'temp/inbytes.txt'")
+    print("Wrote random Ethernet frame to 'temp/inbytes.pcap'.")
 
 def dhcp_disc_offer():
-    # Parse discover
-    with open("temp/dhcp_disc.txt", "r") as f:
-        hex_data = f.read().strip()
+    # Read DHCP DISCOVER packet
+    disc_pkt = rdpcap("temp/dhcp_disc.pcap")[0]  # Read packet from pcap
 
-    # Convert the hex string into bytes
-    packet_data = bytes.fromhex(hex_data)
-    
-    disc_pkt = Ether(packet_data)
-    
-    # Send offer
+    # Extract needed fields
+    client_mac = disc_pkt[Ether].src
+    transaction_id = disc_pkt[BOOTP].xid
+
     offer_ip = "192.168.1.100"
     server_ip = "192.168.1.1"
 
-    ether = Ether(dst=disc_pkt[Ether].src, src=disc_pkt[Ether].dst)
-    
-    ip = IP(src=server_ip, dst='255.255.255.255')
+    # Build DHCP OFFER
+    ether = Ether(dst=client_mac, src=disc_pkt[Ether].dst)
+    ip = IP(src=server_ip, dst="255.255.255.255")
     udp = UDP(sport=67, dport=68)
-    bootp = BOOTP(op=2, chaddr=disc_pkt[Ether].src, xid=disc_pkt[BOOTP].xid)
-    dhcp = DHCP(options=[("message-type", "offer"),
-                              ("server_id", "192.168.1.1"),
-                              ("lease_time", 3600),
-                              ("subnet_mask", "255.255.255.0"),
-                              ("router", "192.168.1.1"),
-                              ("dns", "8.8.8.8"),
-                              ("end")])
-
-    # nothing in bootp
-    #empty_bootp = bytes(240)
-
-    #dhcp = DHCP(options=[
-    #    ('message-type', 'offer'),
-    #    ('server_id', server_ip),
-    #    ('yiaddr', offer_ip),
-    #    'end'
-    #])    
+    bootp = BOOTP(
+        op=2,
+        yiaddr=offer_ip,
+        siaddr=server_ip,
+        chaddr=mac2str(client_mac),
+        xid=transaction_id,
+        flags=0x8000  # broadcast flag
+    )
+    dhcp = DHCP(options=[
+        ("message-type", "offer"),
+        ("server_id", server_ip),
+        ("lease_time", 3600),
+        ("subnet_mask", "255.255.255.0"),
+        ("router", server_ip),
+        ("name_server", "8.8.8.8"),
+        "end"
+    ])
 
     offer_pkt = ether / ip / udp / bootp / dhcp
 
-    with open("temp/dhcp_offer_raw.txt", "wb") as f:
-        f.write(bytes(offer_pkt))
-
+    # Save
+    os.makedirs("temp", exist_ok=True)
     wrpcap("temp/dhcp_offer.pcap", [offer_pkt])
+    with open("temp/dhcp_offer_raw.txt", "wb") as f:
+        f.write(raw(offer_pkt))
+
+    print("Wrote DHCP OFFER to 'temp/dhcp_offer.pcap' and 'temp/dhcp_offer_raw.txt'.")
+
+def dhcp_req_ack():
+    # Read DHCP DISCOVER packet
+    req_pkt = rdpcap("temp/dhcp_req.pcap")[0]  # Read packet from pcap
+
+    # Extract needed fields
+    client_mac = req_pkt[Ether].src
+    transaction_id = req_pkt[BOOTP].xid
+
+    offer_ip = "192.168.1.100"
+    server_ip = "192.168.1.1"
+
+    # Build DHCP ACK
+    ether = Ether(dst=client_mac, src=req_pkt[Ether].dst)
+    ip = IP(src=server_ip, dst="255.255.255.255")
+    udp = UDP(sport=67, dport=68)
+    bootp = BOOTP(
+        op=2,
+        yiaddr=offer_ip,
+        siaddr=server_ip,
+        chaddr=mac2str(client_mac),
+        xid=transaction_id,
+        flags=0x8000  # broadcast flag
+    )
+    dhcp = DHCP(options=[
+        ("message-type", "offer"),
+        ("server_id", server_ip),
+        ("lease_time", 3600),
+        ("subnet_mask", "255.255.255.0"),
+        ("router", server_ip),
+        ("name_server", "8.8.8.8"),
+        "end"
+    ])
+
+    ack_pkt = ether / ip / udp / bootp / dhcp
+
+    # Save
+    os.makedirs("temp", exist_ok=True)
+    wrpcap("temp/dhcp_ack.pcap", [offer_pkt])
+    with open("temp/dhcp_ack_raw.txt", "wb") as f:
+        f.write(raw(offer_pkt))
+
+    print("Wrote DHCP ACK to 'temp/dhcp_ack.pcap' and 'temp/dhcp_ack_raw.txt'.")
 
 
 if __name__ == "__main__":
@@ -99,4 +126,3 @@ if __name__ == "__main__":
         dhcp_disc_offer()
     else:
         print("Invalid test")
-

@@ -11,8 +11,8 @@
 
 #define MSG(...) printf("\n\r"); printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 
-char* tx_outfile = "temp/echoresp.txt";
-char* rx_infile = "temp/echoreq.txt";
+char* tx_outfile = "temp/dhcp_req.txt";
+char* rx_infile = "temp/dhcp_offer.txt";
 
 #define PAYLOAD_SIZE 33
 #define DESTINATION_IP 0xC0A80001 //192.0.1.168
@@ -62,6 +62,11 @@ inline static void testRX(void){
 inline static void testDHCP_DISC(void){
     //tx_outfile = "temp/dhcp_disc.txt";
     dhcp_send_discover();
+}
+
+inline static void testDHCP_REQ(void){
+    ethernetRX();
+    dhcp_send_request();
 }
 
 int main(int argc, char *argv[]){
