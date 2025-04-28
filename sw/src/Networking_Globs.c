@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 uint8_t host_mac_address[6];
-uint32_t host_ip_address;
+uint32_t host_ip_address = 0;
 uint32_t subnet_mask;
 uint32_t gateway;
 

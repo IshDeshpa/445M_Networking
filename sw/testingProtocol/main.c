@@ -78,7 +78,7 @@ inline static void testDHCP_REQ(void){
 
 int main(int argc, char *argv[]){
     setHostMac(testhostmac);
-    setHostIP(HOST_IP);
+    //setHostIP(HOST_IP);
     testPingReq();
 
     //testRX();    

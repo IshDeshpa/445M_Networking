@@ -32,7 +32,6 @@
 /* ================================================== */
 
 uint16_t identification = 0x1234;
-
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
@@ -181,7 +180,7 @@ int dropPkt(ipHeader_t* header){
         return 1;
     }
 
-    if (header->destinationIP != host_ip_address) {
+    if ((header->destinationIP != host_ip_address && host_ip_address != 0)) {
         LOG("Dropped packet: IP 0x%08X not meant for us (0x%08X)", header->destinationIP, host_ip_address);
         return 1;
     }
@@ -245,6 +244,6 @@ static void headerToBigEndian(ipHeader_t* header) {
 }
 
 void setHostIP(uint32_t ip_address){
-    host_ip_address = ip_address;   
+    host_ip_address = ip_address;
     //memcpy(host_ip_address, ip_address, 4);
 }
