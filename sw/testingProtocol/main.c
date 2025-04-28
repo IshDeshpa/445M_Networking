@@ -7,6 +7,7 @@
 #include "mac.h"
 #include "Networking_Globs.h"
 #include "stubs.h"
+#include "dhcp_client.h"
 
 #define MSG(...) printf("\n\r"); printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 
@@ -58,9 +59,17 @@ inline static void testRX(void){
     ethernetRX();
 }
 
+inline static void testDHCP_DISC(void){
+    tx_outfile = "temp/dhcp_disc.txt";
+    dhcp_send_discover();
+}
+
 int main(int argc, char *argv[]){
     setHostMac(testhostmac);
     setHostIP((uint8_t*)&HOST_IP);
     testPingReq();
+
+    //testRX();    
+    //testDHCP_DISC();
     return 0;
 }

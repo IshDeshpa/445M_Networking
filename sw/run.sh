@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 NUM_CORES=$(nproc) # On Linux
 
@@ -61,7 +61,7 @@ case $1 in
     echo "🐍 1. Running Python script to generate test packets"
     echo "========================================"
     source .venv/bin/activate
-    python3 testingProtocol/dummy.py
+    python3 testingProtocol/dummy.py random_frame
     deactivate
 
     echo "========================================"
@@ -98,6 +98,49 @@ case $1 in
     mv compile_commands.json build/
     #make dump
     echo -e "Running Sim\n\n"
+
+    ;;
+
+-dd)
+    make clean
+
+    ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
+    if [[ $? -ne 0 ]]; then
+        exit
+    fi
+
+    mv compile_commands.json build/
+    #make dump
+    echo -e "Used $NUM_CORES for buidling\n"
+    echo -e "Running Sim\n\n"
+    
+    mkdir ${dumpdir}
+
+    echo "========================================"
+    echo "⚙️ 1. Running test executable which sends dummy data"
+    echo "========================================"
+    build/sw/exe.elf
+
+    echo "========================================"
+    echo "📦 2. Converting raw text hex dump to PCAP using text2pcap"
+    echo "========================================"
+    # Uncomment the line below if raw file needs Ethernet header
+    # text2pcap -e 0x0800 ${inputfile} ${outputfile}
+    text2pcap temp/dhcp_disc.txt temp/dhcp_disc.pcap 
+
+    echo "========================================"
+    echo "🔎 3. Inspecting converted PCAP with tshark"
+    echo "========================================"
+    tshark -r temp/dhcp_disc.pcap -o ip.check_checksum:TRUE -V
+
+    
+    echo "========================================"
+    echo "🔎 4. Parsing with python dhcp"
+    echo "========================================"
+
+    python3 testingProtocol/dummy.py dhcp
+
+    echo "✅ Done."
 
     ;;
 *)

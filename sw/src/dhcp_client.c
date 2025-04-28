@@ -28,8 +28,9 @@ static dhcp_packet_t dhcp_template_packet = {
   .cookie = MAGIC_COOKIE
 };
 
-static uint32_t pendingIP;
-static uint32_t dhcp_serverIP; 
+static uint8_t pendingIP[4];
+static uint8_t dhcp_serverIP[4];
+static uint8_t dhcp_serverMac[6];
 
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
@@ -60,19 +61,19 @@ static inline void packetTolittleEndian(dhcp_packet_t *packet){
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
-int send_discover(){
+int dhcp_send_discover(){
     memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
     
     dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
-    memset(pkt->misc, 0x35010100, 4); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER
     
+    //memset(pkt->misc, 0x35010100, 4); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER
     
-    packetToBigEndian(curr_packet_buffer);
+    packetToBigEndian(pkt);
 
     return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFF, 68, 67);
 }
-
-int receive_offer(dhcp_packet_t *packet, uint16_t packet_size){
+ 
+int dhcp_receive_offer(dhcp_packet_t *packet, uint16_t packet_size){
     packetTolittleEndian(packet);
 
     ASSERT(packet->OP == 0x02);
@@ -83,24 +84,28 @@ int receive_offer(dhcp_packet_t *packet, uint16_t packet_size){
     ASSERT(packet->server_ip != 0);
 
     // Get the actual destination ip
-    ipHeader_t *ip_h = (udpHeader_t *)(curr_packet_buffer + sizeof(macHeader_t));
-    pendingIP = ip_h->destinationIP;
-    dhcp_serverIP = ip_h->sourceIP;
+    ipHeader_t *ip_h = (ipHeader_t *)(curr_packet_buffer + sizeof(macHeader_t));
+    macHeader_t *mac_h = (macHeader_t *)(curr_packet_buffer);
+    ASSERT(mac_h->dest_mac == host_mac_address);
+
+    memcpy(pendingIP, &ip_h->destinationIP, 4);
+    memcpy(dhcp_serverIP,  &ip_h->sourceIP, 4);
+    
+    return 0;
 }
 
-int send_request(){
-     memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
-    
+int dhcp_send_request(){
+    memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
+
     dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
-    memset(pkt->misc, 0x35010100, 4); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER
+    //memset(pkt->misc, 0x35010100, 4); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER    
     
-    
-    packetToBigEndian(curr_packet_buffer);
+    packetToBigEndian(pkt);
 
-    return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, dhcp_serverIP, 68, 67);
+    return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFFF, 68, 67);
 }
 
-int receive_ack(dhcp_packet_t *packet, uint16_t packet_size){
+int dhcp_receive_ack(dhcp_packet_t *packet, uint16_t packet_size){
     packetTolittleEndian(packet);
 
     ASSERT(packet->OP == 0x02);
@@ -109,8 +114,13 @@ int receive_ack(dhcp_packet_t *packet, uint16_t packet_size){
     ASSERT(packet->XID == DHCP_XID);
     ASSERT(packet->my_ip == pendingIP);
     ASSERT(packet->server_ip == dhcp_serverIP);
+    
+    macHeader_t *mac_h = (macHeader_t *)(curr_packet_buffer);
+    ASSERT(mac_h->dest_mac == host_mac_address);
 
-    setHostIP(&pendingIP);
+    setHostIP(pendingIP);
+
+    return 0;
 }
 
 
