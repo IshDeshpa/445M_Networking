@@ -98,7 +98,7 @@ errIP_t ip4_rx(uint8_t* payload){
         return IP_RX_PCKT_DROPPED;
     }
 
-    SendPktToTransport(header, payload + HEADER_SIZE_DEFAULT, header->totalPacketLength - HEADER_SIZE_DEFAULT);
+    SendPktToTransport(header, payload + (header->ihl << 2), header->totalPacketLength - header->ihl << 2);
     return IP_SUCCESS;
 }
 
@@ -163,10 +163,10 @@ int dropPkt(ipHeader_t* header){
         return 1;
     }
 
-    if (header->ihl != (HEADER_SIZE_DEFAULT / 4)) {
-        LOG("Dropped packet: Invalid IHL (%u)", header->ihl);
-        return 1;
-    }
+    //if (header->ihl != (HEADER_SIZE_DEFAULT / 4)) {
+    //    LOG("Dropped packet: Invalid IHL (%u)", header->ihl);
+    //    return 1;
+    //}
 
     if (header->totalPacketLength > MTU) {
         LOG("Dropped packet: Packet length %u exceeds MTU", header->totalPacketLength);
