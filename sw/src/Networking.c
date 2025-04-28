@@ -179,13 +179,11 @@ void eth_callback(uint8 u8MsgType, void *pvMsg, void *pvCtrlBuf) {
             LOG("Ethernet RX packet response received.");
             uint8 au8RemoteIpAddr[4];
 
-            uint8 *au8packet = (uint8*)pvMsg;
-            memcpy(eth_rcv_buf, au8packet, MTU+200);
+            uint8 *au8packet = pvMsg; // skip header
+            memcpy(eth_rcv_buf, au8packet - 6, MTU+200);
 
             tstrM2MDataBufCtrl *PstrM2mIpCtrlBuf =( tstrM2MDataBufCtrl *)pvCtrlBuf;
-            eth_rcv_size = PstrM2mIpCtrlBuf->u16DataSize;
-            
-            prettyprint_payload(pvMsg, PstrM2mIpCtrlBuf->u16DataSize);
+            eth_rcv_size = PstrM2mIpCtrlBuf->u16DataSize + 6; // skip header
 
             LOG("Ethernet Frame Received buffer, Size = %d, Remaining = %d, Data offset = %d, Ifc ID = %d",
                 PstrM2mIpCtrlBuf->u16DataSize,
@@ -498,8 +496,10 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 
 void ethernetRX(void){
     LOG("ethernetRX reached");
-
+    
+    printf("\n\n\n===ethernetRX===\n\r");
     prettyprint_payload(eth_rcv_buf, eth_rcv_size);
+    printf("===ethernetRX===\n\r");
 
     macRX(eth_rcv_buf, eth_rcv_size);
     return;
