@@ -1,11 +1,13 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "UDP.h"
 #include "mac.h"
 #include <string.h>
 #include "printf.h"
 #include "stubs.h"
 #include "Networking_Globs.h"
+#include "dhcp_client.h"
 
 extern char *tx_outfile;
 extern char *rx_infile;
@@ -60,6 +62,8 @@ void ethernetRX() {
     fclose(fptr);
     macRX(rx_buffer, i);  // Pass the byte buffer to MAC layer (adjust the second argument if needed)
 }
+
+uint8_t dhcp_rx_buf[MTU];
 void userRXData(uint8_t* payload, uint16_t size) {
     printf("========== Received Payload (%u bytes) ==========\n", size);
     for (uint16_t i = 0; i < size; i++) {

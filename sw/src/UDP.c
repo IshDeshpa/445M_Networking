@@ -1,4 +1,5 @@
 #include "UDP.h"
+#include "dhcp_client.h"
 #include "ip.h"
 #include "Networking_Globs.h"
 #include <string.h>
@@ -14,7 +15,7 @@ static void headerToBigEndian(udpHeader_t* header);
 
 
 
-errUDP_t udp_tx(uint8_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16_t sourcePort, uint16_t destPort){
+errUDP_t udp_tx(uint16_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16_t sourcePort, uint16_t destPort){
     //ASSERT(payload == curr_packet_buffer);
     //ASSERT(payloadsize <= MTU);
 
@@ -50,6 +51,10 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
     if(checksum != 0xFFFF){
         LOG("Packet Dropped");
         return UDP_RX_FAIL;
+    }
+
+    if(header->destinationPort == 68){
+        dhcp_receive_offer(payload + sizeof(udpHeader_t), payloadsize - sizeof(udpHeader_t));
     }
 
     userRXData(payload + HEADER_SIZE, (header->length)-HEADER_SIZE); 

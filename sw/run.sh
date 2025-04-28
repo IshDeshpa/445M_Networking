@@ -113,7 +113,6 @@ case $1 in
 
 -d)
     make clean
-
     ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
     if [[ $? -ne 0 ]]; then
         exit
@@ -154,6 +153,55 @@ case $1 in
     tshark -r temp/dhcp_offer.pcap -o ip.check_checksum:TRUE -V
 
     echo "✅ Done."
+    ;;
+-dd)
+    make clean
+    ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
+    if [[ $? -ne 0 ]]; then
+        exit
+    fi
+
+    mv compile_commands.json build/
+    #make dump
+    echo -e "Used $NUM_CORES for buidling\n"
+    echo -e "Running Sim\n\n"
+
+    mkdir -p ${dumpdir}
+
+    echo "========================================"
+    echo "⚙️ 1. Run python script "
+    echo "========================================"
+    python3 testingProtocol/dummy.py dhcp
+
+    echo "========================================"
+    echo "📦 2. Run rx"
+    echo "========================================"
+    build/sw/exe.elf
+
+    echo "========================================"
+    echo "📦 3. Converting raw text hex dump to PCAP using text2pcap"
+    echo "========================================"
+    # Uncomment the line below if raw file needs Ethernet header
+    # text2pcap -e 0x0800 ${inputfile} ${outputfile}
+    text2pcap temp/dhcp_req.txt temp/dhcp_req.pcap
+
+    echo "========================================"
+    echo "🔎 4. Inspecting converted PCAP with tshark"
+    echo "========================================"
+    tshark -r temp/dhcp_req.pcap -o ip.check_checksum:TRUE -V
+
+    echo "========================================"
+    echo "🔎 4. Generating ack response..."
+    echo "========================================"
+    python3 testingProtocol/dummy.py dhcp2
+
+    echo "========================================"
+    echo "🔎 5. Inspecting offer response with tshark"
+    echo "========================================"
+    tshark -r temp/dhcp_ack.pcap -o ip.check_checksum:TRUE -V
+
+    echo "✅ Done."
+
 
     ;;
 -b)
