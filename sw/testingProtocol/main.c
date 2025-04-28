@@ -67,9 +67,9 @@ inline static void testDHCP_DISC(void){
 int main(int argc, char *argv[]){
     setHostMac(testhostmac);
     setHostIP(HOST_IP);
-    testPingReq();
+    //testPingReq();
 
     //testRX();    
-    //testDHCP_DISC();
+    testDHCP_DISC();
     return 0;
 }

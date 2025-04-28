@@ -26,6 +26,7 @@ typedef struct __attribute((packed)) {
     uint16_t mac_address;
     uint8_t misc[192];
     uint32_t cookie;
+    uint8_t options[274];
 } dhcp_packet_t;
 
 /* ================================================== */

@@ -1,4 +1,4 @@
-from scapy.all import Ether, IP, UDP, Raw, wrpcap, DHCP
+from scapy.all import Ether, IP, UDP, Raw, wrpcap, DHCP, raw, BOOTP
 import random
 
 def random_mac():
@@ -32,19 +32,15 @@ def random_frame():
     frame = generate_random_frame()
     wrpcap("temp/inbytes.pcap", [frame])
 
-    # Write frame details to a text file
-    with open("temp/inbytes_raw.txt", "wb") as txt_file:
-        txt_file.write(bytes(frame))
+    # Write the frame in raw hex format to a third file
+    packet_bytes = raw(frame) 
+    with open("temp/inbytes.txt", "w") as f:
+        for i in range(0, len(packet_bytes), 16):
+            chunk = packet_bytes[i:i+16]
+            hex_bytes = ' '.join(f"{b:02x}" for b in chunk)
+            f.write(f"{i:04x} {hex_bytes}\n")
 
     print("Wrote random Ethernet frame to 'temp/inbytes.pcap' and 'temp/inbytes.txt'")
-
-    # Write the frame in raw hex format to a third file
-    hex_data = bytes(frame).hex()
-    with open("temp/inbytes.txt", "w") as readable_file:
-        for i in range(0, len(hex_data), 32):
-            line = hex_data[i:i+32]
-            readable_file.write(f"{int(i//2):04x} ")
-            readable_file.write(" ".join(line[j:j+2] for j in range(0, len(line), 2)) + "\n") 
 
 def dhcp_disc_offer():
     # Parse discover
@@ -64,16 +60,26 @@ def dhcp_disc_offer():
     
     ip = IP(src=server_ip, dst='255.255.255.255')
     udp = UDP(sport=67, dport=68)
+    bootp = BOOTP(op=2, chaddr=disc_pkt[Ether].src, xid=disc_pkt[BOOTP].xid)
+    dhcp = DHCP(options=[("message-type", "offer"),
+                              ("server_id", "192.168.1.1"),
+                              ("lease_time", 3600),
+                              ("subnet_mask", "255.255.255.0"),
+                              ("router", "192.168.1.1"),
+                              ("dns", "8.8.8.8"),
+                              ("end")])
+
     # nothing in bootp
-    empty_bootp = bytes(240)
+    #empty_bootp = bytes(240)
 
-    dhcp = DHCP(options=[
-        ('message-type', 'offer'),
-        ('server_id', server_ip),
-        'end'
-    ])    
+    #dhcp = DHCP(options=[
+    #    ('message-type', 'offer'),
+    #    ('server_id', server_ip),
+    #    ('yiaddr', offer_ip),
+    #    'end'
+    #])    
 
-    offer_pkt = ether / ip / udp / empty_bootp
+    offer_pkt = ether / ip / udp / bootp / dhcp
 
     with open("temp/dhcp_offer_raw.txt", "wb") as f:
         f.write(bytes(offer_pkt))

@@ -66,7 +66,7 @@ int dhcp_send_discover(){
     
     dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
     
-    //memset(pkt->misc, 0x35010100, 4); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER
+    memset(pkt->options, 0x350101, 3); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER 
     
     packetToBigEndian(pkt);
 
@@ -99,8 +99,11 @@ int dhcp_send_request(){
     memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
 
     dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
-    //memset(pkt->misc, 0x35010100, 4); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER    
-    
+   
+    memset(pkt->options, 0x350103, 3);
+    memset(&pkt->options[3], pendingIP, 4);
+    memset(&pkt->options[7], dhcp_serverIP, 4);
+
     packetToBigEndian(pkt);
 
     return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFFF, 68, 67);
