@@ -156,4 +156,16 @@ int dhcp_receive_ack(dhcp_packet_t *packet, uint16_t packet_size){
     return 0;
 }
 
+#define DHCP_OPTIONS_MAGICNUM_IDX (2)
+#define DHCP_OPTIONS_MAGICNUM_OFFER_MASK (0x02)
+#define DHCP_OPTIONS_MAGICNUM_ACK_MASK (0x05)
+
+int dhcpRX(uint8_t* payload, uint16_t payloadsize){
+    dhcp_packet_t* header = (dhcp_packet_t*)payload;
+    if(header->options[DHCP_OPTIONS_MAGICNUM_IDX] == DHCP_OPTIONS_MAGICNUM_OFFER_MASK){
+        dhcp_receive_offer(payload, payloadsize);
+    }else if(header->options[DHCP_OPTIONS_MAGICNUM_IDX] == DHCP_OPTIONS_MAGICNUM_ACK_MASK){
+        dhcp_receive_ack(payload, payloadsize);
+    }
+}
 
