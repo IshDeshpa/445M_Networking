@@ -7,11 +7,15 @@
 #include "ip.h"
 #include "Networking_Globs.h"
 #include "string.h"
+#include <stdint.h>
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
 #define DHCP_DISCOVER_SIZE (240)
 #define DHCP_XID (0xDEADBEEF)
+
+uint8_t curr_packet_buffer[MTU];
+
 static dhcp_packet_t dhcp_template_packet = {
   .OP = 0x01, // OP (request)
   .HTYPE = 0x01, // HTYPE (ethernet; should this be wifi (IEEE 802)?)
@@ -61,12 +65,13 @@ static inline void packetTolittleEndian(dhcp_packet_t *packet){
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
+uint32_t dhcp_discover_magicnum = 0x00350101;
 int dhcp_send_discover(){
     memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
     
     dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
     
-    memset(pkt->options, 0x350101, 3); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER 
+    memcpy(pkt->options, &dhcp_discover_magicnum, 3); // Option 53 (DHCP Message Type) 1 octet with DHCPDISCOVER 
     
     packetToBigEndian(pkt);
 

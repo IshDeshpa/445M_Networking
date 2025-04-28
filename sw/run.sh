@@ -124,7 +124,7 @@ case $1 in
     echo -e "Used $NUM_CORES for buidling\n"
     echo -e "Running Sim\n\n"
 
-    mkdir ${dumpdir}
+    mkdir -p ${dumpdir}
 
     echo "========================================"
     echo "⚙️ 1. Running test executable which sends dummy data"
