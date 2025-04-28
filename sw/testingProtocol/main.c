@@ -10,6 +10,8 @@
 
 #define MSG(...) printf("\n\r"); printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 
+char *rx_infile;
+char *tx_outfile;
 #define PAYLOAD_SIZE 33
 #define DESTINATION_IP 0xC0A80001 //192.0.1.168
 uint32_t HOST_IP  = 0xC0A80064;  // 192.168.0.100
@@ -46,6 +48,12 @@ inline static void testTX(void){
     MSG("oopsie poopsie packet recived");  
 }
 
+inline static void testPingReq(void){
+    char expRx_inpfile[] = "temp/echoreq.txt";
+    rx_infile = expRx_inpfile;
+    ethernetRX();
+}
+
 inline static void testRX(void){
     ethernetRX();
 }
@@ -53,8 +61,6 @@ inline static void testRX(void){
 int main(int argc, char *argv[]){
     setHostMac(testhostmac);
     setHostIP((uint8_t*)&HOST_IP);
-    //testTX();
-    testRX();    
-
+    testPingReq();
     return 0;
 }

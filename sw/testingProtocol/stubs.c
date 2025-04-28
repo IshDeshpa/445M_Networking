@@ -28,7 +28,7 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 uint8_t rx_buffer[MTU+50];
 void ethernetRX (){
     //call mac api layer
-    FILE *fptr = fopen(rx_outfile, "r");
+    FILE *fptr = fopen(rx_infile, "r");
     if (fptr == NULL) {
         printf("Error opening file\n");
     }
@@ -49,7 +49,6 @@ void ethernetRX (){
     }
     fclose(fptr);
     macRX(rx_buffer, 0);
-
 }
 
 void userRXData(uint8_t* payload, uint16_t size) {

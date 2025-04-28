@@ -2,6 +2,7 @@
 /*                      INCLUDES                      */
 /* ================================================== */
 #include "ip.h"
+#include "ICMP.h"
 #include "internet_checksum.h"
 #include <stdint.h>
 #include <string.h>
@@ -39,7 +40,7 @@ static void headerToBigEndian(ipHeader_t* header);
 static void headerTolittleEndian(ipHeader_t* header);
 
 int dropPkt(ipHeader_t* header);
-errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data);
+errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data, uint16_t datasize);
 /* ================================================== */
 /*                 FUNCTION DEFINITIONS               */
 /* ================================================== */
@@ -98,17 +99,16 @@ errIP_t ip4_rx(uint8_t* payload){
         return IP_RX_PCKT_DROPPED;
     }
 
-    SendPktToTransport(header, payload + (header->ihl >> 4));
+    SendPktToTransport(header, payload + (header->ihl << 2), header->totalPacketLength - HEADER_SIZE_DEFAULT);
     return IP_SUCCESS;
 }
 
 //expects data to have the trasnport header, not ip header
-errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data) {
+errIP_t SendPktToTransport(ipHeader_t* header, uint8_t* data, uint16_t datasize) {
     switch (header->protocol) {
         case IP_PROTOCOL_ICMP:
-            //TODO:add icmp support
-            //return icmp_rx(header, data);
-            return IP_RX_UNSUPPORTED_PROTOCOL;
+            int ret = icmp_rx(data, datasize);
+            return ret == ICMP_SUCCESS? IP_SUCCESS: IP_RX_FAIL;
 
         case IP_PROTOCOL_IGMP:
             LOG("Received IGMP packet — not handled");
