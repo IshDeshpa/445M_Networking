@@ -173,12 +173,6 @@ void eth_callback(uint8 u8MsgType, void *pvMsg, void *pvCtrlBuf) {
                 PstrM2mIpCtrlBuf->u16RemainigDataSize,
                 PstrM2mIpCtrlBuf->u8DataOffset,
                 PstrM2mIpCtrlBuf->u8IfcId);
-            
-            for (int i = 0; i < PstrM2mIpCtrlBuf->u16DataSize; i++) {
-                if(i%0x10 == 0){printf("\n\r%04x ", i);}
-                printf("%02x ", au8packet[i]);
-            }
-            printf("\n\r");
 
             ethernetRX();
 
@@ -229,6 +223,8 @@ errNetworking_t get_mac(void) {
         LOG("STA MAC: ");
         print_mac(mac_sta);
 
+        // Set the host MAC address in little endian
+        // Will be flipped when actually sending out
         setHostMac(mac_sta);
     } else {
         LOG("Failed to get MAC addresses\n");
@@ -473,6 +469,7 @@ void ethernetTX(uint8_t* payload, uint16_t size){
         if(i%0x10 == 0){printf("\n\r%04x ", i);}
         printf("%02x ", payload[i]);
     }
+    printf("\n\r");
 
     LOG("Payload (not pcap):\n\r");
     for (int i = 0; i < size; i++) {
@@ -489,6 +486,21 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 
 void ethernetRX(void){
     LOG("ethernetRX reached");
+    LOG("Full payload (pcap format):");
+    for (int i = 0; i < eth_rcv_size; i++) {
+        if(i%0x10 == 0){printf("\n\r%04x ", i);}
+        printf("%02x ", eth_rcv_buf[i]);
+    }
+    printf("\n\r");
+
+    LOG("Payload (not pcap):\n\r");
+    for (int i = 0; i < eth_rcv_size; i++) {
+        printf("%02x ", eth_rcv_buf[i]);
+    }
+
+    printf("\n\r");
+    LOG("Payload size: %d", eth_rcv_size);
+
     macRX(eth_rcv_buf, eth_rcv_size);
     return;
 }

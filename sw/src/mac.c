@@ -95,7 +95,9 @@ errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype
     return MAC_SUCCESS;
 }
 
+// SHOULD BE PASSED AS BIG ENDIAN
 void setHostMac(uint8_t mac[6]){
+    reverse_mac(mac);
     memcpy(host_mac_address, mac, 6);
 }
 

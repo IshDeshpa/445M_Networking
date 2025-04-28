@@ -30,7 +30,7 @@ static const dhcp_packet_t dhcp_template = {
     .gateway_ip = 0,
     .mac_address = {0},
     .misc = {0},
-    .cookie = 0x63825363, // DHCP magic cookie
+    .cookie = 0x63538263, // DHCP magic cookie; flipped for network byte order
     .options = {0}
 };
 
@@ -42,8 +42,9 @@ static uint32_t dhcp_offered_ip = 0;
 static void prepare_dhcp_packet(dhcp_packet_t *pkt) {
     LOG("Preparing DHCP packet");
     memcpy(pkt, &dhcp_template, sizeof(dhcp_packet_t));
-    memset(pkt->mac_address, 0, 16);
+    
     memcpy(pkt->mac_address, host_mac_address, 6);
+
     LOG("DHCP packet prepared with MAC address: %02X:%02X:%02X:%02X:%02X:%02X",
         host_mac_address[0], host_mac_address[1], host_mac_address[2],
         host_mac_address[3], host_mac_address[4], host_mac_address[5]);

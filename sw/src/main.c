@@ -91,7 +91,7 @@ void Task_TestNetworking(void){
     OS_Sleep(1000);
     Network_Scan();
     OS_Sleep(1000);
-    Network_Connect("moon-LANder", "caterer81backslid1party");
+    Network_Connect("utexas-iot", "91066905343452506107");
 
     OS_AddThread(Task_DHCPClient, STACKSIZE, 5);
     
