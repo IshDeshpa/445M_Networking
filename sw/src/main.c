@@ -14,6 +14,8 @@
 #include "bus_wrapper/include/nm_bus_wrapper.h"
 #include "driver/include/m2m_wifi.h"
 
+#include "dhcp_client.h"
+
 #include "Networking.h"
 #include "printf.h"
 #include <stdint.h>
@@ -89,8 +91,10 @@ void Task_TestNetworking(void){
     OS_Sleep(1000);
     Network_Scan();
     OS_Sleep(1000);
-    Network_Connect("utexas-iot", "91066905343452506107");
+    Network_Connect("moon-LANder", "caterer81backslid1party");
 
+    OS_AddThread(Task_DHCPClient, STACKSIZE, 5);
+    
     while(1){
       //printf("TestThread Sleeping\n\r");
       GPIO_PORTF_DATA_R ^= 0x04;

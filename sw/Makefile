@@ -150,6 +150,7 @@ SRC_FILES += \
 		src/UDP.c \
 		src/internet_checksum.c \
 		src/ICMP.c \
+		src/DHCP.c \
 		src/dhcp_client.c
 
 # Include paths

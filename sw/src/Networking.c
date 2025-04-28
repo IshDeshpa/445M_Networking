@@ -29,6 +29,9 @@ uint8_t irq_rcv_buf[MTU+200];
 uint8_t eth_rcv_buf[MTU+200];
 uint16_t eth_rcv_size;
 
+uint8_t *curr_send_buf;
+uint16_t curr_send_size;
+
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
@@ -226,6 +229,7 @@ errNetworking_t get_mac(void) {
         LOG("STA MAC: ");
         print_mac(mac_sta);
 
+        setHostMac(mac_sta);
     } else {
         LOG("Failed to get MAC addresses\n");
         ret = GET_MAC_FAIL;
@@ -308,6 +312,7 @@ void Network_Connect(char *ssid, char *password){
     OS_Wait(&data_captured);
 
     tstrM2mWifiStateChanged *data = (tstrM2mWifiStateChanged*)msg;
+    // LOG("Connected to AP: %s %s", ssid, password);
     if(data->u8CurrState == M2M_WIFI_CONNECTED){
         LOG("Connected to AP: %s %s", ssid, password);
     }else if(data->u8CurrState == M2M_WIFI_DISCONNECTED){
@@ -326,7 +331,6 @@ void Network_Disconnect(void){
 void Network_Send_Raw(void){
     network_command_t cmd;
     cmd.command = NW_SEND_RAW;
-    memset(cmd.data, 0, sizeof(cmd.data));
 
     OS_Fifo_Put((uint8_t*)&cmd, &network_command_fifo);
 }
@@ -415,13 +419,8 @@ void Task_NetworkThread(void){
             case NW_SEND_RAW:
                 LOG("Send raw command received");
                 // Call the send raw function here
-                
-                break;
-            case NW_RECEIVE_RAW:
-                LOG("Receive raw command received");
-                // Call the receive raw function here
-                break;
-            
+                m2m_wifi_send_ethernet_pkt(curr_send_buf, curr_send_size, AP_INTERFACE);
+                break;            
             default:
                 LOG("Unknown command received");
                 break;
@@ -452,7 +451,7 @@ void Task_NetworkingInit(){
     OS_InitSemaphore(&data_captured, 0);
     OS_InitSemaphore(&data_captured2, 0);
     OS_InitSemaphore(&wifi_mutex, 1);
-
+    
     nm_bsp_init();
     LOG("NM BSP init finished\n\r");
     Wifi_Init();
@@ -469,6 +468,22 @@ void Task_NetworkingInit(){
 
 void ethernetTX(uint8_t* payload, uint16_t size){
     LOG("ethernetTx reached");
+    LOG("Full payload (pcap format):");
+    for (int i = 0; i < size; i++) {
+        if(i%0x10 == 0){printf("\n\r%04x ", i);}
+        printf("%02x ", payload[i]);
+    }
+
+    LOG("Payload (not pcap):\n\r");
+    for (int i = 0; i < size; i++) {
+        printf("%02x ", payload[i]);
+    }
+
+    printf("\n\r");
+    LOG("Payload size: %d", size);
+    curr_send_buf = payload;
+    curr_send_size = size;
+    Network_Send_Raw();
     return;
 }
 

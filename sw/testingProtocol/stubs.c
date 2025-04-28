@@ -7,7 +7,7 @@
 #include "printf.h"
 #include "stubs.h"
 #include "Networking_Globs.h"
-#include "dhcp_client.h"
+#include "DHCP.h"
 
 extern char *tx_outfile;
 extern char *rx_infile;

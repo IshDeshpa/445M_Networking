@@ -188,42 +188,42 @@ int dropPkt(ipHeader_t* header){
 }
 
 void ip4_print_header(ipHeader_t* header) {
-    printf("========== IP HEADER (HEX + DECIMAL) ==========\n");
+    printf("========== IP HEADER (HEX + DECIMAL) ==========\n\r");
 
-    printf("Version           : 0x%01X (%u)\n", header->version, header->version);           
-    printf("IHL               : 0x%01X (%u bytes)\n", header->ihl, header->ihl * 4);
+    printf("Version           : 0x%01X (%u)\n\r", header->version, header->version);           
+    printf("IHL               : 0x%01X (%u bytes)\n\r", header->ihl, header->ihl * 4);
 
     uint8_t dscp = (header->DSCP_ECN & 0xFC) >> 2;
     uint8_t ecn  = (header->DSCP_ECN & 0x03);
-    printf("DSCP              : 0x%02X (%u)\n", dscp, dscp);
-    printf("ECN               : 0x%01X (%u)\n", ecn, ecn);
+    printf("DSCP              : 0x%02X (%u)\n\r", dscp, dscp);
+    printf("ECN               : 0x%01X (%u)\n\r", ecn, ecn);
 
-    printf("Total Length      : 0x%04X (%u)\n", header->totalPacketLength, header->totalPacketLength);
-    printf("Identification    : 0x%04X (%u)\n", header->identification, header->identification);
+    printf("Total Length      : 0x%04X (%u)\n\r", header->totalPacketLength, header->totalPacketLength);
+    printf("Identification    : 0x%04X (%u)\n\r", header->identification, header->identification);
   
     // This shifting takes place while flags_fragmentOffset is in big endian
     uint16_t frag = header->flags_fragmentOffset;
     uint8_t flags = (frag & 0xE0) >> 5;
     uint16_t offset = ((frag & 0xFF00) >> 8) | ((frag & 0x001F) << 8);
 
-    printf("Flags             : 0x%01X (DF=%u, MF=%u)\n", flags,
+    printf("Flags             : 0x%01X (DF=%u, MF=%u)\n\r", flags,
            (flags >> 1) & 1, flags & 1);
-    printf("Fragment Offset   : 0x%04X (%u)\n", offset, offset);
+    printf("Fragment Offset   : 0x%04X (%u)\n\r", offset, offset);
 
-    printf("TTL               : 0x%02X (%u)\n", header->TTL, header->TTL);
-    printf("Protocol          : 0x%02X (%u)\n", header->protocol, header->protocol);
-    printf("Header Checksum   : 0x%04X (%u)\n", header->headerChecksum, header->headerChecksum);
+    printf("TTL               : 0x%02X (%u)\n\r", header->TTL, header->TTL);
+    printf("Protocol          : 0x%02X (%u)\n\r", header->protocol, header->protocol);
+    printf("Header Checksum   : 0x%04X (%u)\n\r", header->headerChecksum, header->headerChecksum);
 
     uint8_t* src = (uint8_t*)&header->sourceIP;
     uint8_t* dst = (uint8_t*)&header->destinationIP;
 
-    printf("Source IP         : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n", 
+    printf("Source IP         : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n\r", 
             src[3], src[2], src[1], src[0], src[3], src[2], src[1], src[0]);
 
-    printf("Destination IP    : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n", 
+    printf("Destination IP    : 0x%02X%02X%02X%02X (%u.%u.%u.%u)\n\r", 
             dst[3], dst[2], dst[1], dst[0], dst[3], dst[2], dst[1], dst[0]);
 
-    printf("===============================================\n");
+    printf("===============================================\n\r");
 }
 
 static void headerTolittleEndian(ipHeader_t* header){

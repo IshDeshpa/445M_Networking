@@ -7,7 +7,7 @@
 #include "mac.h"
 #include "Networking_Globs.h"
 #include "stubs.h"
-#include "dhcp_client.h"
+#include "DHCP.h"
 
 #define MSG(...) printf("\n\r"); printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 

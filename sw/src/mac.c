@@ -139,13 +139,13 @@ static void headerToBigEndian(macHeader_t* header) {
 }
 
 void mac_print_header(const macHeader_t* header) {
-    printf("========== MAC HEADER ==========\n");
+    printf("========== MAC HEADER ==========\n\r");
 
-    printf("Destination MAC     : %02X:%02X:%02X:%02X:%02X:%02X\n",
+    printf("Destination MAC     : %02X:%02X:%02X:%02X:%02X:%02X\n\r",
            header->dest_mac[5], header->dest_mac[4], header->dest_mac[3],
            header->dest_mac[2], header->dest_mac[1], header->dest_mac[0]);
 
-    printf("Source MAC          : %02X:%02X:%02X:%02X:%02X:%02X\n",
+    printf("Source MAC          : %02X:%02X:%02X:%02X:%02X:%02X\n\r",
            header->src_mac[5], header->src_mac[4], header->src_mac[3],
            header->src_mac[2], header->src_mac[1], header->src_mac[0]);
 
@@ -154,18 +154,18 @@ void mac_print_header(const macHeader_t* header) {
     // Optional: print a description if known
     switch (header->ethertype) {
         case 0x0800:
-            printf(" (IPv4)\n");
+            printf(" (IPv4)\n\r");
             break;
         case 0x0806:
-            printf(" (ARP)\n");
+            printf(" (ARP)\n\r");
             break;
         case 0x86DD:
-            printf(" (IPv6)\n");
+            printf(" (IPv6)\n\r");
             break;
         default:
-            printf(" (Unknown)\n");
+            printf(" (Unknown)\n\r");
             break;
     }
 
-    printf("================================\n");
+    printf("================================\n\r");
 }
