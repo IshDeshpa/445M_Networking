@@ -116,6 +116,8 @@ int dhcp_send_request(){
     memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
 
     dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
+
+    pkt->OP = 1;
    
     //memset(pkt->options, 0x350103, 3);
     //memset(&pkt->options[3], pendingIP, 4);
@@ -138,7 +140,8 @@ int dhcp_send_request(){
     return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFFF, 68, 67);
 }
 
-int dhcp_receive_ack(dhcp_packet_t *packet, uint16_t packet_size){
+int dhcp_receive_ack(uint8_t *pkt, uint16_t packet_size){
+    dhcp_packet_t *packet = (dhcp_packet_t*)pkt;
     packetTolittleEndian(packet);
 
     ASSERT(packet->OP == 0x02);

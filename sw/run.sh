@@ -145,7 +145,7 @@ case $1 in
     echo "========================================"
     echo "🔎 4. Generating offer response..."
     echo "========================================"
-    python3 testingProtocol/dummy.py dhcp
+    python3 testingProtocol/dummy.py dhcp_offer
 
     echo "========================================"
     echo "🔎 5. Inspecting offer response with tshark"
@@ -171,32 +171,37 @@ case $1 in
     echo "========================================"
     echo "⚙️ 1. Run python script "
     echo "========================================"
-    python3 testingProtocol/dummy.py dhcp
+    python3 testingProtocol/dummy.py dhcp_offer
 
     echo "========================================"
-    echo "📦 2. Run rx"
+    echo "🔎 2. Inspecting offer response with tshark"
+    echo "========================================"
+    tshark -r temp/dhcp_offer.pcap -o ip.check_checksum:TRUE -V
+    
+    echo "========================================"
+    echo "📦 3. Run rx"
     echo "========================================"
     build/sw/exe.elf
 
     echo "========================================"
-    echo "📦 3. Converting raw text hex dump to PCAP using text2pcap"
+    echo "📦 4. Converting raw text hex dump to PCAP using text2pcap"
     echo "========================================"
     # Uncomment the line below if raw file needs Ethernet header
     # text2pcap -e 0x0800 ${inputfile} ${outputfile}
     text2pcap temp/dhcp_req.txt temp/dhcp_req.pcap
 
     echo "========================================"
-    echo "🔎 4. Inspecting converted PCAP with tshark"
+    echo "🔎 5. Inspecting converted PCAP with tshark"
     echo "========================================"
     tshark -r temp/dhcp_req.pcap -o ip.check_checksum:TRUE -V
 
     echo "========================================"
-    echo "🔎 4. Generating ack response..."
+    echo "🔎 6. Generating ack response..."
     echo "========================================"
-    python3 testingProtocol/dummy.py dhcp2
+    python3 testingProtocol/dummy.py dhcp_ack
 
     echo "========================================"
-    echo "🔎 5. Inspecting offer response with tshark"
+    echo "🔎 7. Inspecting offer response with tshark"
     echo "========================================"
     tshark -r temp/dhcp_ack.pcap -o ip.check_checksum:TRUE -V
 
