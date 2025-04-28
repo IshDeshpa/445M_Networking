@@ -80,14 +80,14 @@ errIP_t ip4_rx(uint8_t* payload){
     //checksum;
     uint16_t savedCksm = header->headerChecksum;
     header->headerChecksum = 0;
-    uint16_t computed_checksum = generate_checksum(header, HEADER_SIZE_DEFAULT);
+    uint16_t computed_checksum = generate_checksum(header, header->ihl);
 
     // loop through and print the bytes of both header and data
     printf("\n");
 
     if(savedCksm != computed_checksum){
         LOG("Packet Dropped: Checksum Invalid: %x, %x", savedCksm, computed_checksum);
-        // return IP_RX_FAIL;
+        return IP_RX_FAIL;
     }
 
     // Convert to little endian after checksum
