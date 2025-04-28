@@ -13,4 +13,3 @@ uint16_t generate_checksum(void* header, uint16_t headersize) {
     return ~((uint16_t)sum); // Final ones' complement
 }
 
-

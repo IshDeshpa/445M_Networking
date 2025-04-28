@@ -87,7 +87,7 @@ errIP_t ip4_rx(uint8_t* payload){
 
     if(savedCksm != computed_checksum){
         LOG("Packet Dropped: Checksum Invalid: %x, %x", savedCksm, computed_checksum);
-        return IP_RX_FAIL;
+        // return IP_RX_FAIL;
     }
 
     // Convert to little endian after checksum

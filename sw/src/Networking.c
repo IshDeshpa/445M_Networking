@@ -43,12 +43,12 @@ uint16_t curr_send_size;
 /* ================================================== */
 
 void prettyprint_payload(uint8_t* payload, uint16_t size) {
-    printf("Full payload (pcap format):");
-    for (int i = 0; i < size; i++) {
-        if(i%0x10 == 0){printf("\n\r%04x ", i);}
-        printf("%02x ", payload[i]);
-    }
-    printf("\n\r");
+    // printf("Full payload (pcap format):");
+    // for (int i = 0; i < size; i++) {
+    //     if(i%0x10 == 0){printf("\n\r%04x ", i);}
+    //     printf("%02x ", payload[i]);
+    // }
+    // printf("\n\r");
 
     printf("Payload (not pcap):\n\r");
     for (int i = 0; i < size; i++) {
@@ -57,6 +57,7 @@ void prettyprint_payload(uint8_t* payload, uint16_t size) {
 
     printf("\n\r");
     printf("Payload size: %d", size);
+    printf("\n\r");
 }
 
 sema4_t data_captured;
@@ -497,7 +498,7 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 void ethernetRX(void){
     LOG("ethernetRX reached");
     
-    printf("\n\n\n===ethernetRX===\n\r");
+    printf("===ethernetRX===\n\r");
     prettyprint_payload(eth_rcv_buf, eth_rcv_size);
     printf("===ethernetRX===\n\r");
 
