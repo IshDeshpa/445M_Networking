@@ -62,7 +62,7 @@ errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, ui
     header->TTL = TTL_DEFAULT;
     header->protocol = (uint8_t) protocol;
     header->headerChecksum = 0; // must be 0 before computing
-    header->sourceIP = *(uint32_t*)host_ip_address;
+    header->sourceIP = host_ip_address;
     header->destinationIP = destinationIP;
 
     // Step 2: Convert all 16/32-bit fields to big-endian
@@ -100,7 +100,7 @@ errIP_t ip4_rx(uint8_t* payload){
         return IP_RX_PCKT_DROPPED;
     }
 
-    SendPktToTransport(header, payload + (header->ihl << 2), header->totalPacketLength - HEADER_SIZE_DEFAULT);
+    SendPktToTransport(header, payload + HEADER_SIZE_DEFAULT, header->totalPacketLength - HEADER_SIZE_DEFAULT);
     return IP_SUCCESS;
 }
 
@@ -181,7 +181,7 @@ int dropPkt(ipHeader_t* header){
         return 1;
     }
 
-    if (header->destinationIP != *(uint32_t *)host_ip_address) {
+    if (header->destinationIP != host_ip_address) {
         LOG("Dropped packet: IP 0x%08X not meant for us (0x%08X)", header->destinationIP, host_ip_address);
         return 1;
     }
@@ -244,6 +244,7 @@ static void headerToBigEndian(ipHeader_t* header) {
     header->destinationIP         = packet_htonl(header->destinationIP);
 }
 
-void setHostIP(uint8_t ip_address[4]){
-    memcpy(host_ip_address, ip_address, 4);
+void setHostIP(uint32_t ip_address){
+    host_ip_address = ip_address;   
+    //memcpy(host_ip_address, ip_address, 4);
 }

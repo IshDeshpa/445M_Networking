@@ -55,7 +55,6 @@ def dhcp_disc_offer():
     packet_data = bytes.fromhex(hex_data)
     
     disc_pkt = Ether(packet_data)
-    disc_pkt.show()
     
     # Send offer
     offer_ip = "192.168.1.100"
@@ -75,7 +74,6 @@ def dhcp_disc_offer():
     ])    
 
     offer_pkt = ether / ip / udp / empty_bootp
-    offer_pkt.show()
 
     with open("temp/dhcp_offer_raw.txt", "wb") as f:
         f.write(bytes(offer_pkt))

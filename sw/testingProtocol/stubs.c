@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "mac.h"
+#include <string.h>
 #include "printf.h"
 #include "stubs.h"
 #include "Networking_Globs.h"
@@ -26,31 +28,38 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 }
 
 uint8_t rx_buffer[MTU+50];
-void ethernetRX (){
-    //call mac api layer
+void ethernetRX() {
     FILE *fptr = fopen(rx_infile, "r");
     if (fptr == NULL) {
         printf("Error opening file\n");
+        return;
     }
 
-    // Seek to end
-    fseek(fptr, 0L, SEEK_END);
+    char line[128];  // Buffer to hold each line (adjust size if needed)
+    int i = 0;
 
-    // Get size
-    int sz = ftell(fptr);
+    // Read each line
+    while (fgets(line, sizeof(line), fptr) != NULL) {
+        // Skip the address part (e.g., '0000', '0010', etc.)
+        char *hex_part = strchr(line, ' ');
+        if (hex_part == NULL) continue;  // No hex data, continue to next line
 
-    // Seek to beginning
-    fseek(fptr, 0L, SEEK_SET);
+        hex_part++;  // Move past the space to start reading hex values
 
-    for (int i = 0; i < sz; i++) {
-        uint8_t byte;
-        fread(&byte, sizeof(uint8_t), 1, fptr);
-        rx_buffer[i] = byte;
+        // Tokenize the line by spaces
+        char *token = strtok(hex_part, " \n");
+        while (token != NULL) {
+            // Convert each token (hex string) to a byte
+            uint8_t byte = (uint8_t) strtol(token, NULL, 16);
+            rx_buffer[i++] = byte;
+
+            token = strtok(NULL, " \n");  // Get the next token
+        }
     }
+
     fclose(fptr);
-    macRX(rx_buffer, 0);
+    macRX(rx_buffer, i);  // Pass the byte buffer to MAC layer (adjust the second argument if needed)
 }
-
 void userRXData(uint8_t* payload, uint16_t size) {
     printf("========== Received Payload (%u bytes) ==========\n", size);
     for (uint16_t i = 0; i < size; i++) {

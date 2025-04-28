@@ -128,7 +128,8 @@ else
 		-pedantic \
 		-O0 \
 		-g3 \
-		-Wno-unused-but-set-variable
+		-Wno-unused-but-set-variable \
+		-w
 
 	LDFLAGS = 
 

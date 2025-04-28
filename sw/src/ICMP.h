@@ -16,7 +16,7 @@ typedef enum {
 } icmpType_t;
 
 typedef struct __attribute__((packed)) {
-    icmpType_t type;
+    icmpType_t type : 8;
     uint8_t code;
     uint16_t checksum;
     uint32_t rest;

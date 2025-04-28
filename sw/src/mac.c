@@ -133,7 +133,7 @@ static void headerTolittleEndian(macHeader_t* header){
 static void headerToBigEndian(macHeader_t* header) {
     header->ethertype = packet_htons(header->ethertype);
     hton_macaddr(header->dest_mac);    
-    hton_macaddr(header->src_mac);    
+    hton_macaddr(header->src_mac);
 }
 
 void mac_print_header(const macHeader_t* header) {

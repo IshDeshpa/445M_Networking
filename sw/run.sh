@@ -15,6 +15,7 @@ echoresp_outfile=echoresp.txt
 echoresp_outfile=echoresp.pcap
 
 tshark_inputfile=inbytes.pcap
+
 case $1 in
 -t)
     make clean
@@ -105,12 +106,12 @@ case $1 in
     echo -e "Running Sim\n\n"
     build/sw/exe.elf
 
-    touch ${dumpdir}/${echoresp_outfile}
-    text2pcap ${dumpdir}/${echoresp_outfile} ${dumpdir}/${echoresp_pcap}
-    tshark -r ${dumpdir}/${echoresp_pcap} -o ip.check_checksum:TRUE -V
+    touch ${dumpdir}/echoresp.txt
+    text2pcap ${dumpdir}/echoresp.txt ${dumpdir}/echoresp.pcap
+    tshark -r ${dumpdir}/echoresp.pcap -o ip.check_checksum:TRUE -V
     ;;
 
--dd)
+-d)
     make clean
 
     ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
@@ -143,10 +144,14 @@ case $1 in
     tshark -r temp/dhcp_disc.pcap -o ip.check_checksum:TRUE -V
 
     echo "========================================"
-    echo "🔎 4. Parsing with python dhcp"
+    echo "🔎 4. Generating offer response..."
     echo "========================================"
-
     python3 testingProtocol/dummy.py dhcp
+
+    echo "========================================"
+    echo "🔎 5. Inspecting offer response with tshark"
+    echo "========================================"
+    tshark -r temp/dhcp_offer.pcap -o ip.check_checksum:TRUE -V
 
     echo "✅ Done."
 

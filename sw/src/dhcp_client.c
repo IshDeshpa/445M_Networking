@@ -28,8 +28,8 @@ static dhcp_packet_t dhcp_template_packet = {
   .cookie = MAGIC_COOKIE
 };
 
-static uint8_t pendingIP[4];
-static uint8_t dhcp_serverIP[4];
+static uint32_t pendingIP;
+static uint32_t dhcp_serverIP;
 static uint8_t dhcp_serverMac[6];
 
 /* ================================================== */
@@ -88,8 +88,9 @@ int dhcp_receive_offer(dhcp_packet_t *packet, uint16_t packet_size){
     macHeader_t *mac_h = (macHeader_t *)(curr_packet_buffer);
     ASSERT(mac_h->dest_mac == host_mac_address);
 
-    memcpy(pendingIP, &ip_h->destinationIP, 4);
-    memcpy(dhcp_serverIP,  &ip_h->sourceIP, 4);
+    pendingIP = ip_h->destinationIP;
+    dhcp_serverIP = ip_h->sourceIP;
+    //memcpy(dhcp_serverIP,  &ip_h->sourceIP, 4);
     
     return 0;
 }

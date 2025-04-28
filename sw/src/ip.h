@@ -57,6 +57,6 @@ typedef struct __attribute__((packed)) {
 errIP_t ip4_rx(uint8_t* payload);
 errIP_t ip4_tx(uint16_t payloadsize, uint8_t* payload, IpProtocol_t protocol, uint32_t destinationIP);
 void ip4_print_header(ipHeader_t* header);
-void setHostIP(uint8_t ip_address[4]);
+void setHostIP(uint32_t ip_address);
 #endif 
 
