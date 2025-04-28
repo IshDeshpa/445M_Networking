@@ -11,8 +11,15 @@
 
 #define MSG(...) printf("\n\r"); printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
 
+#ifdef DHCPTEST
 char* tx_outfile = "temp/dhcp_req.txt";
 char* rx_infile = "temp/dhcp_offer.txt";
+#endif /* ifdef DHCPTEST */
+
+#ifdef ECHOTEST
+char* tx_outfile = "temp/echoresp.txt";
+char* rx_infile = "temp/echoreq.txt";
+#endif /* ifdef ECHOTEST */
 
 #define PAYLOAD_SIZE 33
 #define DESTINATION_IP 0xC0A80001 //192.0.1.168
@@ -72,9 +79,9 @@ inline static void testDHCP_REQ(void){
 int main(int argc, char *argv[]){
     setHostMac(testhostmac);
     setHostIP(HOST_IP);
-    //testPingReq();
+    testPingReq();
 
     //testRX();    
-    testDHCP_REQ();
+    //testDHCP_REQ();
     return 0;
 }

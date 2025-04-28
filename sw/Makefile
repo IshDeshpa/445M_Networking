@@ -141,6 +141,8 @@ else
 			testingProtocol/main.c
 endif
 
+CFLAGS += $(EXTRA_CFLAGS)
+
 SRC_FILES += \
 		src/ip.c \
 		src/mac.c \

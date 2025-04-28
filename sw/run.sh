@@ -16,6 +16,8 @@ echoresp_outfile=echoresp.pcap
 
 tshark_inputfile=inbytes.pcap
 
+source .venv/bin/activate
+
 case $1 in
 -t)
     make clean
@@ -87,16 +89,15 @@ case $1 in
     echo "========================================"
 
     mkdir -p ${dumpdir}/
-    source .venv/bin/activate
+
     python3 testingProtocol/echoreq.py
-    deactivate
 
     text2pcap ${dumpdir}/${echoreq_outfile} ${dumpdir}/${echoreq_pcap}
     tshark -r ${dumpdir}/${echoreq_pcap} -o ip.check_checksum:TRUE -V
 
     make clean
 
-    ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
+    ret=$(bear -- make -j$NUM_CORES MODE=sw -s EXTRA_CFLAGS="-DECHOTEST")
     if [[ $? -ne 0 ]]; then
         exit
     fi
@@ -177,7 +178,7 @@ case $1 in
     echo "🔎 2. Inspecting offer response with tshark"
     echo "========================================"
     tshark -r temp/dhcp_offer.pcap -o ip.check_checksum:TRUE -V
-    
+
     echo "========================================"
     echo "📦 3. Run rx"
     echo "========================================"
@@ -207,7 +208,6 @@ case $1 in
 
     echo "✅ Done."
 
-
     ;;
 -b)
     make clean
@@ -228,3 +228,5 @@ case $1 in
     echo -e "try again shitter\n"
     ;;
 esac
+
+deactivate
