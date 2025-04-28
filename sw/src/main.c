@@ -91,7 +91,7 @@ void Task_TestNetworking(void){
     OS_Sleep(1000);
     Network_Scan();
     OS_Sleep(1000);
-    Network_Connect("utexas-iot", "91066905343452506107");
+    Network_Connect("iPhone (3)", "abcdefgh");
 
     OS_AddThread(Task_DHCPClient, STACKSIZE, 5);
     

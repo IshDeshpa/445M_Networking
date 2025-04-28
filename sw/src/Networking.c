@@ -490,6 +490,13 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 
     memmove(payload + M2M_ETHERNET_HDR_OFFSET + M2M_ETH_PAD_SIZE, payload, size);    
 
+    LOG("Sending ethernet packet");
+    LOG("First 6 bytes:");
+    for(int i=0; i<6; i++){
+        printf("%02x ", payload[i]);
+    }
+    printf("\n\r");
+
     Network_Send_Raw();
 
     return;
