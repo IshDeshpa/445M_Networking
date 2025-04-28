@@ -11,7 +11,8 @@
 
 extern uint32_t host_ip_address;
 extern uint8_t host_mac_address[6];
-extern uint8_t curr_packet_buffer[MTU];
+// extern uint8_t dhcp_tx_buf[MTU];
+extern uint8_t irq_rcv_buf[MTU+200];
 
 uint16_t packet_ntohs(uint16_t network_short);
 uint32_t packet_ntohl(uint32_t network_long);

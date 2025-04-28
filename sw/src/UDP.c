@@ -16,7 +16,7 @@ static void headerToBigEndian(udpHeader_t* header);
 
 
 errUDP_t udp_tx(uint16_t payloadsize, uint8_t *payload, uint32_t destinationIP, uint16_t sourcePort, uint16_t destPort){
-    //ASSERT(payload == curr_packet_buffer);
+    //ASSERT(payload == dhcp_tx_buf);
     //ASSERT(payloadsize <= MTU);
 
     // Move for UDP header

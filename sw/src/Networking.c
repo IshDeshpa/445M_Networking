@@ -21,6 +21,10 @@
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
 tstrWifiInitParam wifi_init_param;
+uint8_t irq_rcv_buf[MTU+200];
+
+uint8_t eth_rcv_buf[MTU+200];
+uint16_t eth_rcv_size;
 
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
@@ -149,7 +153,11 @@ void eth_callback(uint8 u8MsgType, void *pvMsg, void *pvCtrlBuf) {
         case M2M_WIFI_RESP_ETHERNET_RX_PACKET:
             LOG("Ethernet RX packet response received.");
             uint8 au8RemoteIpAddr[4];
+            
             uint8 *au8packet = (uint8*)pvMsg;
+            memcpy(eth_rcv_buf, au8packet, MTU+200);
+            eth_rcv_size = PstrM2mIpCtrlBuf->u16DataSize;
+
             tstrM2MDataBufCtrl *PstrM2mIpCtrlBuf =( tstrM2MDataBufCtrl *)pvCtrlBuf;
             
             LOG("Ethernet Frame Received buffer, Size = %d, Remaining = %d, Data offset = %d, Ifc ID = %d",
@@ -163,6 +171,9 @@ void eth_callback(uint8 u8MsgType, void *pvMsg, void *pvCtrlBuf) {
                 printf("%02x ", au8packet[i]);
             }
             printf("\n\r");
+
+            ethernetRX();
+
             break;
         default:
             LOG("Unknown Ethernet message type received.");
@@ -175,8 +186,6 @@ void print_mac(uint8_t *mac) {
            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 }
 
-uint8_t irq_rcv_buf[2048];
-
 errNetworking_t Wifi_Init(void){
 
     // nm_bsp_init();
@@ -186,7 +195,7 @@ errNetworking_t Wifi_Init(void){
     wifi_init_param.pfAppWifiCb = &wifi_callback;
     wifi_init_param.pfAppMonCb = NULL;
     wifi_init_param.strEthInitParam.au8ethRcvBuf = irq_rcv_buf;
-    wifi_init_param.strEthInitParam.u16ethRcvBufSize = 2048;
+    wifi_init_param.strEthInitParam.u16ethRcvBufSize = MTU+200;
     wifi_init_param.strEthInitParam.pfAppEthCb = &eth_callback;
 
     int8_t ret = m2m_wifi_init(&wifi_init_param);
@@ -200,37 +209,37 @@ errNetworking_t Wifi_Init(void){
     return ret;    
 }
 
-errNetworking_t get_mac(void) {
-    uint8_t mac_ap[6];    // MAC for AP interface
-    uint8_t mac_sta[6];   // MAC for STA interface
+// errNetworking_t get_mac(void) {
+//     uint8_t mac_ap[6];    // MAC for AP interface
+//     uint8_t mac_sta[6];   // MAC for STA interface
     
-    int ret = NETWORKING_SUCCESS;
-    if (m2m_wifi_get_mac_address(mac_ap, mac_sta) == M2M_SUCCESS) {
-        LOG("AP MAC:  ");
-        print_mac(mac_ap);
+//     int ret = NETWORKING_SUCCESS;
+//     if (m2m_wifi_get_mac_address(mac_ap, mac_sta) == M2M_SUCCESS) {
+//         LOG("AP MAC:  ");
+//         print_mac(mac_ap);
 
-        LOG("STA MAC: ");
-        print_mac(mac_sta);
+//         LOG("STA MAC: ");
+//         print_mac(mac_sta);
 
-    } else {
-        LOG("Failed to get MAC addresses\n");
-        ret = GET_MAC_FAIL;
-    }
-    return ret;
-}
+//     } else {
+//         LOG("Failed to get MAC addresses\n");
+//         ret = GET_MAC_FAIL;
+//     }
+//     return ret;
+// }
 
-errNetworking_t List_SSID(void){
-    int ret = NETWORKING_SUCCESS;
-    LOG("Requesting Scan");
-    ret = m2m_wifi_request_scan(M2M_WIFI_CH_11);
-    if(ret == M2M_SUCCESS){
-        LOG("Scan Request Sucessful");
-    }else{
-        LOG("Scan Request Failed");
-        ret = LIST_SSID_FAIL;
-    }
-    return ret; 
-}
+// errNetworking_t List_SSID(void){
+//     int ret = NETWORKING_SUCCESS;
+//     LOG("Requesting Scan");
+//     ret = m2m_wifi_request_scan(M2M_WIFI_CH_11);
+//     if(ret == M2M_SUCCESS){
+//         LOG("Scan Request Sucessful");
+//     }else{
+//         LOG("Scan Request Failed");
+//         ret = LIST_SSID_FAIL;
+//     }
+//     return ret; 
+// }
 
 #define NETWORK_COMMAND_FIFO_SIZE 32
 OS_FIFO_t network_command_fifo;
@@ -457,7 +466,9 @@ void ethernetTX(uint8_t* payload, uint16_t size){
     LOG("ethernetTx reached");
     return;
 }
+
 void ethernetRX(void){
     LOG("ethernetRX reached");
+    macRX(eth_rcv_buf, eth_rcv_size);
     return;
 }

@@ -14,7 +14,7 @@
 #define DHCP_DISCOVER_SIZE (240)
 #define DHCP_XID (0xDEADBEEF)
 
-uint8_t curr_packet_buffer[MTU];
+uint8_t dhcp_tx_buf[MTU];
 
 static dhcp_packet_t dhcp_template_packet = {
   .OP = 0x01, // OP (request)
@@ -120,9 +120,9 @@ static void dhcp_print_packet(const dhcp_packet_t *pkt) {
 
 uint32_t dhcp_discover_magicnum = 0x00350101;
 int dhcp_send_discover(){
-    memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
+    memcpy(dhcp_tx_buf, &dhcp_template_packet, sizeof(dhcp_packet_t));
     
-    dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
+    dhcp_packet_t *pkt = ((dhcp_packet_t*)dhcp_tx_buf);
     
     memset(pkt->mac_address, 0, 16);
     memcpy(pkt->mac_address, host_mac_address, 6);
@@ -144,7 +144,7 @@ int dhcp_send_discover(){
     packetToBigEndian(pkt);
     
     printf("%d\n\r", sizeof(dhcp_packet_t));
-    return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFF, 68, 67);
+    return udp_tx(sizeof(dhcp_packet_t), dhcp_tx_buf, 0xFFFFFFFF, 68, 67);
 }
  
 int dhcp_receive_offer(uint8_t *pkt, uint16_t packet_size){
@@ -162,7 +162,7 @@ int dhcp_receive_offer(uint8_t *pkt, uint16_t packet_size){
     ASSERT(packet->server_ip != 0);
 
     // Get the actual destination ip
-    macHeader_t *mac_h = (macHeader_t *)(curr_packet_buffer);
+    macHeader_t *mac_h = (macHeader_t *)(dhcp_tx_buf);
 
     ASSERT(macAddrComp(host_mac_address, mac_h->dest_mac));
     
@@ -176,9 +176,9 @@ int dhcp_receive_offer(uint8_t *pkt, uint16_t packet_size){
 
 uint32_t dhcp_discover_magicnum2 = 0x00350103;
 int dhcp_send_request(){
-    memcpy(curr_packet_buffer, &dhcp_template_packet, sizeof(dhcp_packet_t));
+    memcpy(dhcp_tx_buf, &dhcp_template_packet, sizeof(dhcp_packet_t));
 
-    dhcp_packet_t *pkt = ((dhcp_packet_t*)curr_packet_buffer);
+    dhcp_packet_t *pkt = ((dhcp_packet_t*)dhcp_tx_buf);
     
     memset(pkt->mac_address, 0, 16);
     memcpy(pkt->mac_address, host_mac_address, 6);
@@ -210,7 +210,7 @@ int dhcp_send_request(){
     
     packetToBigEndian(pkt);
 
-    return udp_tx(sizeof(dhcp_packet_t), curr_packet_buffer, 0xFFFFFFFF, 68, 67);
+    return udp_tx(sizeof(dhcp_packet_t), dhcp_tx_buf, 0xFFFFFFFF, 68, 67);
 }
 
 int dhcp_receive_ack(uint8_t *pkt, uint16_t packet_size){
@@ -226,7 +226,7 @@ int dhcp_receive_ack(uint8_t *pkt, uint16_t packet_size){
     ASSERT(packet->my_ip == pendingIP);
     ASSERT(packet->server_ip == dhcp_serverIP);
     
-    macHeader_t *mac_h = (macHeader_t *)(curr_packet_buffer);
+    macHeader_t *mac_h = (macHeader_t *)(dhcp_tx_buf);
     ASSERT(mac_h->dest_mac == host_mac_address);
 
     setHostIP(pendingIP);
