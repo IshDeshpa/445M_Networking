@@ -94,7 +94,7 @@ void dhcp_send_request(void) {
     dhcp_packet_t *pkt = (dhcp_packet_t *)dhcp_tx_buf;
     prepare_dhcp_packet(pkt);
 
-    append_dhcp_request_options(pkt->options, dhcp_server_ip, dhcp_offered_ip);
+    append_dhcp_request_options(pkt->options, packet_htonl(dhcp_server_ip), packet_htonl(dhcp_offered_ip));
 
     size_t packet_len = DHCP_FIXED_SIZE + 16; // 16 bytes of options
     udp_tx(packet_len, dhcp_tx_buf, DHCP_BROADCAST_IP, DHCP_CLIENT_PORT, DHCP_SERVER_PORT);
@@ -103,8 +103,8 @@ void dhcp_send_request(void) {
 
 static int dhcp_receive_offer(dhcp_packet_t *pkt, uint16_t size) {
     LOG("Received DHCPOFFER");
-    dhcp_server_ip = pkt->server_ip;
-    dhcp_offered_ip = pkt->my_ip;
+    dhcp_server_ip = packet_ntohl(pkt->server_ip);
+    dhcp_offered_ip = packet_ntohl(pkt->my_ip);
     LOG("DHCPOFFER processed, Server IP: %08X, Offered IP: %08X", dhcp_server_ip, dhcp_offered_ip);
 
     user_offer_cb();
@@ -114,7 +114,7 @@ static int dhcp_receive_offer(dhcp_packet_t *pkt, uint16_t size) {
 
 static int dhcp_receive_ack(dhcp_packet_t *pkt, uint16_t size) {
     LOG("Received DHCPACK");
-    uint32_t assigned_ip = pkt->my_ip;
+    uint32_t assigned_ip = packet_ntohl(pkt->my_ip);
     setHostIP(assigned_ip);
     LOG("DHCPACK processed, Assigned IP: %08X", assigned_ip);
     return 0;

@@ -5,9 +5,12 @@
 #define MAX_PING_PACKET_SIZE 64
 
 typedef struct {
-    icmpHeader_t hdr;
+    icmpType_t type;
     uint8_t data[MAX_PING_PACKET_SIZE];
     uint16_t data_size;
+    uint16_t send_ip;
 } ping_msg_t;
+
+void Task_Ping(void);
 
 #endif

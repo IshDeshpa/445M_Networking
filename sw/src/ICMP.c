@@ -1,4 +1,5 @@
 #include "ICMP.h"
+#include "ping.h"
 #include "ip.h"
 #include "internet_checksum.h"
 #include "Networking_Globs.h"
@@ -49,10 +50,10 @@ errICMP_t icmp_tx(uint8_t *payload, uint16_t payloadsize, uint32_t destinationIP
 }
 
 uint8_t icmp_tx_networkBuf[MTU+50];
+extern OS_FIFO_t ping_q;
 errICMP_t icmp_rx(uint8_t *payload, uint16_t payloadsize){
     icmpHeader_t *header = (icmpHeader_t *)payload;
     
-
     uint16_t savedCksm = header->checksum;
     header->checksum = 0;
     uint16_t computed_checksum = generate_checksum(header, payloadsize);
@@ -73,19 +74,25 @@ errICMP_t icmp_rx(uint8_t *payload, uint16_t payloadsize){
     switch (header->type) {
         case ICMP_ECHO_REQUEST:
             LOG("revieced a echo req, sending out a resp now \n\n");
+            
             ipHeader_t* iphdr = (ipHeader_t*)((((uint8_t*)(header)) - IP_HEADER_SIZE));
-            memcpy(icmp_tx_networkBuf, echoresp, sizeof(echoresp));
-            icmp_tx(icmp_tx_networkBuf, sizeof(echoresp), iphdr->sourceIP, ICMP_ECHO_REPLY, 0, 0);
+            // memcpy(icmp_tx_networkBuf, echoresp, sizeof(echoresp));
+            // icmp_tx(icmp_tx_networkBuf, sizeof(echoresp), iphdr->sourceIP, ICMP_ECHO_REPLY, 0, 0);
+
+            ping_msg_t msg;
+            msg.type = ICMP_ECHO_REPLY;
+            msg.data_size = payloadsize - sizeof(icmpHeader_t);
+            msg.send_ip = iphdr->sourceIP;
+            memcpy(msg.data, payload + sizeof(icmpHeader_t), msg.data_size);
+            
+            OS_Fifo_Put((uint8_t*)&msg, &ping_q);
+            LOG("Ping message sent to queue");
             break;
         default:
             LOG("Packet Dropped: type is not servable: %u", header->type);
             return ICMP_PKT_DROPPED;            
             break;
     }
-
-
-    // TODO: Put in fifo here for ping taks when
-    // we intergate witht the os
 }
 
 

@@ -11,6 +11,7 @@ void signal_dhcp_offer(void){
     OS_Signal(&dhcp_offer_sema4);
 }
 
+void StartUserApps(void);
 void Task_DHCPClient(void){
     // DHCP client task implementation
     // This function will handle the DHCP process
@@ -34,7 +35,11 @@ void Task_DHCPClient(void){
         // Send DHCP request
         dhcp_send_request();
         
+        // Sleep for ACK
+        OS_Sleep(5000);
+
+        StartUserApps();
+
         OS_Kill();
-        
     }
 }
