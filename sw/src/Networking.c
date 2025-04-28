@@ -2,6 +2,9 @@
 /*                      INCLUDES                      */
 /* ================================================== */
 #include "Networking.h"
+#include "Networking_Globs.h"
+#include "mac.h"
+
 #include <stdint.h>
 
 #include "bsp/include/nm_bsp.h"
@@ -147,6 +150,8 @@ void wifi_callback(uint8 u8MsgType, void *pvMsg) {
     if(u8MsgType != 7) OS_Signal(&data_captured);
 }
 
+extern void ethernetTX(uint8_t* payload, uint16_t size);
+extern void ethernetRX(void);
 void eth_callback(uint8 u8MsgType, void *pvMsg, void *pvCtrlBuf) {
     LOG("Ethernet callback triggered! Message type: %d", u8MsgType);
     switch (u8MsgType) {
@@ -156,9 +161,9 @@ void eth_callback(uint8 u8MsgType, void *pvMsg, void *pvCtrlBuf) {
             
             uint8 *au8packet = (uint8*)pvMsg;
             memcpy(eth_rcv_buf, au8packet, MTU+200);
-            eth_rcv_size = PstrM2mIpCtrlBuf->u16DataSize;
 
             tstrM2MDataBufCtrl *PstrM2mIpCtrlBuf =( tstrM2MDataBufCtrl *)pvCtrlBuf;
+            eth_rcv_size = PstrM2mIpCtrlBuf->u16DataSize;
             
             LOG("Ethernet Frame Received buffer, Size = %d, Remaining = %d, Data offset = %d, Ifc ID = %d",
                 PstrM2mIpCtrlBuf->u16DataSize,
@@ -209,24 +214,24 @@ errNetworking_t Wifi_Init(void){
     return ret;    
 }
 
-// errNetworking_t get_mac(void) {
-//     uint8_t mac_ap[6];    // MAC for AP interface
-//     uint8_t mac_sta[6];   // MAC for STA interface
+errNetworking_t get_mac(void) {
+    uint8_t mac_ap[6];    // MAC for AP interface
+    uint8_t mac_sta[6];   // MAC for STA interface
     
-//     int ret = NETWORKING_SUCCESS;
-//     if (m2m_wifi_get_mac_address(mac_ap, mac_sta) == M2M_SUCCESS) {
-//         LOG("AP MAC:  ");
-//         print_mac(mac_ap);
+    int ret = NETWORKING_SUCCESS;
+    if (m2m_wifi_get_mac_address(mac_ap, mac_sta) == M2M_SUCCESS) {
+        LOG("AP MAC:  ");
+        print_mac(mac_ap);
 
-//         LOG("STA MAC: ");
-//         print_mac(mac_sta);
+        LOG("STA MAC: ");
+        print_mac(mac_sta);
 
-//     } else {
-//         LOG("Failed to get MAC addresses\n");
-//         ret = GET_MAC_FAIL;
-//     }
-//     return ret;
-// }
+    } else {
+        LOG("Failed to get MAC addresses\n");
+        ret = GET_MAC_FAIL;
+    }
+    return ret;
+}
 
 // errNetworking_t List_SSID(void){
 //     int ret = NETWORKING_SUCCESS;
@@ -455,9 +460,9 @@ void Task_NetworkingInit(){
 
     m2m_wifi_set_scan_options(4, 240);
 
-    OS_AddThread(Task_ReceiveIRQ, 1024, 1);
-    OS_AddThread(Task_NetworkThread, 1024, 2);
-    OS_AddThread(Task_TestNetworking, 1024, 3);
+    OS_AddThread(Task_ReceiveIRQ, STACKSIZE, 1);
+    OS_AddThread(Task_NetworkThread, STACKSIZE, 2);
+    OS_AddThread(Task_TestNetworking, STACKSIZE, 3);
 
     OS_Kill();
 }

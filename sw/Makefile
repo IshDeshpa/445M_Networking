@@ -126,7 +126,7 @@ else
 		-std=c99 \
 		-Wall \
 		-pedantic \
-		-O0 \
+		-Oz \
 		-g3 \
 		-Wno-unused-but-set-variable \
 		-w

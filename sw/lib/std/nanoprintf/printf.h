@@ -2,7 +2,6 @@
 #define PRINTF_H
 
 #if (SIM_MODE == 0)
-
 #include "nanoprintf.h"
 #include "OS.h"
 

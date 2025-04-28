@@ -28,9 +28,9 @@
 #define TIME_500US  (TIME_1MS/2)  
 #define TIME_250US  (TIME_1MS/4)  
 
-#define NUMTHREADS 5// maximum number of threads
+#define NUMTHREADS 5 // maximum number of threads
 #define NUMPROCESSES 5
-#define STACKSIZE 1024 // number of 32-bit words in stack
+#define STACKSIZE 512 // number of 32-bit words in stack
 
 #define PRIORITY_RANGE 8
 

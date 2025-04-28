@@ -57,7 +57,7 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
         dhcpRX(payload + sizeof(udpHeader_t), payloadsize - sizeof(udpHeader_t));
     }
 
-    userRXData(payload + HEADER_SIZE, (header->length)-HEADER_SIZE); 
+    // userRXData(payload + HEADER_SIZE, (header->length)-HEADER_SIZE); 
     return UDP_SUCCESS;
 }
 
