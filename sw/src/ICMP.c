@@ -72,7 +72,7 @@ errICMP_t icmp_rx(uint8_t *payload, uint16_t payloadsize){
         case ICMP_ECHO_REQUEST:
             LOG("revieced a echo req, seni g out a resp now ");
             ipHeader_t* iphdr = (ipHeader_t*)(header + IP_HEADER_SIZE);
-            icmp_tx(echoresp, sizeof(echoresp), iphdr->destinationIP, ICMP_ECHO_REPLY, 0, 0);
+            //icmp_tx(echoresp, sizeof(echoresp), iphdr->destinationIP, ICMP_ECHO_REPLY, 0, 0);
             break;
         default:
             LOG("Packet Dropped: type is not servable: %u", header->type);

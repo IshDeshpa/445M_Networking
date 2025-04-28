@@ -86,21 +86,22 @@ case $1 in
     deactivate
 
     text2pcap ${dumpdir}/${echoreq_outfile} ${dumpdir}/${echoreq_pcap}
-    #tshark -r ${dumpdir}/${echoreq_pcap} -o ip.check_checksum:TRUE -V
+    tshark -r ${dumpdir}/${echoreq_pcap} -o ip.check_checksum:TRUE -V
 
-    make clean
+    #make clean
 
-    ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
-    if [[ $? -ne 0 ]]; then
-        exit
-    fi
+    #ret=$(bear -- make -j$NUM_CORES MODE=sw -s)
+    #if [[ $? -ne 0 ]]; then
+    #    exit
+    #fi
 
-    mv compile_commands.json build/
-    #make dump
-    echo -e "Running Sim\n\n"
+    #mv compile_commands.json build/
+    ##make dump
+    #echo -e "Running Sim\n\n"
+    #build/sw/exe.elf
 
-    build/sw/exe.elf
-
+    #text2pcap temp/dhcp_disc.txt temp/dhcp_disc.pcap
+    #tshark -r temp/dhcp_disc.pcap -o ip.check_checksum:TRUE -V
     ;;
 
 -dd)
