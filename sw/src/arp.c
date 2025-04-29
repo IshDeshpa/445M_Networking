@@ -21,18 +21,6 @@
 #define ARP_OPCODE_REQUEST    1
 #define ARP_OPCODE_REPLY      2
 
-typedef struct __attribute__((__packed__)) {
-    uint16_t htype;
-    uint16_t ptype;
-    uint8_t  hlen;
-    uint8_t  plen;
-    uint16_t opcode;
-    uint8_t  sender_mac[6];
-    uint32_t  sender_ip;
-    uint8_t  target_mac[6];
-    uint32_t  target_ip;
-} arp_header_t;
-
 typedef struct{
     uint32_t TargetIp;
     uint8_t TargetMAC[6];
@@ -91,7 +79,11 @@ errARP_t arpTX(uint8_t* payload, int32_t targetIp, uint8_t* targetMAC){
     hdr->target_ip = targetIp;
     memcpy(hdr->target_mac, targetMAC, 6);
     
-    print_arp_header(hdr);
+    reverse_mac(hdr->sender_mac);
+    reverse_mac(hdr->target_mac);
+
+    // print_arp_header(hdr);
+    printf("ARP TX Reached\n\r");
     HeaderToBigEndian(hdr);
 
     macTX(payload, sizeof(arp_header_t), ETHERTYPE_ARP);
@@ -157,7 +149,7 @@ static void HeaderToBigEndian(arp_header_t* hdr){
     hdr->opcode = packet_htons(hdr->opcode);
     hdr->sender_ip = packet_htonl(hdr->sender_ip);
     hdr->target_ip = packet_htonl(hdr->target_ip);
-    reverse_mac(hdr->sender_mac);
+    // reverse_mac(hdr->sender_mac);
 }
 
 

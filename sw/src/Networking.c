@@ -491,12 +491,15 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 
     memmove(payload + M2M_ETHERNET_HDR_OFFSET + M2M_ETH_PAD_SIZE, payload, size);    
 
-    LOG("Sending ethernet packet");
-    LOG("First 6 bytes:");
-    for(int i=0; i<6; i++){
+    // LOG("Sending ethernet packet");
+    // LOG("First 6 bytes:");
+    // for(int i=0; i<6; i++){
+    //     printf("%02x ", payload[i]);
+    // }
+    // printf("\n\r");
+    for (int i = 0; i < size; i++) {
         printf("%02x ", payload[i]);
     }
-    printf("\n\r");
 
     Network_Send_Raw();
 
@@ -505,10 +508,6 @@ void ethernetTX(uint8_t* payload, uint16_t size){
 
 void ethernetRX(void){
     LOG("ethernetRX reached");
-    
-    printf("===ethernetRX===\n\r");
-    prettyprint_payload(eth_rcv_buf, eth_rcv_size);
-    printf("===ethernetRX===\n\r");
 
     macRX(eth_rcv_buf, eth_rcv_size);
     return;

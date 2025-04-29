@@ -85,6 +85,7 @@ errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype
             arp_header_t* arpheader = (arp_header_t*)(payload + HEADER_SIZE);
             memcpy(macheader->dest_mac, arpheader->target_mac, MAC_ADDR_SIZE);
             memcpy(macheader->src_mac, host_mac_address, MAC_ADDR_SIZE);
+            mac_print_header(macheader);
             headerToBigEndian(macheader);
             ethernetTX(payload, payloadsize + HEADER_SIZE);
             break;
