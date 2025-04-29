@@ -2,12 +2,12 @@
 /*                      INCLUDES                      */
 /* ================================================== */
 #include "mac.h"
+#include "arp.h"
 #include "ip.h"
 #include "stubs.h"
 #include "Networking_Globs.h"
 #include <stdint.h>
 #include "printf.h"
-#include <string.h>
 #include "string_lite.h"
 #include "arp.h"
 
@@ -82,7 +82,8 @@ errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype
 
         case ETHERTYPE_ARP:
             macheader->ethertype = ETHERTYPE_ARP;
-            memcpy(macheader->dest_mac, mac_broadcast_addr, MAC_ADDR_SIZE);
+            arp_header_t* arpheader = (arp_header_t*)(payload + HEADER_SIZE);
+            memcpy(macheader->dest_mac, arpheader->target_mac, MAC_ADDR_SIZE);
             memcpy(macheader->src_mac, host_mac_address, MAC_ADDR_SIZE);
             headerToBigEndian(macheader);
             ethernetTX(payload, payloadsize + HEADER_SIZE);

@@ -19,7 +19,6 @@
 #define ARP_OPCODE_REQUEST    1
 #define ARP_OPCODE_REPLY      2
 
-// Macro to initialize an ARP header (defaults only)
 typedef struct __attribute__((__packed__)) {
     uint16_t htype;
     uint16_t ptype;
@@ -86,7 +85,7 @@ errARP_t arpTX(uint8_t* payload, int32_t targetIp, uint8_t* targetMAC){
     hdr->sender_ip = host_ip_address;
     memcpy(hdr->sender_mac, host_mac_address, 6);
     hdr->target_ip = targetIp;
-    memcpy(hdr->sender_mac, targetMAC, 6);
+    memcpy(hdr->target_mac, targetMAC, 6);
     
     print_arp_header(hdr);
     HeaderToBigEndian(hdr);
