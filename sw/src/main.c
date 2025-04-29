@@ -23,7 +23,7 @@
 #include "printf.h"
 #include <stdint.h>
 #include "OS.h"
-
+#include "userApp_udp.h"
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
 /* ================================================== */
@@ -94,6 +94,7 @@ void StartUserApps(void){
     LOG("Starting User Apps");
     OS_AddThread(Task_Ping, STACKSIZE, 3);
     arp_init();
+    userAppApp_UdpExInit();
 }
 
 void Task_Heartbeat(void){

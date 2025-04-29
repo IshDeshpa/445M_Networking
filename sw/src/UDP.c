@@ -6,6 +6,7 @@
 #include "string_lite.h"
 #include "stubs.h"
 #include "userApp_udp.h"
+#include <stdint.h>
 #define CHECKSUM    (0x0000)
 #define HEADER_SIZE (8)
 
@@ -57,8 +58,13 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
 
     if(header->destinationPort == 68){
         dhcpRX(payload + sizeof(udpHeader_t), payloadsize - sizeof(udpHeader_t));
-    }else if(header->destinationPort == USERAPP_UDP_PORT){//chat siad unused
-        OS_Fifo_Put(payload + sizeof(udpHeader_t), &userAppFifo);
+    }else if(header->destinationPort == USERAPP_UDP_PORT){//chat siad unused 
+        if(header->length - HEADER_SIZE < USERAPP_PAYLOAD_SIZE){
+            userAppRX_t buf;
+            memcpy(buf.payloadRXBuf, payload+HEADER_SIZE, payloadsize-HEADER_SIZE);
+            buf.datasize = payloadsize-HEADER_SIZE;
+            OS_Fifo_Put((uint8_t*)&buf, &userAppFifo);
+        }
     }
 
     // userRXData(payload + HEADER_SIZE, (header->length)-HEADER_SIZE); 
