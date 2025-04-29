@@ -1,773 +1,0 @@
-[Wifi_Init][223]Wifi Init Sucess
-
-[Task_NetworkingInit][473]Wifi Init finished
-
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 7
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[wifi_callback][68]Wi-Fi callback triggered! Message type: 7
-[wifi_callback][167]Unknown Wi-Fi message type received.
-[Task_NetworkThread][430]Get MAC command received
-[get_mac][238]AP MAC:  
-DA:47:8F:87:18:3F
-[get_mac][241]STA MAC: 
-D8:47:8F:87:18:3F
-[Task_NetworkThread][406]Connect command received
-[Task_NetworkThread][413]SSID: iPhone (3)
-[Task_NetworkThread][414]Password: abcdefgh
-[Task_NetworkThread][416]Connecting to SSID: iPhone (3)
-[Task_NetworkThread][419]Connection request sent
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 44
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[wifi_callback][68]Wi-Fi callback triggered! Message type: 44
-[wifi_callback][86]Wi-Fi connection state changed.
-[Network_Connect][331]Connected to AP: iPhone (3) abcdefgh
-[register_dhcp_callback][144]DHCP callback registered
-[dhcp_send_discover][81]Sending DHCPDISCOVER
-[prepare_dhcp_packet][43]Preparing DHCP packet
-[prepare_dhcp_packet][49]DHCP packet prepared with MAC address: 3F:18:87:8F:47:D8
-[append_dhcp_discover_options][55]Appending DHCPDISCOVER options
-[append_dhcp_discover_options][60]DHCPDISCOVER options appended
-========== UDP HEADER ==========
-Source Port        : 0x0044 (68)
-Destination Port   : 0x0043 (67)
-Length             : 0x00FC (252)
-Checksum           : 0x0000 (0)
-================================
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x0110 (272)
-Identification    : 0x1234 (4660)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0040 (64)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0x00000000 (0.0.0.0)
-Destination IP    : 0xFFFFFFFF (255.255.255.255)
-===============================================
-========== MAC HEADER ==========
-Destination MAC     : FF:FF:FF:FF:FF:FF
-Source MAC          : D8:47:8F:87:18:3F
-EtherType           : 0x0800 (IPv4)
-================================
-[ethernetTX][485]ethernetTx reached
-[ethernetTX][494]Sending ethernet packet
-[ethernetTX][495]First 6 bytes:
-ff ff ff ff ff ff 
-[Task_NetworkThread][434]Send raw command received
-[dhcp_send_discover][89]DHCPDISCOVER sent, packet length: 244
-[dhcp_send_discover][81]Sending DHCPDISCOVER
-[prepare_dhcp_packet][43]Preparing DHCP packet
-[prepare_dhcp_packet][49]DHCP packet prepared with MAC address: 3F:18:87:8F:47:D8
-[append_dhcp_discover_options][55]Appending DHCPDISCOVER options
-[append_dhcp_discover_options][60]DHCPDISCOVER options appended
-========== UDP HEADER ==========
-Source Port        : 0x0044 (68)
-Destination Port   : 0x0043 (67)
-Length             : 0x00FC (252)
-Checksum           : 0x0000 (0)
-================================
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x0110 (272)
-Identification    : 0x1235 (4661)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0040 (64)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0x00000000 (0.0.0.0)
-Destination IP    : 0xFFFFFFFF (255.255.255.255)
-===============================================
-========== MAC HEADER ==========
-Destination MAC     : FF:FF:FF:FF:FF:FF
-Source MAC          : D8:47:8F:87:18:3F
-EtherType           : 0x0800 (IPv4)
-================================
-[ethernetTX][485]ethernetTx reached
-[ethernetTX][494]Sending ethernet packet
-[ethernetTX][495]First 6 bytes:
-ff ff ff ff ff ff 
-[Task_NetworkThread][434]Send raw command received
-[dhcp_send_discover][89]DHCPDISCOVER sent, packet length: 244
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 342, Remaining = 0, Data offset = 30, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : D2:6B:78:53:3D:64
-EtherType           : 0x0800 (IPv4)
-================================
-
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x0148 (328)
-Identification    : 0x61EE (25070)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0000 (0)
-TTL               : 0xFF (255)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0xAC140A01 (172.20.10.1)
-Destination IP    : 0xAC140A0C (172.20.10.12)
-===============================================
-========== UDP HEADER ==========
-Source Port        : 0x0043 (67)
-Destination Port   : 0x0044 (68)
-Length             : 0x0134 (308)
-Checksum           : 0x652F (25903)
-================================
-[dhcpRX][124]Processing received DHCP packet, size: 1284
-[dhcp_receive_offer][105]Received DHCPOFFER
-[dhcp_receive_offer][108]DHCPOFFER processed, Server IP: AC140A01, Offered IP: AC140A0C
-[dhcp_send_request][93]Sending DHCPREQUEST
-[prepare_dhcp_packet][43]Preparing DHCP packet
-[prepare_dhcp_packet][49]DHCP packet prepared with MAC address: 3F:18:87:8F:47:D8
-[append_dhcp_request_options][64]Appending DHCPREQUEST options
-[append_dhcp_request_options][77]DHCPREQUEST options appended with Server IP: 010A14AC, Requested IP: 0C0A14AC
-========== UDP HEADER ==========
-Source Port        : 0x0044 (68)
-Destination Port   : 0x0043 (67)
-Length             : 0x0108 (264)
-Checksum           : 0x0000 (0)
-================================
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x011C (284)
-Identification    : 0x1236 (4662)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0040 (64)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0x00000000 (0.0.0.0)
-Destination IP    : 0xFFFFFFFF (255.255.255.255)
-===============================================
-========== MAC HEADER ==========
-Destination MAC     : FF:FF:FF:FF:FF:FF
-Source MAC          : D8:47:8F:87:18:3F
-EtherType           : 0x0800 (IPv4)
-================================
-[ethernetTX][485]ethernetTx reached
-[ethernetTX][494]Sending ethernet packet
-[ethernetTX][495]First 6 bytes:
-ff ff ff ff ff ff 
-[Task_NetworkThread][434]Send raw command received
-[dhcp_send_request][101]DHCPREQUEST sent, packet length: 256
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 342, Remaining = 0, Data offset = 30, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : D2:6B:78:53:3D:64
-EtherType           : 0x0800 (IPv4)
-================================
-
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x0148 (328)
-Identification    : 0x61EF (25071)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0000 (0)
-TTL               : 0xFF (255)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0xAC140A01 (172.20.10.1)
-Destination IP    : 0xAC140A0C (172.20.10.12)
-===============================================
-========== UDP HEADER ==========
-Source Port        : 0x0043 (67)
-Destination Port   : 0x0044 (68)
-Length             : 0x0134 (308)
-Checksum           : 0x622F (25135)
-================================
-[dhcpRX][124]Processing received DHCP packet, size: 1284
-[dhcp_receive_ack][116]Received DHCPACK
-[dhcp_receive_ack][119]DHCPACK processed, Assigned IP: AC140A0C
-[StartUserApps][94]Starting User Apps
-[Task_ARP_RESP][98]Waiting for arp reqs
-[Task_Ping][22]Ping task started; FIFO initialized
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 342, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0800 (IPv4)
-================================
-
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x0148 (328)
-Identification    : 0x0000 (0)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0000 (0)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0x00000000 (0.0.0.0)
-Destination IP    : 0xFFFFFFFF (255.255.255.255)
-===============================================
-[dropPkt][188]Dropped packet: IP 0xFFFFFFFF not meant for us (0xAC140A0C)
-[ip4_rx][98]Packet Dropped
-[macRX][54]Failed with ip rx
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 342, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0800 (IPv4)
-================================
-
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x0148 (328)
-Identification    : 0x0000 (0)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0000 (0)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0x00000000 (0.0.0.0)
-Destination IP    : 0xFFFFFFFF (255.255.255.255)
-===============================================
-[dropPkt][188]Dropped packet: IP 0xFFFFFFFF not meant for us (0xAC140A0C)
-[ip4_rx][98]Packet Dropped
-[macRX][54]Failed with ip rx
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 42, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0806 (ARP)
-================================
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0001 (Request)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 172.20.10.7
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[arpRX][74]ARP request put into FIFO
-[Task_ARP_RESP][102]arp req recived, repsing now
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0000 (Unknown)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 172.20.10.12
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 42, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0806 (ARP)
-================================
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0001 (Request)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 0.0.0.0
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[arpRX][74]ARP request put into FIFO
-[Task_ARP_RESP][102]arp req recived, repsing now
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0000 (Unknown)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 172.20.10.12
-Target MAC: 00:00:00:00:00:00
-Target IP: 0.0.0.0
-==================
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 42, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0806 (ARP)
-================================
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0001 (Request)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 0.0.0.0
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[arpRX][74]ARP request put into FIFO
-[Task_ARP_RESP][102]arp req recived, repsing nowm2m_wifi_cb: 61
-
-===M2M_WIFI_CB===
-=== ARP Header ===
-===M2M_WIFI_CB===
-Hardware Type: 0x0001
-[eth_callback][177]Protocol Type: 0x0800
-Ethernet callback triggered! Message type: 61Hardware Size: 6
-
-Protocol Size: 4
-[eth_callback][180]Opcode: 0x0000 (Unknown)
-Ethernet RX packet response received.Sender MAC: 08:b4:d2:fc:72:a4
-
-Sender IP: 172.20.10.12
-[eth_callback][189]Target MAC: 00:00:00:00:00:00
-Ethernet Frame Received buffer, Size = 42, Remaining = 0, Data offset = 26, Ifc ID = 1Target IP: 0.0.0.0
-
-==================
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0806 (ARP)
-================================
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0001 (Request)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 0.0.0.0
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[arpRX][74]ARP request put into FIFO
-[Task_ARP_RESP][102]arp req recived, repsing nowm2m_wifi_cb: 61
-
-===M2M_WIFI_CB===
-=== ARP Header ===
-===M2M_WIFI_CB===
-Hardware Type: 0x0001
-[eth_callback][177]Protocol Type: 0x0800
-Ethernet callback triggered! Message type: 61Hardware Size: 6
-
-Protocol Size: 4
-[eth_callback][180]Opcode: 0x0000 (Unknown)
-Ethernet RX packet response received.Sender MAC: 08:b4:d2:fc:72:a4
-
-Sender IP: 172.20.10.12
-[eth_callback][189]Target MAC: 00:00:00:00:00:00
-Ethernet Frame Received buffer, Size = 42, Remaining = 0, Data offset = 26, Ifc ID = 1Target IP: 0.0.0.0
-
-==================
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : D2:6B:78:53:3D:64
-EtherType           : 0x0806 (ARP)
-================================
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0001 (Request)
-Sender MAC: d2:6b:78:53:3d:64
-Sender IP: 172.20.10.1
-Target MAC: 00:00:00:00:00:00
-Target IP: 192.168.16.1
-==================
-[arpRX][74]ARP request put into FIFO
-m2m_wifi_cb: 61
-[Task_ARP_RESP][102]===M2M_WIFI_CB===
-arp req recived, repsing now===M2M_WIFI_CB===
-
-[eth_callback][177]=== ARP Header ===
-Ethernet callback triggered! Message type: 61Hardware Type: 0x0001
-
-Protocol Type: 0x0800
-[eth_callback][180]Hardware Size: 6
-Ethernet RX packet response received.Protocol Size: 4
-
-Opcode: 0x0000 (Unknown)
-[eth_callback][189]Sender MAC: d2:6b:78:53:3d:64
-Ethernet Frame Received buffer, Size = 42, Remaining = 0, Data offset = 26, Ifc ID = 1Sender IP: 172.20.10.12
-
-Target MAC: 00:00:00:00:00:00
-[ethernetRX][507]Target IP: 172.20.10.1
-ethernetRX reached==================
-
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0806 (ARP)
-================================
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0001 (Request)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 172.20.10.7
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[arpRX][74]ARP request put into FIFO
-[Task_ARP_RESP][102]arp req recived, repsing now
-=== ARP Header ===
-m2m_wifi_cb: 61
-Hardware Type: 0x0001
-===M2M_WIFI_CB===
-Protocol Type: 0x0800
-===M2M_WIFI_CB===
-Hardware Size: 6
-[eth_callback][177]Protocol Size: 4
-Ethernet callback triggered! Message type: 61Opcode: 0x0000 (Unknown)
-
-Sender MAC: 08:b4:d2:fc:72:a4
-[eth_callback][180]Sender IP: 172.20.10.12
-Ethernet RX packet response received.Target MAC: 00:00:00:00:00:00
-
-Target IP: 172.20.10.7
-[eth_callback][189]==================
-Ethernet Frame Received buffer, Size = 1514, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0800 (IPv4)
-================================
-
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x05DC (1500)
-Identification    : 0x4554 (17748)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0020 (32)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0xAC140A07 (172.20.10.7)
-Destination IP    : 0xFFFFFFFF (255.255.255.255)
-===============================================
-[dropPkt][183]Dropped packet: Fragmented packet not supported: bits= 8192
-[ip4_rx][98]Packet Dropped
-[macRX][54]Failed with ip rx
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 686, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0800 (IPv4)
-================================
-
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x02A0 (672)
-Identification    : 0x4554 (17748)
-Flags             : 0x5 (DF=0, MF=1)
-Fragment Offset   : 0x1900 (6400)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0xAC140A07 (172.20.10.7)
-Destination IP    : 0xFFFFFFFF (255.255.255.255)
-===============================================
-[dropPkt][183]Dropped packet: Fragmented packet not supported: bits= 185
-[ip4_rx][98]Packet Dropped
-[macRX][54]Failed with ip rx
-[Task_ReceiveIRQ][450]IRQ received
-[Task_ReceiveIRQ][450]IRQ received
-[Task_ReceiveIRQ][450]IRQ received
-[Task_ReceiveIRQ][450]IRQ received
-[Task_ReceiveIRQ][450]IRQ received
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 42, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0806 (ARP)
-================================
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0001 (Request)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 172.20.10.7
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[arpRX][74]ARP request put into FIFO
-[Task_ARP_RESP][102]arp req recived, repsing now
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0000 (Unknown)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 172.20.10.12
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 86, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0800 (IPv4)
-================================
-
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x0048 (72)
-Identification    : 0x66F6 (26358)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0040 (64)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0xAC140A07 (172.20.10.7)
-Destination IP    : 0xAC140A0F (172.20.10.15)
-===============================================
-[dropPkt][188]Dropped packet: IP 0xAC140A0F not meant for us (0xAC140A0C)
-[ip4_rx][98]Packet Dropped
-[macRX][54]Failed with ip rx
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 42, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0806 (ARP)
-================================
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0001 (Request)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 172.20.10.7
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[arpRX][74]ARP request put into FIFO
-[Task_ARP_RESP][102]arp req recived, repsing now
-=== ARP Header ===
-Hardware Type: 0x0001
-Protocol Type: 0x0800
-Hardware Size: 6
-Protocol Size: 4
-Opcode: 0x0000 (Unknown)
-Sender MAC: 08:b4:d2:fc:72:a4
-Sender IP: 172.20.10.12
-Target MAC: 00:00:00:00:00:00
-Target IP: 172.20.10.7
-==================
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 281, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0800 (IPv4)
-================================
-
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x010B (267)
-Identification    : 0x7E5E (32350)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0040 (64)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0xAC140A07 (172.20.10.7)
-Destination IP    : 0xAC140A0F (172.20.10.15)
-===============================================
-[dropPkt][188]Dropped packet: IP 0xAC140A0F not meant for us (0xAC140A0C)
-[ip4_rx][98]Packet Dropped
-[macRX][54]Failed with ip rx
-[Task_ReceiveIRQ][450]IRQ received
-m2m_wifi_cb: 61
-===M2M_WIFI_CB===
-===M2M_WIFI_CB===
-[eth_callback][177]Ethernet callback triggered! Message type: 61
-[eth_callback][180]Ethernet RX packet response received.
-[eth_callback][189]Ethernet Frame Received buffer, Size = 86, Remaining = 0, Data offset = 26, Ifc ID = 1
-[ethernetRX][507]ethernetRX reached
-===ethernetRX===
-===ethernetRX===
-========== MAC HEADER ==========
-Destination MAC     : D8:47:8F:87:18:3F
-Source MAC          : 08:B4:D2:FC:72:A4
-EtherType           : 0x0800 (IPv4)
-================================
-
-========== IP HEADER (HEX + DECIMAL) ==========
-Version           : 0x4 (4)
-IHL               : 0x5 (20 bytes)
-DSCP              : 0x00 (0)
-ECN               : 0x0 (0)
-Total Length      : 0x0048 (72)
-Identification    : 0xC153 (49491)
-Flags             : 0x0 (DF=0, MF=0)
-Fragment Offset   : 0x0040 (64)
-TTL               : 0x40 (64)
-Protocol          : 0x11 (17)
-Header Checksum   : 0x0000 (0)
-Source IP         : 0xAC140A07 (172.20.10.7)
-Destination IP    : 0xAC140A0F (172.20.10.15)
-===============================================
-[dropPkt][188]Dropped packet: IP 0xAC140A0F not meant for us (0xAC140A0C)
-[ip4_rx][98]Packet Dropped
-[macRX][54]Failed with ip rx
-

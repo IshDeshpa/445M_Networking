@@ -5,7 +5,9 @@
 #include "Networking_Globs.h"
 #include <stdint.h>
 #include "string_lite.h"
-#ifdef SIM
+#include "mac.h"
+
+#if (SIM == 0)
 #include "OS.h"
 #endif 
 /* ================================================== */
@@ -82,6 +84,8 @@ errARP_t arpRX(uint8_t * payload, uint16_t payloadsize){
 errARP_t arpTX(uint8_t* payload, int32_t targetIp, uint8_t* targetMAC){
     arp_header_t* hdr = (arp_header_t*)payload;
     INIT_ARP_HEADER_DEFAULTS(hdr);
+
+    hdr->opcode = ARP_OPCODE_REPLY;
     hdr->sender_ip = host_ip_address;
     memcpy(hdr->sender_mac, host_mac_address, 6);
     hdr->target_ip = targetIp;
@@ -89,6 +93,8 @@ errARP_t arpTX(uint8_t* payload, int32_t targetIp, uint8_t* targetMAC){
     
     print_arp_header(hdr);
     HeaderToBigEndian(hdr);
+
+    macTX(payload, sizeof(arp_header_t), ETHERTYPE_ARP);
 
     return APR_SUCCESS;
 }
@@ -98,7 +104,7 @@ void Task_ARP_RESP(void){
     arpReqLog_t rxBuf;
     while(1){
         OS_Fifo_Get((uint8_t *)&rxBuf, &arpReqFifo);
-        LOG("arp req recived, repsing now");
+        LOG("ARP request received, responding now");
         arpTX((uint8_t*)&arpBuf, rxBuf.TargetIp, rxBuf.TargetMAC);
     }
 }
@@ -151,6 +157,7 @@ static void HeaderToBigEndian(arp_header_t* hdr){
     hdr->opcode = packet_htons(hdr->opcode);
     hdr->sender_ip = packet_htonl(hdr->sender_ip);
     hdr->target_ip = packet_htonl(hdr->target_ip);
+    reverse_mac(hdr->sender_mac);
 }
 
 
