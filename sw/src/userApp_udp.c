@@ -13,7 +13,7 @@
 #define USERAPP_DATA_FIFO_SIZE (3)
 #define USERAPP_PAYLOAD_SIZE (128)
 #define TEST_TX_IP (0x12345678)
-#define TEST_TX_PORT
+#define TEST_TX_PORT (54321)
 
 OS_FIFO_t userAppFifo;
 sema4_t userAppFifo_sema4s[3];

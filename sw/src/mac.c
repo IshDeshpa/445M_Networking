@@ -9,6 +9,7 @@
 #include "printf.h"
 #include <string.h>
 #include "string_lite.h"
+#include "arp.h"
 
 /* ================================================== */
 /*            GLOBAL VARIABLE DEFINITIONS             */
@@ -54,8 +55,7 @@ errMAC_t macRX(uint8_t* payload, uint16_t size){
             }
             break;
         case ETHERTYPE_ARP:
-            LOG("Got a ARP pakcet, droping it");
-            //TODO: send up to arp headnler
+            arpRX(payload + sizeof(macHeader_t), size - sizeof(macHeader_t));
             break;
         default:
             printf("Unsupported EtherType Received: 0x%04X\n", macheader->ethertype);

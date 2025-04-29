@@ -70,7 +70,7 @@ errARP_t arpRX(uint8_t * payload, uint16_t payloadsize){
         arpReqLog_t log;
         log.TargetIp = header->sender_ip;
         memcpy(log.TargetMAC, header->sender_mac, 6);
-        OS_Fifo_Put(&log, &arpReqFifo);
+        OS_Fifo_Put((uint8_t *)&log, &arpReqFifo);
     }else{
         LOG("Unknown arp opcode found, %u", header->opcode);
     }
@@ -95,9 +95,9 @@ errARP_t arpTX(uint8_t* payload, int32_t targetIp, uint8_t* targetMAC){
 void Task_ARP_RESP(void){
     LOG("Waiting for arp reqs");
     arpReqLog_t rxBuf;
-    while(OS_Fifo_Get(&rxBuf, &arpReqFifo)){
+    while(OS_Fifo_Get((uint8_t *)&rxBuf, &arpReqFifo)){
         LOG("arp req recived, repsing now");
-        arpTX(&arpBuf, rxBuf.TargetIp, rxBuf.TargetMAC);
+        arpTX((uint8_t*)&arpBuf, rxBuf.TargetIp, rxBuf.TargetMAC);
     }
 }
 
@@ -121,14 +121,16 @@ void print_arp_header(const arp_header_t *arp) {
            arp->sender_mac[3], arp->sender_mac[4], arp->sender_mac[5]);
 
     printf("Sender IP: %u.%u.%u.%u\n",
-           arp->sender_ip[0], arp->sender_ip[1], arp->sender_ip[2], arp->sender_ip[3]);
+           (arp->sender_ip >> 24) & 0xFF, (arp->sender_ip >> 16) & 0xFF,
+           (arp->sender_ip >> 8) & 0xFF, arp->sender_ip & 0xFF);
 
     printf("Target MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
            arp->target_mac[0], arp->target_mac[1], arp->target_mac[2],
            arp->target_mac[3], arp->target_mac[4], arp->target_mac[5]);
 
     printf("Target IP: %u.%u.%u.%u\n",
-           arp->target_ip[0], arp->target_ip[1], arp->target_ip[2], arp->target_ip[3]);
+           (arp->target_ip >> 24) & 0xFF, (arp->target_ip >> 16) & 0xFF,
+           (arp->target_ip >> 8) & 0xFF, arp->target_ip & 0xFF);
     printf("==================\n");
 }
 

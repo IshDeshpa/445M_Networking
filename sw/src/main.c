@@ -16,6 +16,7 @@
 
 #include "dhcp_client.h"
 #include "ping.h"
+#include "arp.h"
 
 #include "Networking.h"
 #include "Networking_Globs.h"
@@ -92,6 +93,7 @@ void HeartBeat(void){
 void StartUserApps(void){
     LOG("Starting User Apps");
     OS_AddThread(Task_Ping, STACKSIZE, 3);
+    arp_init();
 }
 
 void Task_Heartbeat(void){

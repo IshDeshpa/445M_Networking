@@ -152,7 +152,9 @@ SRC_FILES += \
 		src/ICMP.c \
 		src/DHCP.c \
 		src/dhcp_client.c \
-		src/ping.c
+		src/ping.c \
+		src/arp.c \
+		src/userApp_udp.c
 
 # Include paths
 INCLUDES += $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
