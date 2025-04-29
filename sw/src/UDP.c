@@ -1,10 +1,11 @@
 #include "UDP.h"
 #include "DHCP.h"
+#include "OS.h"
 #include "ip.h"
 #include "Networking_Globs.h"
-#include <string.h>
+#include "string_lite.h"
 #include "stubs.h"
-
+#include "userApp_udp.h"
 #define CHECKSUM    (0x0000)
 #define HEADER_SIZE (8)
 
@@ -36,6 +37,7 @@ errUDP_t udp_tx(uint16_t payloadsize, uint8_t *payload, uint32_t destinationIP, 
     return UDP_SUCCESS;
 }
 
+extern OS_FIFO_t userAppFifo;
 errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
     udpHeader_t* header = (udpHeader_t*)payload;
 
@@ -51,12 +53,12 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
     //if(checksum != 0xFFFF){
     //    LOG("Packet Dropped");
     //    return UDP_RX_FAIL;
-   // }
+    //}
 
     if(header->destinationPort == 68){
         dhcpRX(payload + sizeof(udpHeader_t), payloadsize - sizeof(udpHeader_t));
-    }else if(header->destinationPort == 54321){//chat siad unused
-
+    }else if(header->destinationPort == USERAPP_UDP_PORT){//chat siad unused
+        OS_Fifo_Put(payload + sizeof(udpHeader_t), &userAppFifo);
     }
 
     // userRXData(payload + HEADER_SIZE, (header->length)-HEADER_SIZE); 
