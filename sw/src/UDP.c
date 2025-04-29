@@ -55,6 +55,8 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
 
     if(header->destinationPort == 68){
         dhcpRX(payload + sizeof(udpHeader_t), payloadsize - sizeof(udpHeader_t));
+    }else if(header->destinationPort == 54321){//chat siad unused
+
     }
 
     // userRXData(payload + HEADER_SIZE, (header->length)-HEADER_SIZE); 
