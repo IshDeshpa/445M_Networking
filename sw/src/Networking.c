@@ -50,10 +50,10 @@ void prettyprint_payload(uint8_t* payload, uint16_t size) {
     // }
     // printf("\n\r");
 
-    // printf("Payload (not pcap):\n\r");
-    // for (int i = 0; i < size; i++) {
-    //     printf("%02x ", payload[i]);
-    // }
+    printf("Payload (not pcap):\n\r");
+    for (int i = 0; i < size; i++) {
+        printf("%02x ", payload[i]);
+    }
 
     // printf("\n\r");
     // printf("Payload size: %d", size);
