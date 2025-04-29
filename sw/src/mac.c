@@ -17,7 +17,7 @@
 
 #define HEADER_SIZE (14) 
 uint8_t mac_broadcast_addr[MAC_ADDR_SIZE] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-uint8_t test_MAC_ADDR[MAC_ADDR_SIZE] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
+uint8_t test_MAC_ADDR[MAC_ADDR_SIZE] = { 0xA4, 0x72, 0xFC, 0xD2, 0xB4, 0x08 };
 /* ================================================== */
 /*            FUNCTION PROTOTYPES (DECLARATIONS)      */
 /* ================================================== */
