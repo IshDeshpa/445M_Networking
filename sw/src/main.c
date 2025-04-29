@@ -15,8 +15,10 @@
 #include "driver/include/m2m_wifi.h"
 
 #include "dhcp_client.h"
+#include "ping.h"
 
 #include "Networking.h"
+#include "Networking_Globs.h"
 #include "printf.h"
 #include <stdint.h>
 #include "OS.h"
@@ -86,6 +88,20 @@ void HeartBeat(void){
     //printf("thump\n\r");
 }
 
+// Only after success on DHCP
+void StartUserApps(void){
+    LOG("Starting User Apps");
+    OS_AddThread(Task_Ping, STACKSIZE, 3);
+}
+
+void Task_Heartbeat(void){
+    while(1){
+      //printf("TestThread Sleeping\n\r");
+      GPIO_PORTF_DATA_R ^= 0x04;
+      OS_Sleep(1000);
+    }
+}
+
 void Task_TestNetworking(void){
     Network_Get_Mac();
     OS_Sleep(1000);
@@ -94,12 +110,8 @@ void Task_TestNetworking(void){
     Network_Connect("iPhone (3)", "abcdefgh");
 
     OS_AddThread(Task_DHCPClient, STACKSIZE, 5);
-    
-    while(1){
-      //printf("TestThread Sleeping\n\r");
-      GPIO_PORTF_DATA_R ^= 0x04;
-      OS_Sleep(1000);
-    }
+    OS_AddThread(Task_Heartbeat, STACKSIZE, 7);
+    OS_Kill();
 }
 
 void IdleThread(void){

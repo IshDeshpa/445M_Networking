@@ -80,7 +80,7 @@ errIP_t ip4_rx(uint8_t* payload){
     //checksum;
     uint16_t savedCksm = header->headerChecksum;
     header->headerChecksum = 0;
-    uint16_t computed_checksum = generate_checksum(header, header->ihl);
+    uint16_t computed_checksum = generate_checksum(header, header->ihl<<2);
 
     // loop through and print the bytes of both header and data
     printf("\n");

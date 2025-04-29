@@ -151,7 +151,8 @@ SRC_FILES += \
 		src/internet_checksum.c \
 		src/ICMP.c \
 		src/DHCP.c \
-		src/dhcp_client.c
+		src/dhcp_client.c \
+		src/ping.c
 
 # Include paths
 INCLUDES += $(sort $(foreach src_f,$(SRC_FILES),-I$(patsubst %/,%,$(dir $(src_f)))))
