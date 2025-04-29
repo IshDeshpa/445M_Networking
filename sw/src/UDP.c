@@ -66,14 +66,14 @@ errUDP_t udp_rx(uint8_t* payload, uint16_t payloadsize){
 }
 
 void udp_print_header(const udpHeader_t* header) {
-    printf("========== UDP HEADER ==========\n\r");
+    LOG("========== UDP HEADER ==========\n\r");
 
-    printf("Source Port        : 0x%04X (%u)\n\r", header->sourcePort, header->sourcePort);
-    printf("Destination Port   : 0x%04X (%u)\n\r", header->destinationPort, header->destinationPort);
-    printf("Length             : 0x%04X (%u)\n\r", header->length, header->length);
-    printf("Checksum           : 0x%04X (%u)\n\r", header->checksum, header->checksum);
+    LOG("Source Port        : 0x%04X (%u)\n\r", header->sourcePort, header->sourcePort);
+    LOG("Destination Port   : 0x%04X (%u)\n\r", header->destinationPort, header->destinationPort);
+    LOG("Length             : 0x%04X (%u)\n\r", header->length, header->length);
+    LOG("Checksum           : 0x%04X (%u)\n\r", header->checksum, header->checksum);
 
-    printf("================================\n\r");
+    LOG("================================\n\r");
 }
 
 static void headerTolittleEndian(udpHeader_t* header){

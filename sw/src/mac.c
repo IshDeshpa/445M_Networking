@@ -7,7 +7,6 @@
 #include "stubs.h"
 #include "Networking_Globs.h"
 #include <stdint.h>
-#include "printf.h"
 #include "string_lite.h"
 #include "arp.h"
 
@@ -58,7 +57,7 @@ errMAC_t macRX(uint8_t* payload, uint16_t size){
             arpRX(payload + sizeof(macHeader_t), size - sizeof(macHeader_t));
             break;
         default:
-            printf("Unsupported EtherType Received: 0x%04X\n", macheader->ethertype);
+            LOG("Unsupported EtherType Received: 0x%04X\n", macheader->ethertype);
     }
     return MAC_SUCCESS;
 }
@@ -91,7 +90,7 @@ errMAC_t macTX(uint8_t* payload, uint16_t payloadsize, mac_EtherType_t ethertype
             break;
 
         default:
-            printf("Unsupported EtherType Attempted to be transmitted: 0x%04X\n", ethertype_protocol);
+            LOG("Unsupported EtherType Attempted to be transmitted: 0x%04X\n", ethertype_protocol);
             break;
     }
     return MAC_SUCCESS;
@@ -143,33 +142,33 @@ static void headerToBigEndian(macHeader_t* header) {
 }
 
 void mac_print_header(const macHeader_t* header) {
-    printf("========== MAC HEADER ==========\n\r");
+    LOG("========== MAC HEADER ==========\n\r");
 
-    printf("Destination MAC     : %02X:%02X:%02X:%02X:%02X:%02X\n\r",
+    LOG("Destination MAC     : %02X:%02X:%02X:%02X:%02X:%02X\n\r",
            header->dest_mac[5], header->dest_mac[4], header->dest_mac[3],
            header->dest_mac[2], header->dest_mac[1], header->dest_mac[0]);
 
-    printf("Source MAC          : %02X:%02X:%02X:%02X:%02X:%02X\n\r",
+    LOG("Source MAC          : %02X:%02X:%02X:%02X:%02X:%02X\n\r",
            header->src_mac[5], header->src_mac[4], header->src_mac[3],
            header->src_mac[2], header->src_mac[1], header->src_mac[0]);
 
-    printf("EtherType           : 0x%04X", header->ethertype);
+    LOG("EtherType           : 0x%04X", header->ethertype);
 
     // Optional: print a description if known
     switch (header->ethertype) {
         case 0x0800:
-            printf(" (IPv4)\n\r");
+            LOG(" (IPv4)\n\r");
             break;
         case 0x0806:
-            printf(" (ARP)\n\r");
+            LOG(" (ARP)\n\r");
             break;
         case 0x86DD:
-            printf(" (IPv6)\n\r");
+            LOG(" (IPv6)\n\r");
             break;
         default:
-            printf(" (Unknown)\n\r");
+            LOG(" (Unknown)\n\r");
             break;
     }
 
-    printf("================================\n\r");
+    LOG("================================\n\r");
 }

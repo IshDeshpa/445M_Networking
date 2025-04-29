@@ -69,7 +69,7 @@ errARP_t arpRX(uint8_t * payload, uint16_t payloadsize){
 }
 
 //needs to send a braod cast message
-errARP_t arpTX(uint8_t* payload, int32_t targetIp, uint8_t* targetMAC){
+errARP_t arpTX(uint8_t* payload, uint32_t targetIp, uint8_t* targetMAC){
     arp_header_t* hdr = (arp_header_t*)payload;
     INIT_ARP_HEADER_DEFAULTS(hdr);
 
@@ -107,31 +107,31 @@ void arp_init(void){
 }
 
 void print_arp_header(const arp_header_t *arp) {
-    printf("=== ARP Header ===\n\r");
-    printf("Hardware Type: 0x%04x\n\r", (arp->htype));
-    printf("Protocol Type: 0x%04x\n\r", (arp->ptype));
-    printf("Hardware Size: %u\n\r", arp->hlen);
-    printf("Protocol Size: %u\n\r", arp->plen);
-    printf("Opcode: 0x%04x (%s)\n\r", (arp->opcode),
+    LOG("=== ARP Header ===\n\r");
+    LOG("Hardware Type: 0x%04x\n\r", (arp->htype));
+    LOG("Protocol Type: 0x%04x\n\r", (arp->ptype));
+    LOG("Hardware Size: %u\n\r", arp->hlen);
+    LOG("Protocol Size: %u\n\r", arp->plen);
+    LOG("Opcode: 0x%04x (%s)\n\r", (arp->opcode),
            ((arp->opcode) == 1) ? "Request" : 
            ((arp->opcode) == 2) ? "Reply" : "Unknown");
 
-    printf("Sender MAC: %02x:%02x:%02x:%02x:%02x:%02x\n\r",
+    LOG("Sender MAC: %02x:%02x:%02x:%02x:%02x:%02x\n\r",
            arp->sender_mac[0], arp->sender_mac[1], arp->sender_mac[2],
            arp->sender_mac[3], arp->sender_mac[4], arp->sender_mac[5]);
 
-    printf("Sender IP: %u.%u.%u.%u\n\r",
+    LOG("Sender IP: %u.%u.%u.%u\n\r",
            (arp->sender_ip >> 24) & 0xFF, (arp->sender_ip >> 16) & 0xFF,
            (arp->sender_ip >> 8) & 0xFF, arp->sender_ip & 0xFF);
 
-    printf("Target MAC: %02x:%02x:%02x:%02x:%02x:%02x\n\r",
+    LOG("Target MAC: %02x:%02x:%02x:%02x:%02x:%02x\n\r",
            arp->target_mac[0], arp->target_mac[1], arp->target_mac[2],
            arp->target_mac[3], arp->target_mac[4], arp->target_mac[5]);
 
-    printf("Target IP: %u.%u.%u.%u\n\r",
+    LOG("Target IP: %u.%u.%u.%u\n\r",
            (arp->target_ip >> 24) & 0xFF, (arp->target_ip >> 16) & 0xFF,
            (arp->target_ip >> 8) & 0xFF, arp->target_ip & 0xFF);
-    printf("==================\n\r");
+    LOG("==================\n\r");
 }
 
 
