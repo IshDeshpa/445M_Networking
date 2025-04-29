@@ -497,9 +497,9 @@ void ethernetTX(uint8_t* payload, uint16_t size){
     //     printf("%02x ", payload[i]);
     // }
     // printf("\n\r");
-    for (int i = 0; i < size; i++) {
-        printf("%02x ", payload[i]);
-    }
+    //for (int i = 0; i < size; i++) {
+    //    printf("%02x ", payload[i]);
+    //}
 
     Network_Send_Raw();
 

@@ -16,12 +16,12 @@ static inline void headerToBigEndian(icmpHeader_t* header){
 }
 
 static inline void icmp_print_header(const icmpHeader_t* header) {
-    printf("========== ICMP HEADER (HEX + DECIMAL) ==========\n");
-    printf("Type              : 0x%02X (%u)\n", header->type, header->type);
-    printf("Code              : 0x%02X (%u)\n", header->code, header->code);
-    printf("Checksum          : 0x%04X (%u)\n", header->checksum, header->checksum);
-    printf("Rest              : 0x%08X (%u)\n", header->rest, header->rest);
-    printf("===============================================\n");
+    LOG("========== ICMP HEADER (HEX + DECIMAL) ==========\n");
+    LOG("Type              : 0x%02X (%u)\n", header->type, header->type);
+    LOG("Code              : 0x%02X (%u)\n", header->code, header->code);
+    LOG("Checksum          : 0x%04X (%u)\n", header->checksum, header->checksum);
+    LOG("Rest              : 0x%08X (%u)\n", header->rest, header->rest);
+    LOG("===============================================\n");
 }
 
 
@@ -49,8 +49,9 @@ errICMP_t icmp_tx(uint8_t *payload, uint16_t payloadsize, uint32_t destinationIP
     return ret == IP_SUCCESS ? ICMP_SUCCESS : ICMP_TX_FAIL;
 }
 
-uint8_t icmp_tx_networkBuf[MTU+50];
 extern OS_FIFO_t ping_q;
+
+uint8_t icmp_tx_networkBuf[MTU+50];
 errICMP_t icmp_rx(uint8_t *payload, uint16_t payloadsize){
     icmpHeader_t *header = (icmpHeader_t *)payload;
     
@@ -61,10 +62,10 @@ errICMP_t icmp_rx(uint8_t *payload, uint16_t payloadsize){
     headerTolittleEndian(header);
     icmp_print_header(header);
 
-    if (savedCksm != computed_checksum){
-        LOG("Packet Dropped: Checksum Invalid: %x, %x", savedCksm, computed_checksum);
-        return ICMP_RX_FAIL;
-    }
+    //if (savedCksm != computed_checksum){
+    //    LOG("Packet Dropped: Checksum Invalid: %x, %x", savedCksm, computed_checksum);
+    //    return ICMP_RX_FAIL;
+    //}
 
     if(header->code != 0){
         LOG("Packet Dropped: code is not servable: %u", header->code);
@@ -75,18 +76,18 @@ errICMP_t icmp_rx(uint8_t *payload, uint16_t payloadsize){
         case ICMP_ECHO_REQUEST:
             LOG("revieced a echo req, sending out a resp now \n\n");
             
-            ipHeader_t* iphdr = (ipHeader_t*)((((uint8_t*)(header)) - IP_HEADER_SIZE));
-            // memcpy(icmp_tx_networkBuf, echoresp, sizeof(echoresp));
-            // icmp_tx(icmp_tx_networkBuf, sizeof(echoresp), iphdr->sourceIP, ICMP_ECHO_REPLY, 0, 0);
+            ipHeader_t* iphdr = (ipHeader_t*)(payload - IP_HEADER_SIZE);
+            memcpy(icmp_tx_networkBuf, echoresp, sizeof(echoresp));
+            icmp_tx(icmp_tx_networkBuf, sizeof(echoresp), iphdr->sourceIP, ICMP_ECHO_REPLY, 0, header->rest);
 
-            ping_msg_t msg;
-            msg.type = ICMP_ECHO_REPLY;
-            msg.data_size = payloadsize - sizeof(icmpHeader_t);
-            msg.send_ip = iphdr->sourceIP;
-            memcpy(msg.data, payload + sizeof(icmpHeader_t), msg.data_size);
-            
-            OS_Fifo_Put((uint8_t*)&msg, &ping_q);
-            LOG("Ping message sent to queue");
+            //ping_msg_t msg;
+            //msg.type = ICMP_ECHO_REPLY;
+            //msg.data_size = payloadsize - sizeof(icmpHeader_t);
+            //msg.send_ip = iphdr->sourceIP;
+            //memcpy(msg.data, payload + sizeof(icmpHeader_t), msg.data_size);
+            //
+            //OS_Fifo_Put((uint8_t*)&msg, &ping_q);
+            //LOG("Ping message sent to queue");
             break;
         default:
             LOG("Packet Dropped: type is not servable: %u", header->type);
