@@ -9,6 +9,8 @@
 #include <stdarg.h>
 #include <stddef.h>
 
+#include "OS.h"
+
 // Define this to fully sandbox nanoprintf inside of a translation unit.
 #ifdef NANOPRINTF_VISIBILITY_STATIC
   #define NPF_VISIBILITY static
@@ -1039,10 +1041,13 @@ int npf_vpprintf(npf_putc pc, void *pc_ctx, char const *format, va_list args) {
 #undef NPF_EXTRACT
 #undef NPF_WRITEBACK
 
+extern sema4_t printf_sema4;
 int npf_pprintf(npf_putc pc, void *pc_ctx, char const *format, ...) {
   va_list val;
   va_start(val, format);
+  OS_Wait(&printf_sema4);
   int const rv = npf_vpprintf(pc, pc_ctx, format, val);
+  OS_Signal(&printf_sema4);
   va_end(val);
   return rv;
 }

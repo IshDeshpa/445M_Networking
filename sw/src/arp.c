@@ -32,7 +32,7 @@ typedef struct __attribute__((__packed__)) {
     uint32_t  target_ip;
 } arp_header_t;
 
-typedef struct __attribute__((__packed__)){
+typedef struct{
     uint32_t TargetIp;
     uint8_t TargetMAC[6];
 }arpReqLog_t;
@@ -71,6 +71,7 @@ errARP_t arpRX(uint8_t * payload, uint16_t payloadsize){
         log.TargetIp = header->sender_ip;
         memcpy(log.TargetMAC, header->sender_mac, 6);
         OS_Fifo_Put((uint8_t *)&log, &arpReqFifo);
+        LOG("ARP request put into FIFO");
     }else{
         LOG("Unknown arp opcode found, %u", header->opcode);
     }
@@ -80,13 +81,14 @@ errARP_t arpRX(uint8_t * payload, uint16_t payloadsize){
 
 //needs to send a braod cast message
 errARP_t arpTX(uint8_t* payload, int32_t targetIp, uint8_t* targetMAC){
-
     arp_header_t* hdr = (arp_header_t*)payload;
     INIT_ARP_HEADER_DEFAULTS(hdr);
     hdr->sender_ip = host_ip_address;
     memcpy(hdr->sender_mac, host_mac_address, 6);
     hdr->target_ip = targetIp;
     memcpy(hdr->sender_mac, targetMAC, 6);
+    
+    print_arp_header(hdr);
     HeaderToBigEndian(hdr);
 
     return APR_SUCCESS;
@@ -95,7 +97,8 @@ errARP_t arpTX(uint8_t* payload, int32_t targetIp, uint8_t* targetMAC){
 void Task_ARP_RESP(void){
     LOG("Waiting for arp reqs");
     arpReqLog_t rxBuf;
-    while(OS_Fifo_Get((uint8_t *)&rxBuf, &arpReqFifo)){
+    while(1){
+        OS_Fifo_Get((uint8_t *)&rxBuf, &arpReqFifo);
         LOG("arp req recived, repsing now");
         arpTX((uint8_t*)&arpBuf, rxBuf.TargetIp, rxBuf.TargetMAC);
     }
@@ -103,52 +106,52 @@ void Task_ARP_RESP(void){
 
 void arp_init(void){
     OS_Fifo_Init(ARPREQ_DATA_FIFO_SIZE, &arpReqFifo, arpReqFifo_buffer, sizeof(arpReqLog_t), arpReqFifo_sema4s);
-    OS_AddThread(Task_ARP_RESP, STACKSIZE, 4);
+    OS_AddThread(Task_ARP_RESP, STACKSIZE, 2);
 }
 
 void print_arp_header(const arp_header_t *arp) {
-    printf("=== ARP Header ===\n");
-    printf("Hardware Type: 0x%04x\n", (arp->htype));
-    printf("Protocol Type: 0x%04x\n", (arp->ptype));
-    printf("Hardware Size: %u\n", arp->hlen);
-    printf("Protocol Size: %u\n", arp->plen);
-    printf("Opcode: 0x%04x (%s)\n", (arp->opcode),
+    printf("=== ARP Header ===\n\r");
+    printf("Hardware Type: 0x%04x\n\r", (arp->htype));
+    printf("Protocol Type: 0x%04x\n\r", (arp->ptype));
+    printf("Hardware Size: %u\n\r", arp->hlen);
+    printf("Protocol Size: %u\n\r", arp->plen);
+    printf("Opcode: 0x%04x (%s)\n\r", (arp->opcode),
            ((arp->opcode) == 1) ? "Request" : 
            ((arp->opcode) == 2) ? "Reply" : "Unknown");
 
-    printf("Sender MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
+    printf("Sender MAC: %02x:%02x:%02x:%02x:%02x:%02x\n\r",
            arp->sender_mac[0], arp->sender_mac[1], arp->sender_mac[2],
            arp->sender_mac[3], arp->sender_mac[4], arp->sender_mac[5]);
 
-    printf("Sender IP: %u.%u.%u.%u\n",
+    printf("Sender IP: %u.%u.%u.%u\n\r",
            (arp->sender_ip >> 24) & 0xFF, (arp->sender_ip >> 16) & 0xFF,
            (arp->sender_ip >> 8) & 0xFF, arp->sender_ip & 0xFF);
 
-    printf("Target MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
+    printf("Target MAC: %02x:%02x:%02x:%02x:%02x:%02x\n\r",
            arp->target_mac[0], arp->target_mac[1], arp->target_mac[2],
            arp->target_mac[3], arp->target_mac[4], arp->target_mac[5]);
 
-    printf("Target IP: %u.%u.%u.%u\n",
+    printf("Target IP: %u.%u.%u.%u\n\r",
            (arp->target_ip >> 24) & 0xFF, (arp->target_ip >> 16) & 0xFF,
            (arp->target_ip >> 8) & 0xFF, arp->target_ip & 0xFF);
-    printf("==================\n");
+    printf("==================\n\r");
 }
 
 
 static void HeaderToLittleEndian(arp_header_t* hdr){
-    packet_ntohs(hdr->htype);
-    packet_ntohs(hdr->ptype);
-    packet_ntohs(hdr->opcode);
-    packet_ntohl(hdr->sender_ip);
-    packet_ntohl(hdr->target_ip);
+    hdr->htype = packet_ntohs(hdr->htype);
+    hdr->ptype = packet_ntohs(hdr->ptype);
+    hdr->opcode = packet_ntohs(hdr->opcode);
+    hdr->sender_ip = packet_ntohl(hdr->sender_ip);
+    hdr->target_ip = packet_ntohl(hdr->target_ip);
 }
 
 static void HeaderToBigEndian(arp_header_t* hdr){
-    packet_htons(hdr->htype);
-    packet_htons(hdr->ptype);
-    packet_htons(hdr->opcode);
-    packet_htonl(hdr->sender_ip);
-    packet_htonl(hdr->target_ip);
+    hdr->htype = packet_htons(hdr->htype);
+    hdr->ptype = packet_htons(hdr->ptype);
+    hdr->opcode = packet_htons(hdr->opcode);
+    hdr->sender_ip = packet_htonl(hdr->sender_ip);
+    hdr->target_ip = packet_htonl(hdr->target_ip);
 }
 
 

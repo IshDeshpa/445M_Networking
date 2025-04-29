@@ -50,14 +50,14 @@ void prettyprint_payload(uint8_t* payload, uint16_t size) {
     // }
     // printf("\n\r");
 
-    printf("Payload (not pcap):\n\r");
-    for (int i = 0; i < size; i++) {
-        printf("%02x ", payload[i]);
-    }
+    // printf("Payload (not pcap):\n\r");
+    // for (int i = 0; i < size; i++) {
+    //     printf("%02x ", payload[i]);
+    // }
 
-    printf("\n\r");
-    printf("Payload size: %d", size);
-    printf("\n\r");
+    // printf("\n\r");
+    // printf("Payload size: %d", size);
+    // printf("\n\r");
 }
 
 sema4_t data_captured;
@@ -465,6 +465,7 @@ void Task_NetworkingInit(){
     OS_InitSemaphore(&data_captured, 0);
     OS_InitSemaphore(&data_captured2, 0);
     OS_InitSemaphore(&wifi_mutex, 1);
+    OS_InitSemaphore(&log_mtx, 1);
     
     nm_bsp_init();
     LOG("NM BSP init finished\n\r");
@@ -473,7 +474,7 @@ void Task_NetworkingInit(){
 
     m2m_wifi_set_scan_options(4, 240);
 
-    OS_AddThread(Task_ReceiveIRQ, STACKSIZE, 1);
+    OS_AddThread(Task_ReceiveIRQ, STACKSIZE, 2);
     OS_AddThread(Task_NetworkThread, STACKSIZE, 2);
     OS_AddThread(Task_TestNetworking, STACKSIZE, 3);
 

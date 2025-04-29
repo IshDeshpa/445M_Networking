@@ -107,8 +107,8 @@ void Task_Heartbeat(void){
 void Task_TestNetworking(void){
     Network_Get_Mac();
     OS_Sleep(1000);
-    Network_Scan();
-    OS_Sleep(1000);
+    // Network_Scan();
+    // OS_Sleep(1000);
     Network_Connect("iPhone (3)", "abcdefgh");
 
     OS_AddThread(Task_DHCPClient, STACKSIZE, 5);

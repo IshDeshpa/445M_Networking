@@ -5,6 +5,7 @@ uint8_t host_mac_address[6];
 uint32_t host_ip_address = 0;
 uint32_t subnet_mask;
 uint32_t gateway;
+sema4_t log_mtx;
 
 uint16_t packet_ntohs(uint16_t network_short) {
     return ((network_short & 0x00FF) << 8) |

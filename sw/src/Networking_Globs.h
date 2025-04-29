@@ -6,7 +6,8 @@
 
 #define MTU (1500)
 
-#define LOG(...) printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r")
+extern sema4_t log_mtx;
+#define LOG(...) OS_Wait(&log_mtx); printf("[%s][%d]", __FUNCTION__, __LINE__); printf(__VA_ARGS__); printf("\n\r"); OS_Signal(&log_mtx);
 #define ASSERT(x) do {if(!(x)){ LOG("ASSERT FAILED: %s", #x); while(1){} }} while(0)
 
 extern uint32_t host_ip_address;
